@@ -13,7 +13,7 @@
 	"npc_unit_bare_greevil"
 	{
 		"Model"						"models/courier/greevil/greevil.vmdl"
-		"BaseClass"					"npc_dota_creep_neutral"
+		"BaseClass"					"npc_dota_creature"
 		"SoundSet"					"LoneDruid_SpiritBear"
 		"Level"						"1"
 		"ModelScale" 				"1.0"

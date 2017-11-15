@@ -3,6 +3,7 @@
 ---@field public respawn_at number
 ---@field public is_dead boolean
 ---@field public using_custom_death_timer boolean
+---@field public tick_counter number
 
 local MAX_ABILITY_LEVEL = 4
 local RESPAWN_DURATION = 15.0
@@ -29,8 +30,6 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil, { release = true })
 
     print("Creating a greevil for player", owner.native_unit_proxy:GetPlayerID())
-
-    greevil:SetControllableByPlayer(native_unit_proxy:GetPlayerID(), true)
 
     if primal_seal then
         greevil:SetSkin(map_primal_seal_type_to_skin_id(primal_seal))
@@ -69,7 +68,8 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         respawn_at = 0,
         is_dead = false,
         using_custom_death_timer = false,
-        native_unit_proxy = greevil
+        native_unit_proxy = greevil,
+        tick_counter = 0
     })
 
     greevil.attached_entity = entity
@@ -278,7 +278,18 @@ end
 
 ---@param greevil Greevil
 function update_greevil(greevil)
+    ---@type CDOTA_BaseNPC_Hero
+    local owner = greevil.native_unit_proxy:GetOwner()
+
+    greevil.tick_counter = greevil.tick_counter + 1
+
     if not greevil.is_dead then
+        if owner:GetAttackTarget() ~= nil then
+            greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
+        else
+            if greevil.tick_counter % 10 == 0 then
+            greevil.native_unit_proxy:MoveToNPC(owner) end
+        end
     else
         if greevil.using_custom_death_timer and GameRules:GetGameTime() >= greevil.respawn_at then
             respawn_greevil(greevil)
