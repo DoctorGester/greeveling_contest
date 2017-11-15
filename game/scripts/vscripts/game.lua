@@ -71,7 +71,7 @@ function make_egg_invulnerable(egg)
 end
 
 function schedule_next_event(current_time)
-    event_start_at = current_time + minutes(5.0)
+    event_start_at = current_time + minutes(4.5)
 
     if is_in_debug_mode then
         event_start_at = current_time + minutes(0.3)
@@ -466,7 +466,7 @@ function filter_native_item_added_to_inventory(item_data)
     local inventory_parent_entity_id = item_data.inventory_parent_entindex_const
 
     if item_entity_id == nil or inventory_parent_entity_id == nil then
-        return
+        return true
     end
 
     ---@type CDOTA_Item
@@ -474,7 +474,7 @@ function filter_native_item_added_to_inventory(item_data)
     local native_unit = EntIndexToHScript(inventory_parent_entity_id)
 
     if native_item == nil or native_unit == nil then
-        return
+        return true
     end
 
     local main_hero = native_unit
@@ -608,6 +608,7 @@ function set_up_game_settings()
 
     GameRules:SetGoldPerTick(4)
     GameRules:SetUseUniversalShopMode(true)
+    GameRules:SetPreGameTime(20)
 
     if is_in_debug_mode then
         mode:SetCustomGameForceHero("npc_dota_hero_juggernaut")
