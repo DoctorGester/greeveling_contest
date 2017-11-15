@@ -281,8 +281,6 @@ function spawn_lane_creeps()
         "npc_dota_creep_badguys_melee",
         "npc_dota_creep_badguys_melee",
         "npc_dota_creep_badguys_melee",
-        "npc_dota_creep_badguys_melee",
-        "npc_dota_creep_badguys_ranged",
         "npc_dota_creep_badguys_ranged"
     }
 
@@ -291,8 +289,6 @@ function spawn_lane_creeps()
         "npc_dota_creep_goodguys_melee",
         "npc_dota_creep_goodguys_melee",
         "npc_dota_creep_goodguys_melee",
-        "npc_dota_creep_goodguys_melee",
-        "npc_dota_creep_goodguys_ranged",
         "npc_dota_creep_goodguys_ranged"
     }
 
