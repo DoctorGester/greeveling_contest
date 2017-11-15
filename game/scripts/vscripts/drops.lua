@@ -1,4 +1,5 @@
-drop_time_counter = 0
+neutral_creep_drop_time_counter = 0
+lane_creep_drop_time_counter = 0
 egg_drop_time_counter = 0
 remaining_seal_drops = {
     [Seal_Type.PRIMAL] = {},
@@ -6,9 +7,10 @@ remaining_seal_drops = {
     [Seal_Type.LESSER] = {}
 }
 
-local drop_occurrence_frequency = minutes(0.35)
-local egg_drop_occurence_frequency = minutes(1.5)
-local amount_of_each_bonus = 4
+local neutral_drop_occurrence_frequency = minutes(0.15)
+local lane_drop_occurence_frequency = minutes(0.2)
+local egg_drop_occurence_frequency = minutes(1.0)
+local amount_of_each_bonus = 8
 
 local seal_type_factors = {
     [Seal_Type.PRIMAL] = 1,
@@ -80,7 +82,8 @@ function get_next_drop_and_update_drop_table()
 end
 
 function initialize_drop_occurence_counter(current_time)
-    drop_time_counter = current_time - drop_occurrence_frequency -- First creep killed will drop an item
+    neutral_creep_drop_time_counter = current_time - neutral_drop_occurrence_frequency -- First creep killed will drop an item
+    lane_creep_drop_time_counter = current_time - lane_drop_occurence_frequency
     egg_drop_time_counter = current_time
 end
 
@@ -90,25 +93,51 @@ function handle_neutral_creep_death_in_regard_to_item_drops(neutral_creep)
     if current_time - egg_drop_time_counter > egg_drop_occurence_frequency then
         egg_drop_time_counter = egg_drop_time_counter + egg_drop_occurence_frequency
         generate_and_launch_egg_drop(neutral_creep)
-    elseif current_time - drop_time_counter > drop_occurrence_frequency then
-        drop_time_counter = drop_time_counter + drop_occurrence_frequency
-        generate_and_launch_neutral_creep_drop(neutral_creep)
+    elseif current_time - neutral_creep_drop_time_counter > neutral_drop_occurrence_frequency then
+        neutral_creep_drop_time_counter = neutral_creep_drop_time_counter + neutral_drop_occurrence_frequency
+        generate_and_launch_creep_drop(neutral_creep)
     end
 end
 
-function generate_and_launch_egg_drop(neutral_creep)
+function handle_lane_creep_death_in_regard_to_item_drops(lane_creep)
+    local current_time = GameRules:GetGameTime()
+
+    local any_heroes_are_around = #FindUnitsInRadius(
+        DOTA_TEAM_NEUTRALS,
+        lane_creep:GetAbsOrigin(),
+        nil,
+        800,
+        DOTA_UNIT_TARGET_TEAM_BOTH,
+        DOTA_UNIT_TARGET_HERO,
+        DOTA_UNIT_TARGET_FLAG_NONE,
+        FIND_ANY_ORDER,
+        false
+    ) > 0
+
+    if any_heroes_are_around then
+        if current_time - egg_drop_time_counter > egg_drop_occurence_frequency then
+            egg_drop_time_counter = egg_drop_time_counter + egg_drop_occurence_frequency
+            generate_and_launch_egg_drop(lane_creep)
+        elseif current_time - lane_creep_drop_time_counter > lane_drop_occurence_frequency then
+            lane_creep_drop_time_counter = lane_creep_drop_time_counter + lane_drop_occurence_frequency
+            generate_and_launch_creep_drop(lane_creep)
+        end
+    end
+end
+
+function generate_and_launch_egg_drop(creep)
     local egg_drop_item = CreateItem("item_greevil_egg", nil, nil)
-    local egg_drop_container = CreateItemOnPositionForLaunch(neutral_creep:GetAbsOrigin(), egg_drop_item)
+    local egg_drop_container = CreateItemOnPositionForLaunch(creep:GetAbsOrigin(), egg_drop_item)
 
     EmitSoundOn("item_drop", egg_drop_container)
 
     make_greevil_egg_from_existing_item(egg_drop_item, egg_drop_container)
 
-    local launch_location = neutral_creep:GetAbsOrigin() + RandomVector(100)
+    local launch_location = creep:GetAbsOrigin() + RandomVector(100)
     egg_drop_item:LaunchLootInitialHeight(false, 0, 300, 0.75, launch_location)
 end
 
-function generate_and_launch_neutral_creep_drop(neutral_creep)
+function generate_and_launch_creep_drop(creep)
     local seal_type, seal, found = get_next_drop_and_update_drop_table()
 
     if not found then
@@ -117,7 +146,7 @@ function generate_and_launch_neutral_creep_drop(neutral_creep)
 
     local item_name = convert_seal_type_to_item_name(seal_type, seal)
     local bonus_drop_item = CreateItem(item_name, nil, nil)
-    local bonus_drop_container = CreateItemOnPositionForLaunch(neutral_creep:GetAbsOrigin(), bonus_drop_item)
+    local bonus_drop_container = CreateItemOnPositionForLaunch(creep:GetAbsOrigin(), bonus_drop_item)
 
     EmitSoundOn("item_drop", bonus_drop_container)
 
@@ -128,7 +157,7 @@ function generate_and_launch_neutral_creep_drop(neutral_creep)
         seal
     )
 
-    local launch_location = neutral_creep:GetAbsOrigin() + RandomVector(100)
+    local launch_location = creep:GetAbsOrigin() + RandomVector(100)
 
     bonus_drop_item:LaunchLootInitialHeight(false, 0, 300, 0.75, launch_location)
 end

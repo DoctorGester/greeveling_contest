@@ -20,7 +20,8 @@
 		"ConsideredHero"			"1"
 		"UnitLabel"			        "greevil"
 
-		"ArmorPhysical"				"3"
+		"ArmorPhysical"				"5"
+		"MagicalResistance"			"50"
 
 		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttackDamageMin"			"35"
@@ -43,7 +44,7 @@
 		"MovementSpeed"				"320"		
 		"MovementTurnRate"			"0.6"		
 
-		"StatusHealth"				"500"		
+		"StatusHealth"				"1000"
 		"StatusHealthRegen"			"3"			
 		"StatusMana"				"300"		
 		"StatusManaRegen"			"3"		
@@ -80,7 +81,7 @@
         "AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
         "AttackDamageMin"			"450"
         "AttackDamageMax"			"500"
-        "AttackRate"				"1.0"
+        "AttackRate"				"1.5"
         "AttackAnimationPoint"		"0.43"
         "AttackAcquisitionRange"	"500"
         "AttackRange"				"280"

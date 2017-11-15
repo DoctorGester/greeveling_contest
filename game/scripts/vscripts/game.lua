@@ -42,7 +42,8 @@ function start_game()
 
     initialize_drop_occurence_counter(current_time)
     schedule_next_event(current_time)
-    schedule_next_creep_spawn(current_time)
+
+    next_creep_spawn_at = current_time
     big_eggs_hatch_at = current_time + minutes(20.0)
 
     if is_in_debug_mode then
@@ -163,6 +164,10 @@ function on_native_unit_killed(event)
 
     if native_unit_proxy:GetTeam() == DOTA_TEAM_NEUTRALS then
         handle_neutral_creep_death_in_regard_to_item_drops(native_unit_proxy)
+    end
+
+    if native_unit_proxy:GetName() == "npc_dota_creep_lane" then
+        handle_lane_creep_death_in_regard_to_item_drops(native_unit_proxy)
     end
 
     ---@type Entity

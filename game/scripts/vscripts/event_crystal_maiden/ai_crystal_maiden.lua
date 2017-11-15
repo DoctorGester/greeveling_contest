@@ -16,7 +16,7 @@
 ---@field public event_ended_at number
 
 local FROST_NOVA_RADIUS = 275
-local LOOT_BUFFER_SIZE = 250
+local LOOT_BUFFER_SIZE = 125
 local FROSTBITE_DURATION = 3.0
 
 local DELAY_BETWEEN_EVENT_END_AND_DESTROY = 0.9
