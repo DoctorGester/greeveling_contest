@@ -1,3 +1,8 @@
-"AddonInfo"
-{
+"AddonInfo" {
+    maps "5v5"
+	"IsPlayable" "1"
+	"HeroGuidesSupported" "1"
+	"5v5" {
+        "MaxPlayers" "10"
+	}
 }
