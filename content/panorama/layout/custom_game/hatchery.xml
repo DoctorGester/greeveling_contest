@@ -1,0 +1,77 @@
+<root>
+    <styles>
+        <include src="file://{resources}/styles/custom_game/animations.css"/>
+        <include src="file://{resources}/styles/custom_game/hatchery.css"/>
+        <include src="file://{resources}/styles/custom_game/seals.css"/>
+    </styles>
+
+    <scripts>
+        <include src="file://{resources}/scripts/custom_game/enums.js"/>
+        <include src="file://{resources}/scripts/custom_game/utils.js"/>
+        <include src="file://{resources}/scripts/custom_game/seal_slot.js"/>
+        <include src="file://{resources}/scripts/custom_game/hatchery.js"/>
+    </scripts>
+
+    <Panel hittest="false" class="HatcheryRoot">
+        <Panel id="HatcheryContainer" acceptfocus="true">
+            <Label id="Title" text="Hatchery"/>
+
+            <Panel id="HatcheryNoEggOverlay">
+                <Panel id="HatcheryNoEggImage"/>
+                <Label id="HatcheryNoEggTip" text="Collect eggs to hatch greevils!"/>
+                <!--TODO another image of a hero running with a bonus in his arms-->
+            </Panel>
+
+            <Panel id="HatcheryRegularContent">
+                <Panel id="EggContainer">
+                    <Image id="Egg"/>
+                    <Panel id="EggCounter">
+                        <Label id="EggCount"/>
+                    </Panel>
+                </Panel>
+
+                <Panel id="SealsSection">
+                    <Label class="SectionTitle" text="Seals"/>
+                    <Panel id="SealContainer">
+                        <Panel id="PrimalSeal"/>
+                        <Panel id="GreaterSeals"/>
+                        <Panel id="LesserSeals"/>
+                    </Panel>
+                </Panel>
+
+                <Label class="SectionTitle" text="Hatch"/>
+                <Panel id="HatchButtonContainer">
+                    <Button id="HatchButton">
+                        <Panel id="HatchButtonImage"/>
+                        <Label id="HatchButtonCounter" text="3"/>
+                    </Button>
+                </Panel>
+            </Panel>
+
+            <Panel id="InventorySection">
+                <Label class="SectionTitle" id="InventoryTitle" text="Inventory"/>
+                <Label class="SectionTitle" id="InventoryStatusFeeding" text="FEED THE MEGA GREEVIL"/>
+                <Label class="SectionTitle" id="InventoryStatusDropping" text="SELECT ITEMS TO DROP"/>
+                <Panel id="InventoryContainer"/>
+                <Panel id="InventoryButtons">
+                    <Button id="InventoryButtonFeed">
+                        <Label text="Feed"/>
+                        <Image src="file://{images}/custom_game/feed_mega_greevil.png"/>
+                    </Button>
+                    <Button id="InventoryButtonDrop">
+                        <Label text="Drop"/>
+                        <Image src="file://{images}/custom_game/drop.png"/>
+                    </Button>
+                </Panel>
+            </Panel>
+
+            <Panel id="ImageCache" style="flow-children: right;">
+                <Image src="file://{images}/custom_game/cooldown_reduction.png"/>
+                <Image src="file://{images}/custom_game/health.png"/>
+                <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_strength.psd"/>
+                <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_agility.psd"/>
+                <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_intelligence.psd"/>
+            </Panel>
+        </Panel>
+    </Panel>
+</root>

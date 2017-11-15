@@ -1,0 +1,8 @@
+<root>
+    <Panel>
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/event_timer.xml" />
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hatchery_button.xml" />
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/hatchery.xml" />
+        <CustomUIElement type="Hud" layoutfile="file://{resources}/layout/custom_game/big_egg_status.xml" />
+    </Panel>
+</root>

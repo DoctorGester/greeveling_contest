@@ -1,0 +1,53 @@
+.SealPanel {
+  //border-radius: 2px;
+  //border-top: 1px solid #717a89;
+  transition-property: background-color, border;
+  transition-duration: .05s;
+  transition-timing-function: ease-in-out;
+  border-radius: 50%;
+  box-shadow: inset black 0px 0px 16px 0px;
+  tooltip-position: left;
+  tooltip-body-position: 100% 0%;
+
+  &.Empty .SealContent {
+    box-shadow: inset #838c9b 0px 0px 8px 0px;
+  }
+
+  &.Lesser .SealContent {
+    //background-color: gradient(linear, 0% 0%, 0% 100%, from(rgb(46, 52, 47)), to(rgb(121, 131, 145)));
+    box-shadow: inset #a1c3d9 -4px 4px 8px 0px;
+    background-color: black;
+  }
+
+  &.Greater .SealContent {
+    //background-color: gradient(linear, 0% 0%, 0% 100%, from(rgb(27, 41, 52)), to(rgb(67, 145, 133)));
+    //opacity-mask: url("file://{images}/custom_game/opacity_mask_greater.png");
+    box-shadow: inset #e4ae39 -3px 3px 8px 0px;
+  }
+
+  &.Primal .SealContent {
+    box-shadow: inset #d32ce6 -3px 3px 8px 0px;
+  }
+
+  &.Appear .SealContent {
+    animation-duration: 0.1s;
+    animation-timing-function: linear;
+    animation-iteration-count: 1;
+    animation-name: SealSlotAppearAnimation;
+  }
+
+  .SealContent {
+    width: 90%;
+    height: 90%;
+    align: center center;
+    border-radius: 50%;
+  }
+
+  &:active {
+    transform: scaleX(0.93) scaleY(0.93);
+  }
+
+  &:hover:enabled {
+    brightness: 1.5;
+  }
+}

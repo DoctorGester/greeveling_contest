@@ -1,0 +1,541 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+
+{
+    greevil_hatch = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/ui/inventory/inv_egg_hatch.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    greevil_step = {
+        type = "dota_src1_3d"
+        vsnd_files =
+        [
+            "sounds/physics/footsteps/hero/tiny/walk01.vsnd",
+            "sounds/physics/footsteps/hero/tiny/walk02.vsnd",
+            "sounds/physics/footsteps/hero/tiny/walk03.vsnd",
+            "sounds/physics/footsteps/hero/tiny/walk04.vsnd",
+            "sounds/physics/footsteps/hero/tiny/walk05.vsnd",
+            "sounds/physics/footsteps/hero/tiny/walk06.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    greevil_attack = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/earthshaker/fist_swing_impact1.vsnd",
+            "sounds/weapons/hero/earthshaker/fist_swing_impact2.vsnd",
+            "sounds/weapons/hero/earthshaker/fist_swing_impact3.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    hatch_rumble = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/ambient/tut_rockfall.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    hatch_kicking = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/physics/footsteps/hero/tidehunter/01.vsnd",
+            "sounds/physics/footsteps/hero/tidehunter/02.vsnd",
+            "sounds/physics/footsteps/hero/tidehunter/03.vsnd",
+            "sounds/physics/footsteps/hero/tidehunter/04.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    hatch_cracking = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/physics/footsteps/hero/undying/foley01.vsnd",
+            "sounds/physics/footsteps/hero/undying/foley02.vsnd",
+            "sounds/physics/footsteps/hero/undying/foley03.vsnd",
+            "sounds/physics/footsteps/hero/undying/foley04.vsnd",
+            "sounds/physics/footsteps/hero/undying/foley05.vsnd",
+            "sounds/physics/footsteps/hero/undying/foley06.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    hatch_scream = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/creep/roshan/dt/scream.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    hatch_boom = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/earthshaker/gravelmaw_cast.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    item_drop = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/ui/item_drop_gem_world.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+	ability_primal_blue_cast = {
+		type = "dota_update_default"
+		vsnd_files =
+		[
+			"sounds/weapons/hero/winter_wyvern/cold_embrace.vsnd"
+		]
+		volume = "1.0"
+		pitch_rand_min = "-0.05"
+		pitch_rand_max = "0.05"
+		pitch = "1.0"
+		soundlevel = "95.0"
+		event_type = "1.0"
+	}
+
+	ability_primal_blue_cast_secondary = {
+		type = "dota_update_default"
+		vsnd_files =
+		[
+			"sounds/ambient/shrine_cast.vsnd"
+		]
+		volume = "1.0"
+		pitch_rand_min = "-0.05"
+		pitch_rand_max = "0.05"
+		pitch = "1.0"
+		soundlevel = "95.0"
+		event_type = "1.0"
+	}
+
+    ability_primal_orange_cast = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/jakiro/liquid_fire.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "0.5"
+        pitch_rand_max = "0.6"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_primal_orange_impact = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/morphling/adaptive_strike_cast.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_primal_orange_loop = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/viper/nethertoxin_lp.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+        volume_fade_out = "0.7"
+        volume_falloff_max = "1400"
+    }
+
+    ability_primal_black_cast = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/bristlebog/goo_cast.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_primal_black_cast_layer = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/pudge/dismember_blood1.vsnd",
+            "sounds/weapons/hero/pudge/dismember_blood2.vsnd",
+            "sounds/weapons/hero/pudge/dismember_blood2.vsnd"
+
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.2"
+        pitch_rand_max = "0.2"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+        limiter_on = "0.0"
+    }
+
+    ability_primal_black_impact = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/bristlebog/goo_target.vsnd"
+        ]
+        volume = "0.3"
+        pitch_rand_min = "0.5"
+        pitch_rand_max = "0.6"
+        pitch = "1.0"
+        soundlevel = "75.0"
+        event_type = "1.0"
+        limiter_on = "0.0"
+    }
+
+    ability_primal_yellow_cast = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/omniknight/wingfall.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.1"
+        pitch_rand_max = "-0.1"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_primal_yellow_loop = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/dazzle/shallow_grave.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.5"
+        pitch_rand_max = "-0.5"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+        volume_fade_out = "0.7"
+        volume_falloff_max = "1400"
+    }
+
+    ability_primal_yellow_voice = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/creep/greevil/preattack01.vsnd",
+            "sounds/weapons/creep/greevil/preattack02.vsnd",
+            "sounds/weapons/creep/greevil/preattack02.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_primal_white_cast = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/keeper/blinding_light.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    ability_primal_red_cast = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/alchemist/scepter_target.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    ability_primal_red_loop = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/diagnostics/rain_heavy_lp_01.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        volume_fade_in = "0.4"
+        volume_fade_out = "0.7"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_greater_greevil_pinata = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/ui/item_drop_gem_world.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_greater_greevil_pinata_eat_candy = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/creep/roshan/dt/eat_candy.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    ability_greater_soul_bind = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/wisp/tether_target.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    ability_heal_la_kill_trigger = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/sven/warcry_signet.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    ability_static_discharge_mark = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/disruptor/static_storm_end.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    ability_static_discharge_trigger = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/disruptor/thunder_strike_target.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+    
+    cm_frostbite = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/crystal_maiden/frostbite.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    cm_frost_nova = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/crystal_maiden/crystal_nova.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    cm_spiral_launch = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/leshrac/attack.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "65.0"
+        event_type = "1.0"
+        limiter_on = 0
+    }
+
+    cm_spiral_hit = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/crystal_maiden/impact01.vsnd",
+            "sounds/weapons/hero/crystal_maiden/impact02.vsnd",
+            "sounds/weapons/hero/crystal_maiden/impact03.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    cm_voice_before_frostbite = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/vo/crystalmaiden/cm_attack_09.vsnd",
+            "sounds/vo/crystalmaiden/cm_attack_07.vsnd",
+            "sounds/vo/crystalmaiden/cm_attack_02.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    cm_voice_before_frost_nova = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/vo/crystalmaiden/cm_spawn_05.vsnd",
+            "sounds/vo/crystalmaiden/cm_attack_04.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
+    cm_voice_before_spiral = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/vo/crystalmaiden/cm_spawn_06.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+}

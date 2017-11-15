@@ -1,0 +1,6 @@
+"CustomEvents"
+{
+    "hatchery_button_click"
+    {
+    }
+}

@@ -1,0 +1,16 @@
+<root>
+    <styles>
+        <include src="file://{resources}/styles/custom_game/hatchery.css"/>
+    </styles>
+
+    <scripts>
+        <include src="file://{resources}/scripts/custom_game/hatchery_button.js"/>
+    </scripts>
+
+    <Panel class="HatcheryButtonContainer">
+        <Button id="HatcheryButton">
+            <Panel id="SnowBackground"/>
+            <Label text="Hatchery"/>
+        </Button>
+    </Panel>
+</root>

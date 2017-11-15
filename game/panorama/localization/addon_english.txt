@@ -1,0 +1,49 @@
+"addon"
+{
+	"Language" "english"
+	"Tokens"
+	{
+		"locale" "en"
+
+        "error_cant_be_picked_up_by_non_heroes" "Can only be picked up by heroes"
+		"error_hatchery_is_full" "Hatchery is full!"
+
+		"hatch_button_text" "HATCH"
+		"hatch_greevil_tooltip" "Hatch your greevil!<br/>Don't forget to put in as many seals as you can to make your greevil as strong as possible!"
+		"feed_mega_greevil_tooltip" "Feed seals to your Mega Greevil to power him up! Mega Greevil can contain 2x more seals than a regular greevil."
+
+        "DOTA_Tooltip_Ability_item_greevil_egg" "Greevil Egg"
+        "DOTA_Tooltip_Ability_item_healing_candy" "Healing Candy"
+
+        "DOTA_Tooltip_Ability_item_primal_black" "<font color=\"#d32ce6\">Primal Seal:</font> Black"
+        "DOTA_Tooltip_Ability_item_primal_blue" "<font color=\"#d32ce6\">Primal Seal:</font> Blue"
+        "DOTA_Tooltip_Ability_item_primal_green" "<font color=\"#d32ce6\">Primal Seal:</font> Green"
+        "DOTA_Tooltip_Ability_item_primal_orange" "<font color=\"#d32ce6\">Primal Seal:</font> Orange"
+        "DOTA_Tooltip_Ability_item_primal_red" "<font color=\"#d32ce6\">Primal Seal:</font> Red"
+        "DOTA_Tooltip_Ability_item_primal_white" "<font color=\"#d32ce6\">Primal Seal:</font> White"
+        "DOTA_Tooltip_Ability_item_primal_yellow" "<font color=\"#d32ce6\">Primal Seal:</font> Yellow"
+        "DOTA_Tooltip_Ability_item_primal_purple" "<font color=\"#d32ce6\">Primal Seal:</font> Purple"
+
+        "DOTA_Tooltip_Ability_item_greater_greevil_pinata" "<font color=\"#e4ae39\">Greater Seal:</font> Greevil Piñata"
+        "DOTA_Tooltip_Ability_item_greater_heal_la_kill" "<font color=\"#e4ae39\">Greater Seal:</font> Heal la Kill"
+        "DOTA_Tooltip_Ability_item_greater_healing_frenzy" "<font color=\"#e4ae39\">Greater Seal:</font> Healing Frenzy"
+        "DOTA_Tooltip_Ability_item_greater_magic_well" "<font color=\"#e4ae39\">Greater Seal:</font> Magic Well"
+        "DOTA_Tooltip_Ability_item_greater_soul_bind" "<font color=\"#e4ae39\">Greater Seal:</font> Sould Bind"
+        "DOTA_Tooltip_Ability_item_greater_static_discharge" "<font color=\"#e4ae39\">Greater Seal:</font> Static Discharge"
+        "DOTA_Tooltip_Ability_item_greater_together_we_stand" "<font color=\"#e4ae39\">Greater Seal:</font> Together We Stand"
+
+        "DOTA_Tooltip_Ability_item_lesser_ability_level" "<font color=\"#a1c3d9\">Lesser Seal:</font> Ability Level"
+        "DOTA_Tooltip_Ability_item_lesser_armor" "<font color=\"#a1c3d9\">Lesser Seal:</font> Armor"
+        "DOTA_Tooltip_Ability_item_lesser_attack_speed" "<font color=\"#a1c3d9\">Lesser Seal:</font> Attack Speed"
+        "DOTA_Tooltip_Ability_item_lesser_cooldown_reduction" "<font color=\"#a1c3d9\">Lesser Seal:</font> Cooldown Reduction"
+        "DOTA_Tooltip_Ability_item_lesser_damage" "<font color=\"#a1c3d9\">Lesser Seal:</font> Attack Damage"
+        "DOTA_Tooltip_Ability_item_lesser_health" "<font color=\"#a1c3d9\">Lesser Seal:</font> Health"
+        
+        "lesser_seal_ability_level" "Increases ability levels of your greevil.<br/>WARNING: Placement of seals is extremely important. Levels are distributed top-to-down and left-to-right."
+        "lesser_seal_armor" "Increases armor of your greevil"
+        "lesser_seal_attack_speed" "Increases attack speed of your greevil"
+        "lesser_seal_cooldown_reduction" "Increases cooldown reduction of your greevil"
+        "lesser_seal_damage" "Multiplies attack damage of your greevil"
+        "lesser_seal_health" "Multiplies health of your greevil"
+    }
+}

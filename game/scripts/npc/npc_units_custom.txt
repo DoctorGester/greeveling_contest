@@ -1,0 +1,205 @@
+#base "towers.txt"
+#base "forts.txt"
+
+"DOTAUnits"
+{
+	"Version"	"1"
+
+	"wearable_model"
+    {
+        "BaseClass"     "npc_dota_creature"
+    }
+	
+	"npc_unit_bare_greevil"
+	{
+		"Model"						"models/courier/greevil/greevil.vmdl"
+		"BaseClass"					"npc_dota_creep_neutral"
+		"SoundSet"					"LoneDruid_SpiritBear"
+		"Level"						"1"
+		"ModelScale" 				"1.0"
+		"ConsideredHero"			"1"
+		"UnitLabel"			        "greevil"
+
+		"ArmorPhysical"				"3"
+
+		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
+		"AttackDamageMin"			"35"
+		"AttackDamageMax"			"35"
+		"AttackRate"				"1.2"
+		"AttackAnimationPoint"		"0.43"
+		"AttackAcquisitionRange"	"500"
+		"AttackRange"				"128"
+		"ProjectileModel"			""
+		"ProjectileSpeed"			"0"
+
+		"RingRadius"				"70"
+		"HealthBarOffset"			"215"
+
+		"BountyXP"					"300"		
+		"BountyGoldMin"				"300"		
+		"BountyGoldMax"				"300"		
+
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"320"		
+		"MovementTurnRate"			"0.6"		
+
+		"StatusHealth"				"500"		
+		"StatusHealthRegen"			"3"			
+		"StatusMana"				"300"		
+		"StatusManaRegen"			"3"		
+
+		"VisionDaytimeRange"		"1400"		
+		"VisionNighttimeRange"		"800"
+
+		"TeamName"					"DOTA_TEAM_NEUTRALS"							
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_HERO"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_HERO"
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+		"CanRespawn"                "1"
+
+		"HasInventory"				"0"
+	}
+
+    "npc_unit_mega_greevil"
+    {
+        "Model"						"models/creeps/mega_greevil/mega_greevil.vmdl"
+        "BaseClass"					"npc_dota_creature"
+        "SoundSet"					"LoneDruid_SpiritBear"
+        "Level"						"1"
+        "ModelScale" 				"5.0"
+        "ConsideredHero"			"1"
+        "UnitLabel"			        "greevil"
+
+        "Ability1"					"generic_hidden" // Used to apply modifiers!
+        "Ability2"					""
+        "Ability3"					""
+        "Ability4"					""
+
+        "ArmorPhysical"				"30"
+
+        "AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
+        "AttackDamageMin"			"450"
+        "AttackDamageMax"			"500"
+        "AttackRate"				"1.0"
+        "AttackAnimationPoint"		"0.43"
+        "AttackAcquisitionRange"	"500"
+        "AttackRange"				"280"
+        "ProjectileModel"			""
+        "ProjectileSpeed"			"0"
+
+        "RingRadius"				"110"
+        "HealthBarOffset"			"450"
+
+        "BountyXP"					"300"		
+        "BountyGoldMin"				"300"		
+        "BountyGoldMax"				"300"		
+
+        "MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
+        "MovementSpeed"				"160"
+        "MovementTurnRate"			"0.6"		
+
+        "StatusHealth"				"30000"
+        "StatusHealthRegen"			"3"			
+        "StatusMana"				"1000"
+        "StatusManaRegen"			"3"		
+
+        "VisionDaytimeRange"		"2000"
+        "VisionNighttimeRange"		"2000"
+
+        "BoundsHullName"			"DOTA_HULL_SIZE_BARRACKS"
+        "TeamName"					"DOTA_TEAM_NEUTRALS"							
+        "CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_HERO"
+        "CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_HERO"
+        "UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+
+		"MinimapIcon"				"minimap_greevil"
+		"MinimapIconSize"			"600"
+
+        "HasInventory"				"0"
+
+		"Creature"
+		{
+		    "DisableResistance"			"100.0"
+			"DisableClumpingBehavior"	"1"
+		}
+    }
+
+	"npc_dota_creature_crystal_maiden_boss"
+	{
+		"BaseClass"					"npc_dota_creature"
+		"Model"						"models/heroes/crystal_maiden/crystal_maiden_arcana.vmdl"
+		"SoundSet"					"Roshan"
+		"Level"						"50"
+		"ModelScale" 				"2.2"
+		"ConsideredHero"			"1"
+		"IsAncient"					"1"
+		"IsBossMonster"				"1"
+
+		"MinimapIcon"				"minimap_heroicon_npc_dota_hero_crystal_maiden"
+		"MinimapIconSize"			"600"
+
+		"Ability1"					"crystal_maiden_boss_spiral"
+		"Ability2"					"crystal_maiden_boss_frostbite"
+		"Ability3"					"crystal_maiden_boss_frost_nova"
+		"Ability4"					"crystal_maiden_boss_passive"
+		"Ability5"					""
+		"Ability6"					""
+		"Ability7"					""
+		"Ability8"					""
+		"Ability9"					""
+		"Ability10"					""
+
+		"ArmorPhysical"				"50"
+		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
+		"AttackDamageMin"			"1400"
+		"AttackDamageMax"			"1700"
+		"AttackRate"				"1.5"
+		"AttackAnimationPoint"		"0.56"
+		"AttackAcquisitionRange"	"1800"
+		"AttackRange"				"350"
+		"ProjectileModel"			""
+		"ProjectileSpeed"			"0"
+
+		"RingRadius"				"75"
+		"HealthBarOffset"			"650"
+		"BoundsHullName"			"DOTA_HULL_SIZE_HUGE"
+
+		"BountyXP"					"2000"
+		"BountyGoldMin"				"1000"
+		"BountyGoldMax"				"2000"
+
+		"MovementCapabilities"		"DOTA_UNIT_CAP_MOVE_GROUND"
+		"MovementSpeed"				"450"
+		"MovementTurnRate"			"0.25"
+
+		"StatusHealth"				"200000"
+		"StatusHealthRegen"			"35"
+		"StatusMana"				"50000"
+		"StatusManaRegen"			"500"
+
+		"VisionDaytimeRange"		"6000"
+		"VisionNighttimeRange"		"6000"
+
+		"TeamName"					"DOTA_TEAM_BADGUYS"
+		"CombatClassAttack"			"DOTA_COMBAT_CLASS_ATTACK_BASIC"
+		"CombatClassDefend"			"DOTA_COMBAT_CLASS_DEFEND_BASIC"
+		"UnitRelationshipClass"		"DOTA_NPC_UNIT_RELATIONSHIP_TYPE_DEFAULT"
+
+		"HasInventory"				"1"
+
+		"Creature"
+		{
+		    "DisableResistance"			"100.0"
+			"DisableClumpingBehavior"	"1"
+
+			"AttachWearables"
+			{
+				"Wearable1"		{	"ItemDef"		"9328"		}
+				"Wearable2" 	{	"ItemDef"		"9324"		}
+				"Wearable3"		{	"ItemDef"		"9326"		}
+				"Wearable4"		{	"ItemDef"		"9327"		}
+				"Wearable5"     {   "ItemDef"       "7385"      }
+			}
+		}
+	}
+}

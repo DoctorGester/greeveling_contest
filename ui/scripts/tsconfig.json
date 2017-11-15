@@ -1,0 +1,15 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es5",
+    "outDir": "../../content/panorama/scripts/custom_game",
+    "noImplicitAny" : true,
+    "alwaysStrict" : true,
+    "strictNullChecks" : true,
+    "sourceMap": false,
+    "lib": [
+      "es2015",
+      "dom"
+    ]
+  }
+}

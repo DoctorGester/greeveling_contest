@@ -1,0 +1,39 @@
+.BigEggStatusRoot {
+  height: 40px;
+  align: center top;
+  margin-top: 50px;
+
+  .AltPressed & { // TODO Doesn't work, replace with a schedule!
+    margin-top: 80px;
+  }
+
+  #BigEggStatusContainer {
+    flow-children: right;
+
+    #LeftTeamContainer {
+      flow-children: left;
+      margin-right: 100px;
+    }
+
+    #RightTeamContainer {
+      flow-children: right;
+      margin-left: 100px;
+    }
+
+    .TeamContainer {
+      Panel {
+        width: 32px;
+        height: 32px;
+      }
+
+      .SealPanel.Empty {
+        opacity: 0.0;
+      }
+
+      .SealPanel {
+        tooltip-position: bottom;
+        tooltip-body-position: 50% 100%;
+      }
+    }
+  }
+}
