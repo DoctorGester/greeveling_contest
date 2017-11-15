@@ -528,7 +528,7 @@ end
 
 function filter_native_experience_added(experience_data)
     if experience_data.experience ~= nil then
-        experience_data.experience = experience_data.experience * 1.75
+        experience_data.experience = experience_data.experience * 1.45
     end
 
     return true
