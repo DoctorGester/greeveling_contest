@@ -68,7 +68,9 @@
         "SoundSet"					"LoneDruid_SpiritBear"
         "Level"						"1"
         "ModelScale" 				"5.0"
-        "ConsideredHero"			"1"
+		"ConsideredHero"			"1"
+		"IsAncient"					"1"
+		"IsBossMonster"				"1"
         "UnitLabel"			        "greevil"
 
         "Ability1"					"generic_hidden" // Used to apply modifiers!
