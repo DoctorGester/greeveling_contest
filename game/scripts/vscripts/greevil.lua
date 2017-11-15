@@ -17,7 +17,7 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         "npc_unit_bare_greevil",
         native_unit_proxy:GetAbsOrigin(),
         true,
-        native_unit_proxy:GetOwner(),
+        native_unit_proxy,
         native_unit_proxy,
         native_unit_proxy:GetTeamNumber()
     )
@@ -301,16 +301,7 @@ end
 
 ---@param greevil Greevil
 function respawn_greevil(greevil)
-    local respawn_locations_by_team = {
-        [DOTA_TEAM_GOODGUYS] = Entities:FindAllByClassname("info_player_start_goodguys"),
-        [DOTA_TEAM_BADGUYS] = Entities:FindAllByClassname("info_player_start_badguys")
-    }
-
-    local respawn_locations = respawn_locations_by_team[greevil.native_unit_proxy:GetTeam()]
-
-    assert(respawn_locations ~= nil, "Could not find respawn locations for that team")
-
-    local respawn_location = respawn_locations[RandomInt(1, #respawn_locations)]:GetAbsOrigin()
+    local respawn_location = greevil.native_unit_proxy:GetOwner():GetAbsOrigin()
 
     greevil.is_dead = false
     greevil.native_unit_proxy:RespawnUnit()
