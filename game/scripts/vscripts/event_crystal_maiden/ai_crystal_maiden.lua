@@ -302,10 +302,6 @@ function handle_crystal_maiden_loot_dropped(ai)
     if ai.loot_dropped % 10 == 0 then
         ai.queue_spiral_cast = true
     end
-
-    if ai.loot_dropped >= max_drops_per_event then
-        queue_event_finish = true
-    end
 end
 
 ---@param ai AI_Crystal_Maiden
