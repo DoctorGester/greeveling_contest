@@ -211,7 +211,7 @@ function clusterize_points_for_black_seal_ability(points, caster_position, maxim
             local pool_position = point_top + side_offset + arc_offset
 
             if index_top ~= index_bottom and (pool_position - point_bottom):Length2D() <= 180.0 then
-                DebugDrawCircle(pool_position, Vector(0, 255, 0), 0.5, 120, true, 0.1)
+                -- DebugDrawCircle(pool_position, Vector(0, 255, 0), 0.5, 120, true, 0.1)
 
                 table.insert(current_cluster, point_bottom)
             end

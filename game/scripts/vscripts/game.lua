@@ -139,7 +139,7 @@ end
 function on_native_unit_spawned(event)
     local native_unit_proxy = EntIndexToHScript(event.entindex)
 
-    if is_native_unit_a_player_assigned_hero(native_unit_proxy) then
+    if is_native_unit_a_player_assigned_hero(native_unit_proxy) and native_unit_proxy.attached_entity == nil then
         add_entity(make_hero(native_unit_proxy))
     end
 end
@@ -167,7 +167,13 @@ function on_native_unit_killed(event)
     end
 
     if native_unit_proxy:GetName() == "npc_dota_creep_lane" then
-        handle_lane_creep_death_in_regard_to_item_drops(native_unit_proxy)
+        local hero_killer = EntIndexToHScript(event.entindex_attacker)
+
+        if not hero_killer:IsRealHero() then
+            hero_killer = nil
+        end
+
+        handle_lane_creep_death_in_regard_to_item_drops(native_unit_proxy, hero_killer)
     end
 
     ---@type Entity
@@ -240,6 +246,8 @@ end
 function start_next_event()
     event_is_ongoing = true
 
+    announce_and_reveal_event()
+
     if event_type == Event_Type.CRYSTAL_MAIDEN then
         event_entity = make_crystal_maiden_ai(next_event_location:GetAbsOrigin())
 
@@ -285,12 +293,10 @@ function spawn_lane_creeps()
         "npc_dota_creep_badguys_melee",
         "npc_dota_creep_badguys_melee",
         "npc_dota_creep_badguys_melee",
-        "npc_dota_creep_badguys_melee",
         "npc_dota_creep_badguys_ranged"
     }
 
     local radiant_creep_names = {
-        "npc_dota_creep_goodguys_melee",
         "npc_dota_creep_goodguys_melee",
         "npc_dota_creep_goodguys_melee",
         "npc_dota_creep_goodguys_melee",
@@ -317,7 +323,25 @@ function update_ongoing_event_state(current_time)
     end
 end
 
-function announce_event()
+function announce_and_reveal_event()
+    if next_event_location == event_locations[1] then
+        EmitAnnouncerSound("announcer_ann_custom_generic_alert_62")
+    elseif next_event_location == event_locations[2] then
+        EmitAnnouncerSound("announcer_ann_custom_generic_alert_60")
+    elseif next_event_location == event_locations[3] then
+        EmitAnnouncerSound("announcer_ann_custom_generic_alert_56")
+    end
+
+    local location = next_event_location:GetAbsOrigin()
+
+    for _, team in pairs({ DOTA_TEAM_GOODGUYS, DOTA_TEAM_BADGUYS }) do
+        MinimapEvent(team, big_egg_by_team_id[team].native_unit_proxy, location.x, location.y, DOTA_MINIMAP_EVENT_HINT_LOCATION, 5.0)
+
+        AddFOWViewer(team, location, 2000, EVENT_DURATION, false)
+    end
+end
+
+function announce_event_before()
     if next_event_location == event_locations[1] then
         EmitAnnouncerSound("announcer_ann_custom_generic_alert_52")
     elseif next_event_location == event_locations[2] then
@@ -347,7 +371,7 @@ function update_game_state(current_time)
         end
 
         if current_time >= event_start_at - 15.0 and not event_announced then
-            announce_event()
+            announce_event_before()
             event_announced = true
         end
 
@@ -613,7 +637,7 @@ function set_up_game_settings()
 
     if is_in_debug_mode then
         mode:SetCustomGameForceHero("npc_dota_hero_juggernaut")
-        mode:SetFogOfWarDisabled(true)
+        --mode:SetFogOfWarDisabled(true)
 
         GameRules:EnableCustomGameSetupAutoLaunch(true)
         GameRules:SetCustomGameSetupAutoLaunchDelay(1)

@@ -189,6 +189,12 @@ function max_vector_2d(vector, max_vector)
     return vector
 end
 
+function min_vector_2d(vector, min_vector)
+    if min_vector:Length2D() < vector:Length2D() then return min_vector end
+
+    return vector
+end
+
 function can_ability_be_actually_cast_on_a_target(ability, target)
     return UnitFilter(
         target,

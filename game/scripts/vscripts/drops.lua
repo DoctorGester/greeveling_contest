@@ -99,14 +99,14 @@ function handle_neutral_creep_death_in_regard_to_item_drops(neutral_creep)
     end
 end
 
-function handle_lane_creep_death_in_regard_to_item_drops(lane_creep)
+function handle_lane_creep_death_in_regard_to_item_drops(lane_creep, hero_killer_optional)
     local current_time = GameRules:GetGameTime()
 
     local any_heroes_are_around = #FindUnitsInRadius(
         DOTA_TEAM_NEUTRALS,
         lane_creep:GetAbsOrigin(),
         nil,
-        800,
+        900,
         DOTA_UNIT_TARGET_TEAM_BOTH,
         DOTA_UNIT_TARGET_HERO,
         DOTA_UNIT_TARGET_FLAG_NONE,
@@ -117,15 +117,15 @@ function handle_lane_creep_death_in_regard_to_item_drops(lane_creep)
     if any_heroes_are_around then
         if current_time - egg_drop_time_counter > egg_drop_occurence_frequency then
             egg_drop_time_counter = egg_drop_time_counter + egg_drop_occurence_frequency
-            generate_and_launch_egg_drop(lane_creep)
+            generate_and_launch_egg_drop(lane_creep, hero_killer_optional)
         elseif current_time - lane_creep_drop_time_counter > lane_drop_occurence_frequency then
             lane_creep_drop_time_counter = lane_creep_drop_time_counter + lane_drop_occurence_frequency
-            generate_and_launch_creep_drop(lane_creep)
+            generate_and_launch_creep_drop(lane_creep, hero_killer_optional)
         end
     end
 end
 
-function generate_and_launch_egg_drop(creep)
+function generate_and_launch_egg_drop(creep, towards_who_optional)
     local egg_drop_item = CreateItem("item_greevil_egg", nil, nil)
     local egg_drop_container = CreateItemOnPositionForLaunch(creep:GetAbsOrigin(), egg_drop_item)
 
@@ -134,10 +134,18 @@ function generate_and_launch_egg_drop(creep)
     make_greevil_egg_from_existing_item(egg_drop_item, egg_drop_container)
 
     local launch_location = creep:GetAbsOrigin() + RandomVector(100)
+
+    if towards_who_optional then
+        local direction_halfway = (towards_who_optional:GetAbsOrigin() - creep:GetAbsOrigin()) / 2.0
+        direction_halfway = min_vector_2d(direction_halfway, direction_halfway:Normalized() * 500.0)
+
+        launch_location = creep:GetAbsOrigin() + direction_halfway
+    end
+
     egg_drop_item:LaunchLootInitialHeight(false, 0, 300, 0.75, launch_location)
 end
 
-function generate_and_launch_creep_drop(creep)
+function generate_and_launch_creep_drop(creep, towards_who_optional)
     local seal_type, seal, found = get_next_drop_and_update_drop_table()
 
     if not found then
@@ -158,6 +166,13 @@ function generate_and_launch_creep_drop(creep)
     )
 
     local launch_location = creep:GetAbsOrigin() + RandomVector(100)
+
+    if towards_who_optional then
+        local direction_halfway = (towards_who_optional:GetAbsOrigin() - creep:GetAbsOrigin()) / 2.0
+        direction_halfway = min_vector_2d(direction_halfway, direction_halfway:Normalized() * 500.0)
+
+        launch_location = creep:GetAbsOrigin() + direction_halfway
+    end
 
     bonus_drop_item:LaunchLootInitialHeight(false, 0, 300, 0.75, launch_location)
 end
