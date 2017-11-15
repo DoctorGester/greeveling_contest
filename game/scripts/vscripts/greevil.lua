@@ -4,6 +4,7 @@
 ---@field public is_dead boolean
 ---@field public using_custom_death_timer boolean
 ---@field public tick_counter number
+---@field public ai Greevil_AI
 
 local MAX_ABILITY_LEVEL = 4
 local RESPAWN_DURATION = 15.0
@@ -42,15 +43,17 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     local primal_seals_and_levels, greater_seals_and_levels, lesser_seals_and_levels =
         collapse_abilities_and_levels_into_abilities_with_levels({ primal_seal }, greater_seals, lesser_seals)
 
+    local primal_seal_to_ability = {}
+
     for _, primal_seal_and_level in pairs(primal_seals_and_levels) do
         local ability = greevil:AddAbility(convert_primal_seal_type_to_ability_name(primal_seal_and_level.seal))
-
         ability:SetLevel(primal_seal_and_level.level)
+
+        primal_seal_to_ability[primal_seal_and_level.seal] = ability
     end
 
     for _, greater_seal_and_level in pairs(greater_seals_and_levels) do
         local ability = greevil:AddAbility(convert_greater_seal_type_to_ability_name(greater_seal_and_level.seal))
-
         ability:SetLevel(greater_seal_and_level.level)
     end
 
@@ -69,7 +72,8 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         is_dead = false,
         using_custom_death_timer = false,
         native_unit_proxy = greevil,
-        tick_counter = 0
+        tick_counter = 0,
+        ai = make_greevil_ai(greevil, primal_seal_to_ability)
     })
 
     greevil.attached_entity = entity
@@ -284,11 +288,19 @@ function update_greevil(greevil)
     greevil.tick_counter = greevil.tick_counter + 1
 
     if not greevil.is_dead then
-        if owner:GetAttackTarget() ~= nil then
-            greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
-        else
-            if greevil.tick_counter % 10 == 0 then
-            greevil.native_unit_proxy:MoveToNPC(owner) end
+        local is_casting = greevil_ai_is_casting(greevil.ai) or greevil.native_unit_proxy:IsChanneling()
+
+        if not is_casting then
+            if owner:GetAttackTarget() ~= nil then
+                greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
+            else
+                if greevil.tick_counter % 10 == 0 then
+                    greevil.native_unit_proxy:MoveToNPC(owner) end
+            end
+
+            if GameRules:GetGameTime() - greevil.ai.started_casting_at > 1.5 then
+                update_greevil_ai_ability_ai(greevil.ai)
+            end
         end
     else
         if greevil.using_custom_death_timer and GameRules:GetGameTime() >= greevil.respawn_at then
