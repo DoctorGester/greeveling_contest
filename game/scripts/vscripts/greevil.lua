@@ -2,8 +2,10 @@
 ---@field public native_unit_proxy CDOTA_BaseNPC_Creature
 ---@field public respawn_at number
 ---@field public is_dead boolean
+---@field public using_custom_death_timer boolean
 
 local MAX_ABILITY_LEVEL = 4
+local RESPAWN_DURATION = 15.0
 
 ---@param primal_seal Primal_Seal_Type
 ---@param greater_seals Greater_Seal_Type[]
@@ -66,6 +68,7 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     local entity = make_entity(Entity_Type.GREEVIL, {
         respawn_at = 0,
         is_dead = false,
+        using_custom_death_timer = false,
         native_unit_proxy = greevil
     })
 
@@ -277,7 +280,7 @@ end
 function update_greevil(greevil)
     if not greevil.is_dead then
     else
-        if GameRules:GetGameTime() >= greevil.respawn_at then
+        if greevil.using_custom_death_timer and GameRules:GetGameTime() >= greevil.respawn_at then
             respawn_greevil(greevil)
         end
     end
@@ -296,12 +299,30 @@ end
 ---@param greevil Greevil
 function handle_greevil_death(greevil)
     greevil.is_dead = true
-    greevil.respawn_at = GameRules:GetGameTime() + 15.0
+
+    local owner_hero = greevil.native_unit_proxy:GetOwner()
+    local modifier = owner_hero:AddNewModifier(owner_hero, nil, "modifier_greevil_respawn", { duration = RESPAWN_DURATION })
+
+    if modifier then
+        greevil.respawn_at = GameRules:GetGameTime() + RESPAWN_DURATION
+        greevil.using_custom_death_timer = true
+    else
+        modifier.attached_entity = greevil
+    end
 end
 
 ---@param greevil Greevil
 function respawn_greevil(greevil)
     local respawn_location = greevil.native_unit_proxy:GetOwner():GetAbsOrigin()
+
+    if not greevil.native_unit_proxy:GetOwner():IsAlive() then
+        local respawn_locations_by_team = {
+            [DOTA_TEAM_GOODGUYS] = Entities:FindAllByClassname("info_player_start_goodguys"),
+            [DOTA_TEAM_BADGUYS] = Entities:FindAllByClassname("info_player_start_badguys")
+        }
+
+        respawn_locations = respawn_locations_by_team[greevil.native_unit_proxy:GetTeam()]
+    end
 
     greevil.is_dead = false
     greevil.native_unit_proxy:RespawnUnit()
