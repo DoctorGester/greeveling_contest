@@ -563,6 +563,37 @@ function filter_native_experience_added(experience_data)
     return true
 end
 
+function filter_native_modifier_applied(modifier_data)
+    if modifier_data.entindex_parent_const == nil then
+        return true
+    end
+
+    local parent = EntIndexToHScript(modifier_data.entindex_parent_const)
+
+    if parent == nil or parent.attached_entity == nil then
+        return true
+    end
+
+    local modifier_name = modifier_data.name_const
+    local entity_type = parent.attached_entity.entity_type
+    local is_a_boss =
+        entity_type == Entity_Type.MEGA_GREEVIL or
+        entity_type == Entity_Type.AI_CRYSTAL_MAIDEN or
+        entity_type == Entity_Type.AI_LICH or
+        entity_type == Entity_Type.AI_TUSK or
+        entity_type == Entity_Type.AI_WINTER_WYVERN
+
+    local is_a_modifier_we_do_not_want_on_bosses =
+        modifier_name == "modifier_axe_berserkers_call" or
+        modifier_name == "modifier_ursa_fury_swipes_damage_increase"
+
+    if is_a_boss and is_a_modifier_we_do_not_want_on_bosses then
+        return false
+    end
+
+    return true
+end
+
 function emit_custom_hud_error_for_player(player, error_text, error_reason)
     CustomGameEventManager:Send_ServerToPlayer(player, "custom_game_error", {
         reason = error_reason,
@@ -630,6 +661,7 @@ function set_up_game_settings()
     mode:SetHealingFilter(function(_, data) return on_native_heal_received(data) end, {})
     mode:SetItemAddedToInventoryFilter(function(_, data) return filter_native_item_added_to_inventory(data) end, {})
     mode:SetModifyExperienceFilter(function(_, data) return filter_native_experience_added(data) end, {})
+    mode:SetModifierGainedFilter(function (_, data) return filter_native_modifier_applied(data) end, {})
     mode:SetRespawnTimeScale(0.5)
 
     GameRules:SetGoldPerTick(4)
