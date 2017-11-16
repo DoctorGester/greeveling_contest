@@ -5,6 +5,7 @@
 ---@field public tick_counter number
 ---@field public ai Greevil_AI
 ---@field public lost_owner_at number
+---@field public started_attacking_at number
 
 local MAX_ABILITY_LEVEL = 4
 local RESPAWN_DURATION = 15.0
@@ -75,7 +76,8 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         native_unit_proxy = greevil,
         tick_counter = 0,
         ai = make_greevil_ai(greevil, primal_seal_to_ability),
-        lost_owner_at = 0
+        lost_owner_at = 0,
+        started_attacking_at = 0
     })
 
     greevil.attached_entity = entity
@@ -314,12 +316,17 @@ function update_greevil(greevil)
                     end
                 end
 
-                if owner:GetAttackTarget() ~= nil then
-                    greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
-                else
-                    if greevil.tick_counter % 10 == 0 then
-                        greevil.native_unit_proxy:MoveToNPC(owner)
+                local owner_has_no_attack_target = owner:GetAttackTarget() == nil
+
+                if owner_has_no_attack_target then
+                    if GameRules:GetGameTime() - greevil.started_attacking_at >= 1.5 then
+                        if greevil.tick_counter % 10 == 0 then
+                            greevil.native_unit_proxy:MoveToNPC(owner)
+                        end
                     end
+                else
+                    greevil.started_attacking_at = GameRules:GetGameTime()
+                    greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
                 end
             else
                 if greevil.tick_counter % 10 == 0 then
