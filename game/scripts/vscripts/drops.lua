@@ -8,8 +8,8 @@ remaining_seal_drops = {
 }
 
 local neutral_drop_occurrence_frequency = minutes(0.15)
-local lane_drop_occurence_frequency = minutes(0.2)
-local egg_drop_occurence_frequency = minutes(1.0)
+local lane_drop_occurence_frequency = minutes(0.15)
+local egg_drop_occurence_frequency = minutes(0.75)
 local amount_of_each_bonus = 8
 
 local seal_type_factors = {
@@ -177,25 +177,36 @@ function generate_and_launch_creep_drop(creep, towards_who_optional)
     bonus_drop_item:LaunchLootInitialHeight(false, 0, 300, 0.75, launch_location)
 end
 
-function generate_and_launch_boss_drop(attacker, boss)
-    local seal_type, seal, found = get_next_drop_and_update_drop_table()
-
-    if not found then
-        return
-    end
-
-    local item_name = convert_seal_type_to_item_name(seal_type, seal)
+function generate_and_launch_boss_drop(attacker, boss, drop_an_egg)
+    local drop_item, drop_container
     local attacker_position = attacker:GetAbsOrigin()
     local boss_position = boss:GetAbsOrigin()
     local drop_direction = (boss_position - attacker_position):Normalized()
-    local bonus_drop_item = CreateItem(item_name, nil, nil)
-    local bonus_drop_container = CreateItemOnPositionForLaunch(boss_position, bonus_drop_item)
-    local bonus_entity = make_bonus_from_existing_item_and_container(
-        bonus_drop_item,
-        bonus_drop_container,
-        seal_type,
-        seal
-    )
+
+    if drop_an_egg then
+        drop_item = CreateItem("item_greevil_egg", nil, nil)
+        drop_container = CreateItemOnPositionForLaunch(boss_position, drop_item)
+
+        make_greevil_egg_from_existing_item(drop_item, drop_container)
+    else
+        local seal_type, seal, found = get_next_drop_and_update_drop_table()
+
+        if not found then
+            return
+        end
+
+        local item_name = convert_seal_type_to_item_name(seal_type, seal)
+
+        drop_item = CreateItem(item_name, nil, nil)
+        drop_container = CreateItemOnPositionForLaunch(boss_position, drop_item)
+
+        make_bonus_from_existing_item_and_container(
+            drop_item,
+            drop_container,
+            seal_type,
+            seal
+        )
+    end
 
     local launch_power = RandomFloat(1.0, 2.0)
     while true do
@@ -204,9 +215,9 @@ function generate_and_launch_boss_drop(attacker, boss)
         local launch_target = boss_position + drop_direction * 300.0 * launch_power
 
         if GridNav:CanFindPath(boss_position, launch_target) or launch_power < 0.5 then
-            EmitSoundOn("item_drop", bonus_drop_container)
+            EmitSoundOn("item_drop", drop_container)
 
-            bonus_entity.native_item_proxy:LaunchLootInitialHeight(false, 200, launch_height, launch_duration, launch_target)
+            drop_item:LaunchLootInitialHeight(false, 200, launch_height, launch_duration, launch_target)
             break
         else
             launch_power = launch_power - 0.1

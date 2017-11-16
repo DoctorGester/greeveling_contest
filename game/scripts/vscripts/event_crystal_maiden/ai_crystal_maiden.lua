@@ -16,7 +16,7 @@
 ---@field public event_ended_at number
 
 local FROST_NOVA_RADIUS = 275
-local LOOT_BUFFER_SIZE = 125
+local LOOT_BUFFER_SIZE = 225
 local FROSTBITE_DURATION = 3.0
 
 local DELAY_BETWEEN_EVENT_END_AND_DESTROY = 0.9
@@ -320,7 +320,7 @@ function crystal_maiden_register_damage_taken(ai, attacker, damage)
         ai.loot_dropped = ai.loot_dropped + 1
         ai.loot_drop_damage_buffer = ai.loot_drop_damage_buffer - LOOT_BUFFER_SIZE
 
-        generate_and_launch_boss_drop(attacker, ai.native_unit_proxy)
+        generate_and_launch_boss_drop(attacker, ai.native_unit_proxy, ai.loot_dropped % 7 == 0)
         handle_crystal_maiden_loot_dropped(ai)
     end
 end
