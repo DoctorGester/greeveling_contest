@@ -668,6 +668,7 @@ function set_up_game_settings()
     GameRules:SetUseUniversalShopMode(true)
     GameRules:SetPreGameTime(20)
     GameRules:SetHeroSelectionTime(30.0)
+    GameRules:SetStrategyTime(10.0)
 
     if is_in_debug_mode then
         --mode:SetCustomGameForceHero("npc_dota_hero_juggernaut")
