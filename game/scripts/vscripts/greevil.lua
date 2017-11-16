@@ -2,7 +2,6 @@
 ---@field public native_unit_proxy CDOTA_BaseNPC_Creature
 ---@field public respawn_at number
 ---@field public is_dead boolean
----@field public using_custom_death_timer boolean
 ---@field public tick_counter number
 ---@field public ai Greevil_AI
 
@@ -26,6 +25,7 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         native_unit_proxy:GetTeamNumber()
     )
 
+    greevil:SetUnitCanRespawn(true)
     greevil:EmitSound("greevil_hatch")
 
     fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil, { release = true })
@@ -38,7 +38,8 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     end
 
     randomize_greevil_wearables(greevil, map_primal_seal_type_to_skin_id(primal_seal))
-    randomize_greevil_animation_set(greevil)
+
+    greevil:AddNewModifier(greevil, nil, "modifier_greevil", {}):SetStackCount(RandomInt(0, 6))
 
     local primal_seals_and_levels, greater_seals_and_levels, lesser_seals_and_levels =
         collapse_abilities_and_levels_into_abilities_with_levels({ primal_seal }, greater_seals, lesser_seals)
@@ -70,7 +71,6 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     local entity = make_entity(Entity_Type.GREEVIL, {
         respawn_at = 0,
         is_dead = false,
-        using_custom_death_timer = false,
         native_unit_proxy = greevil,
         tick_counter = 0,
         ai = make_greevil_ai(greevil, primal_seal_to_ability)
@@ -79,11 +79,6 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     greevil.attached_entity = entity
 
     return entity
-end
-
----@param greevil CDOTA_BaseNPC_Creature
-function randomize_greevil_animation_set(greevil)
-    greevil:AddNewModifier(greevil, nil, "modifier_greevil_animation", {}):SetStackCount(RandomInt(0, 6))
 end
 
 ---@param greevil CDOTA_BaseNPC_Creature
@@ -291,11 +286,18 @@ function update_greevil(greevil)
         local is_casting = greevil_ai_is_casting(greevil.ai) or greevil.native_unit_proxy:IsChanneling()
 
         if not is_casting then
-            if owner:GetAttackTarget() ~= nil then
-                greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
+            if owner:IsAlive() then
+                if owner:GetAttackTarget() ~= nil then
+                    greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
+                else
+                    if greevil.tick_counter % 10 == 0 then
+                        greevil.native_unit_proxy:MoveToNPC(owner)
+                    end
+                end
             else
                 if greevil.tick_counter % 10 == 0 then
-                    greevil.native_unit_proxy:MoveToNPC(owner) end
+                    greevil.native_unit_proxy:MoveToPosition(get_random_greevil_respawn_location(greevil))
+                end
             end
 
             if GameRules:GetGameTime() - greevil.ai.started_casting_at > 1.5 then
@@ -303,7 +305,7 @@ function update_greevil(greevil)
             end
         end
     else
-        if greevil.using_custom_death_timer and GameRules:GetGameTime() >= greevil.respawn_at then
+        if GameRules:GetGameTime() >= greevil.respawn_at then
             respawn_greevil(greevil)
         end
     end
@@ -322,16 +324,21 @@ end
 ---@param greevil Greevil
 function handle_greevil_death(greevil)
     greevil.is_dead = true
+    greevil.respawn_at = GameRules:GetGameTime() + RESPAWN_DURATION
 
     local owner_hero = greevil.native_unit_proxy:GetOwner()
-    local modifier = owner_hero:AddNewModifier(owner_hero, nil, "modifier_greevil_respawn", { duration = RESPAWN_DURATION })
+    owner_hero:AddNewModifier(owner_hero, nil, "modifier_greevil_respawn", { duration = RESPAWN_DURATION })
+end
 
-    if modifier then
-        greevil.respawn_at = GameRules:GetGameTime() + RESPAWN_DURATION
-        greevil.using_custom_death_timer = true
-    else
-        modifier.attached_entity = greevil
-    end
+function get_random_greevil_respawn_location(greevil)
+    local respawn_locations_by_team = {
+        [DOTA_TEAM_GOODGUYS] = Entities:FindAllByClassname("info_player_start_goodguys"),
+        [DOTA_TEAM_BADGUYS] = Entities:FindAllByClassname("info_player_start_badguys")
+    }
+
+    local respawn_locations = respawn_locations_by_team[greevil.native_unit_proxy:GetTeam()]
+
+    return respawn_locations[RandomInt(1, #respawn_locations)]:GetAbsOrigin()
 end
 
 ---@param greevil Greevil
@@ -339,16 +346,12 @@ function respawn_greevil(greevil)
     local respawn_location = greevil.native_unit_proxy:GetOwner():GetAbsOrigin()
 
     if not greevil.native_unit_proxy:GetOwner():IsAlive() then
-        local respawn_locations_by_team = {
-            [DOTA_TEAM_GOODGUYS] = Entities:FindAllByClassname("info_player_start_goodguys"),
-            [DOTA_TEAM_BADGUYS] = Entities:FindAllByClassname("info_player_start_badguys")
-        }
-
-        respawn_locations = respawn_locations_by_team[greevil.native_unit_proxy:GetTeam()]
+        respawn_location = get_random_greevil_respawn_location(greevil)
     end
 
     greevil.is_dead = false
     greevil.native_unit_proxy:RespawnUnit()
+    greevil.native_unit_proxy:SetUnitCanRespawn(true)
 
     fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil.native_unit_proxy, { release = true })
 

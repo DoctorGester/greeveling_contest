@@ -614,7 +614,7 @@ function link_native_modifiers()
     -- Other stuff
     link_native_modifier_simple("modifier_big_egg_visual_delta_z_correction")
     link_native_modifier_simple("modifier_big_egg_hidden")
-    link_native_modifier_simple("modifier_greevil_animation")
+    link_native_modifier_simple("modifier_greevil")
     link_native_modifier_simple("modifier_greevil_respawn")
     link_native_modifier_simple("modifier_mega_greevil")
 
