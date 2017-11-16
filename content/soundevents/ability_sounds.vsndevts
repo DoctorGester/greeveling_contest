@@ -128,6 +128,20 @@
         event_type = "1.0"
     }
 
+    greevil_blink = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/hero/antimage/blink_out.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
     item_drop = {
         type = "dota_update_default"
         vsnd_files =

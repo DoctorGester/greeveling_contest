@@ -4,6 +4,7 @@
 ---@field public is_dead boolean
 ---@field public tick_counter number
 ---@field public ai Greevil_AI
+---@field public lost_owner_at number
 
 local MAX_ABILITY_LEVEL = 4
 local RESPAWN_DURATION = 15.0
@@ -73,7 +74,8 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         is_dead = false,
         native_unit_proxy = greevil,
         tick_counter = 0,
-        ai = make_greevil_ai(greevil, primal_seal_to_ability)
+        ai = make_greevil_ai(greevil, primal_seal_to_ability),
+        lost_owner_at = 0
     })
 
     greevil.attached_entity = entity
@@ -287,6 +289,31 @@ function update_greevil(greevil)
 
         if not is_casting then
             if owner:IsAlive() then
+                if (owner:GetAbsOrigin() - greevil.native_unit_proxy:GetAbsOrigin()):Length2D() >= 1100 then
+                    if greevil.lost_owner_at == 0 then
+                        greevil.lost_owner_at = GameRules:GetGameTime()
+                    end
+
+                    if greevil.lost_owner_at ~= 0 and GameRules:GetGameTime() - greevil.lost_owner_at >= 0.8 then
+                        fx("particles/econ/events/winter_major_2016/blink_dagger_start_wm.vpcf", PATTACH_WORLDORIGIN, nil, {
+                            cp0 = greevil.native_unit_proxy:GetAbsOrigin(),
+                            release = true
+                        })
+
+                        greevil.native_unit_proxy:EmitSound("greevil_blink")
+
+                        FindClearSpaceForUnit(greevil.native_unit_proxy, owner:GetAbsOrigin(), true)
+
+                        fx("particles/econ/events/winter_major_2016/blink_dagger_wm_end.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil.native_unit_proxy, {
+                            release = true
+                        })
+
+                        greevil.lost_owner_at = 0
+                    else
+                        greevil.native_unit_proxy:Stop()
+                    end
+                end
+
                 if owner:GetAttackTarget() ~= nil then
                     greevil.native_unit_proxy:MoveToTargetToAttack(owner:GetAttackTarget())
                 else
