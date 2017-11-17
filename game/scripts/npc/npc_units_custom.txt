@@ -82,6 +82,7 @@
         "Ability4"					""
 
         "ArmorPhysical"				"30"
+        "MagicalResistance"			"50"
 
         "AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
         "AttackDamageMin"			"450"
@@ -104,7 +105,7 @@
         "MovementSpeed"				"160"
         "MovementTurnRate"			"0.6"		
 
-        "StatusHealth"				"30000"
+        "StatusHealth"				"75000"
         "StatusHealthRegen"			"3"			
         "StatusMana"				"1000"
         "StatusManaRegen"			"3"		
