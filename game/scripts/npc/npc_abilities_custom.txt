@@ -10,7 +10,6 @@
         "AbilityCooldown" "12.0"
         "AbilityCastPoint" "0.1"
         "AbilityCastRange" "1200"
-        "AbilityManaCost" "120"
         "MaxLevel" "4"
 
         "AbilitySpecial" {
@@ -38,7 +37,6 @@
         "AbilityCastRange" "1200"
         "AbilityCooldown" "10.0"
         "AbilityCastPoint" "0.1"
-        "AbilityManaCost" "80"
         "MaxLevel" "4"
 
         "AbilitySpecial" {
@@ -63,7 +61,6 @@
         "AbilityUnitTargetType" "DOTA_UNIT_TARGET_HERO"
         "AbilityCooldown" "14.0"
         "AbilityCastPoint" "0.3"
-        "AbilityManaCost" "0"
         "AbilityCastRange" "400"
         "MaxLevel" "4"
 
@@ -85,7 +82,6 @@
         "AbilityCooldown" "14.0"
         "AbilityCastPoint" "0.3"
         "AbilityDamage" "100 200 300 400"
-        "AbilityManaCost" "100"
         "AbilityCastRange" "400"
         "MaxLevel" "4"
 
@@ -112,7 +108,6 @@
         "AbilityCooldown" "24 18 12 6"
         "AbilityCastPoint" "0.1"
         "AbilityCastRange" "1800"
-        "AbilityManaCost" "150"
         "MaxLevel" "4"
 
         "AbilitySpecial" {
@@ -134,7 +129,6 @@
         "AbilityTextureName" "bloodseeker_blood_bath"
         "AbilityCooldown" "20.0"
         "AbilityCastPoint" "0.1"
-        "AbilityManaCost" "80"
         "MaxLevel" "4"
 
 
@@ -161,7 +155,6 @@
         "AbilityTextureName" "keeper_of_the_light_illuminate"
         "AbilityCooldown" "14 12 10 8"
         "AbilityCastPoint" "0.1"
-        "AbilityManaCost" "120 100 80 60"
         "MaxLevel" "4"
     }
 

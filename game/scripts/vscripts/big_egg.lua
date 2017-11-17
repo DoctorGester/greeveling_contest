@@ -3,23 +3,23 @@ big_egg_state_by_team_id = {}
 
 ---@class Big_Egg : Entity
 ---@field public native_unit_proxy CDOTA_BaseNPC
----@field public primal_seals Primal_Seal_Type[]
----@field public greater_seals Greater_Seal_Type[]
----@field public lesser_seals Lesser_Seal_Type[]
+---@field public storage Stored_Greevil
 ---@field public started_hatching_at number
 ---@field public is_hatching boolean
 ---@field public has_hatched boolean
 ---@field public hatch_model CBaseAnimating
 ---@field public hide_countdown boolean
 
+MAX_BIG_EGG_PRIMAL_SEALS = 2
+MAX_BIG_EGG_GREATER_SEALS = 4
+MAX_BIG_EGG_LESSER_SEALS = 8
+
 ---@param native_unit_proxy CDOTA_BaseNPC_Building
 ---@return Big_Egg
 function make_big_egg(native_unit_proxy)
     local big_egg = make_entity(Entity_Type.BIG_EGG, {
         native_unit_proxy = native_unit_proxy,
-        primal_seals = {},
-        greater_seals = {},
-        lesser_seals = {},
+        storage = make_stored_greevil(MAX_BIG_EGG_PRIMAL_SEALS, MAX_BIG_EGG_GREATER_SEALS, MAX_BIG_EGG_LESSER_SEALS),
         is_hatching = false,
         hide_countdown = 0
     })
@@ -31,44 +31,15 @@ function make_big_egg(native_unit_proxy)
     return big_egg
 end
 
-MAX_BIG_EGG_PRIMAL_SEALS = 2
-MAX_BIG_EGG_GREATER_SEALS = 4
-MAX_BIG_EGG_LESSER_SEALS = 8
-
----@param big_egg Big_Egg
----@param seal_type Seal_Type
----@return table
-function big_egg_get_seal_table_by_seal_type(big_egg, seal_type)
-    if seal_type == Seal_Type.PRIMAL then
-        return big_egg.primal_seals
-    elseif seal_type == Seal_Type.GREATER then
-        return big_egg.greater_seals
-    elseif seal_type == Seal_Type.LESSER then
-        return big_egg.lesser_seals
-    else
-        assert(false, "Unrecognized seal type " .. tostring(seal_type))
-    end
-end
-
 ---@param big_egg Big_Egg
 ---@param seal Bonus
 function big_egg_apply_seal(big_egg, seal)
-    local seal_table = big_egg_get_seal_table_by_seal_type(big_egg, seal.seal_type)
-    local max_seals_in_table
+    print_table("s", seal)
+    local result = stored_greevil_apply_seal(big_egg.storage, seal)
 
-    if seal.seal_type == Seal_Type.PRIMAL then
-        max_seals_in_table = MAX_BIG_EGG_PRIMAL_SEALS
-    elseif seal.seal_type == Seal_Type.GREATER then
-        max_seals_in_table = MAX_BIG_EGG_GREATER_SEALS
-    elseif seal.seal_type == Seal_Type.LESSER then
-        max_seals_in_table = MAX_BIG_EGG_LESSER_SEALS
+    if result ~= success then
+        return result
     end
-
-    if #seal_table >= max_seals_in_table then
-        return error_cant_insert_all_slots_are_full
-    end
-
-    table.insert(seal_table, seal.seal)
 
     update_big_egg_network_state(big_egg)
 
@@ -167,9 +138,9 @@ function update_big_egg_network_state(big_egg)
     local team_id = big_egg.native_unit_proxy:GetTeamNumber()
     local egg_state = {}
 
-    egg_state.primal_seals = big_egg.primal_seals
-    egg_state.greater_seals = big_egg.greater_seals
-    egg_state.lesser_seals = big_egg.lesser_seals
+    egg_state.primal_seals = big_egg.storage.primal_seals
+    egg_state.greater_seals = big_egg.storage.greater_seals
+    egg_state.lesser_seals = big_egg.storage.lesser_seals
     egg_state.past_the_hatching_state = big_egg.is_hatching or big_egg.has_hatched
 
     big_egg_state_by_team_id[team_id] = egg_state

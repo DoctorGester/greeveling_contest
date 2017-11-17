@@ -3,9 +3,9 @@ hero_state_by_entity_id = {}
 
 ---@class Hero : Entity
 ---@field public native_unit_proxy CDOTA_BaseNPC_Hero
----@field public primal_seals Primal_Seal_Type[]
----@field public greater_seals Greater_Seal_Type[]
----@field public lesser_seals Lesser_Seal_Type[]
+---@field public egg_greevil Stored_Greevil
+---@field public party_greevils Stored_Greevil[]
+---@field public inventory_greevils Stored_Greevil[]
 ---@field public greevil_eggs number
 ---@field public bonuses Bonus[]
 ---@field public is_hatching_an_egg boolean
@@ -23,9 +23,7 @@ function make_hero(native_unit_proxy)
         native_unit_proxy = native_unit_proxy,
         greevil_eggs = 1,
         bonuses = {},
-        primal_seals = {},
-        greater_seals = {},
-        lesser_seals = {},
+        egg_greevil = make_stored_greevil(MAX_HERO_PRIMAL_SEALS, MAX_HERO_GREATER_SEALS, MAX_HERO_LESSER_SEALS),
         is_hatching_an_egg = false,
         started_hatchingg_at = -1
     })
@@ -64,21 +62,6 @@ function find_empty_inventory_slot(hero)
 end
 
 ---@param hero Hero
----@param seal_type Seal_Type
-function find_empty_egg_seal_slot(hero, seal_type)
-    local max_seals_of_this_type = get_max_hero_seal_amount_by_seal_type(seal_type)
-    local seal_table = hero_get_seal_table_by_seal_type(hero, seal_type)
-
-    for slot_index = 1, max_seals_of_this_type do
-        if not seal_table[slot_index] then
-            return slot_index, true
-        end
-    end
-
-    return nil, false
-end
-
----@param hero Hero
 ---@param bonus Bonus
 function add_bonus_to_hero_inventory(hero, bonus)
     assert(hero ~= nil)
@@ -103,15 +86,12 @@ end
 ---@param seal Bonus
 function hero_egg_apply_seal(hero, seal)
     assert_hero_can_act_on_an_egg(hero)
+    local result = stored_greevil_apply_seal(hero.egg_greevil, seal)
 
-    local seal_table = hero_get_seal_table_by_seal_type(hero, seal.seal_type)
-    local empty_slot_index, found = find_empty_egg_seal_slot(hero, seal.seal_type)
-
-    if not found then
-        return error_cant_insert_all_slots_are_full
+    if result ~= success then
+        return result
     end
 
-    seal_table[empty_slot_index] = seal.seal
     update_hero_network_state(hero)
 
     return success
@@ -132,9 +112,9 @@ function update_hero_network_state(hero)
     end
 
     hero_state.egg = {}
-    hero_state.egg.primal_seals = hero.primal_seals
-    hero_state.egg.greater_seals = hero.greater_seals
-    hero_state.egg.lesser_seals = hero.lesser_seals
+    hero_state.egg.primal_seals = hero.egg_greevil.primal_seals
+    hero_state.egg.greater_seals = hero.egg_greevil.greater_seals
+    hero_state.egg.lesser_seals = hero.egg_greevil.lesser_seals
 
     hero_state.is_hatching_an_egg = hero.is_hatching_an_egg
     hero_state.total_eggs = hero.greevil_eggs
@@ -213,35 +193,6 @@ end
 
 ---@param hero Hero
 ---@param seal_type Seal_Type
----@return table
-function hero_get_seal_table_by_seal_type(hero, seal_type)
-    if seal_type == Seal_Type.PRIMAL then
-        return hero.primal_seals
-    elseif seal_type == Seal_Type.GREATER then
-        return hero.greater_seals
-    elseif seal_type == Seal_Type.LESSER then
-        return hero.lesser_seals
-    else
-        assert(false, "Unrecognized seal type " .. tostring(seal_type))
-    end
-end
-
----@param seal_type Seal_Type
----@return number
-function get_max_hero_seal_amount_by_seal_type(seal_type)
-    if seal_type == Seal_Type.PRIMAL then
-        return MAX_HERO_PRIMAL_SEALS
-    elseif seal_type == Seal_Type.GREATER then
-        return MAX_HERO_GREATER_SEALS
-    elseif seal_type == Seal_Type.LESSER then
-        return MAX_HERO_LESSER_SEALS
-    else
-        assert(false, "Unrecognized seal type " .. tostring(seal_type))
-    end
-end
-
----@param hero Hero
----@param seal_type Seal_Type
 ---@param seal number
 function hero_remove_seal(hero, seal_type, slot_index)
     assert_hero_can_act_on_an_egg(hero)
@@ -250,14 +201,8 @@ function hero_remove_seal(hero, seal_type, slot_index)
     assert(slot_index ~= nil, "Slot index can't be nil")
     assert(hero_has_a_slot_for_another_bonus(hero), "No empty slot to drop another bonus in")
 
-    local seal_table = hero_get_seal_table_by_seal_type(hero, seal_type)
-
-    assert(seal_table[slot_index] ~= nil, string.format("Invalid/empty seal slot %i", slot_index))
-
-    local removed_bonus = seal_table[slot_index]
-    seal_table[slot_index] = nil
-
-    add_bonus_to_hero_inventory(hero, make_seal_in_inventory(seal_type, removed_bonus))
+    local removed_seal = stored_greevil_remove_seal(hero.egg_greevil, seal_type, slot_index)
+    add_bonus_to_hero_inventory(hero, make_seal_in_inventory(seal_type, removed_seal))
 end
 
 ---@param hero Hero
@@ -287,13 +232,13 @@ function hero_finish_hatching_an_egg(hero)
     hero.is_hatching_an_egg = false
     hero.greevil_eggs = hero.greevil_eggs - 1
 
-    local greevil_primal_seals = filter_empty_slots_from_seal_table(hero.primal_seals)
-    local greevil_greater_seals = filter_empty_slots_from_seal_table(hero.greater_seals)
-    local greevl_lesser_seals = filter_empty_slots_from_seal_table(hero.lesser_seals)
+    local greevil_primal_seals = filter_empty_slots_from_seal_table(hero.egg_greevil.primal_seals)
+    local greevil_greater_seals = filter_empty_slots_from_seal_table(hero.egg_greevil.greater_seals)
+    local greevl_lesser_seals = filter_empty_slots_from_seal_table(hero.egg_greevil.lesser_seals)
 
-    hero.primal_seals = {}
-    hero.greater_seals = {}
-    hero.lesser_seals = {}
+    hero.egg_greevil.primal_seals = {}
+    hero.egg_greevil.greater_seals = {}
+    hero.egg_greevil.lesser_seals = {}
 
     add_entity(make_greevil(hero, greevil_primal_seals[1], greevil_greater_seals, greevl_lesser_seals))
     update_hero_network_state(hero)
@@ -320,6 +265,10 @@ function on_hatchery_insert_seal(event)
 
     if result == error_cant_insert_all_slots_are_full then
         emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_slots_are_occupied", 80)
+    end
+
+    if result == error_max_seal_level then
+        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_max_seal_level", 80)
     end
 end
 
@@ -355,6 +304,10 @@ function on_hatchery_hero_feed_big_egg(event)
 
     if result == error_cant_insert_all_slots_are_full then
         emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_slots_are_occupied", 80)
+    end
+
+    if result == error_max_seal_level then
+        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_max_seal_level", 80)
     end
 
     if result == error_big_eggs_have_already_hatched then

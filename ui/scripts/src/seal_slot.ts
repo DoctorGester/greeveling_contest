@@ -1,16 +1,19 @@
 class Slot_Panel {
     panel: Panel;
     image_panel: ImagePanel;
+    level_text: LabelPanel;
 
+    last_seal_level?: number;
     last_seal_type?: Seal_Type;
     last_seal?: number;
 }
 
-function update_seal_slot_panel_from_seal_type_and_seal(slot_panel: Slot_Panel, seal_type?: Seal_Type, seal?: number) {
+function update_seal_slot_panel_from_seal_type_and_seal(slot_panel: Slot_Panel, seal_type?: Seal_Type, seal?: number, level?: number) {
     slot_panel.panel.SetHasClass("Primal", seal_type == Seal_Type.PRIMAL);
     slot_panel.panel.SetHasClass("Greater", seal_type == Seal_Type.GREATER);
     slot_panel.panel.SetHasClass("Lesser", seal_type == Seal_Type.LESSER);
     slot_panel.panel.SetHasClass("Empty", seal_type == undefined && seal == undefined);
+    slot_panel.panel.SetHasClass("LevelOne", level == undefined || level <= 1);
 
     if (slot_panel.last_seal != seal || slot_panel.last_seal_type != seal_type) {
         slot_panel.panel.AddClass("Appear");
@@ -20,7 +23,12 @@ function update_seal_slot_panel_from_seal_type_and_seal(slot_panel: Slot_Panel, 
 
     slot_panel.last_seal_type = seal_type;
     slot_panel.last_seal = seal;
+    slot_panel.last_seal_level = level;
     slot_panel.panel.enabled = seal_type != undefined && seal != undefined;
+
+    if (level != undefined) {
+        slot_panel.level_text.text = level.toString(10);
+    }
 
     if (seal_type == undefined || seal == undefined) {
         slot_panel.image_panel.SetImage("");
@@ -140,17 +148,25 @@ function convert_lesser_seal_type_to_localization_token(seal_type: Lesser_Seal_T
 }
 
 function display_slot_tooltip(slot_panel: Slot_Panel) {
+    function dispatch_tooltip_event(ability_name: string, ability_level: number | undefined, slot_panel: Panel) {
+        if (ability_level != undefined) {
+            $.DispatchEvent("DOTAShowAbilityTooltipForLevel", slot_panel, ability_name, ability_level);
+        } else {
+            $.DispatchEvent("DOTAShowAbilityTooltip", slot_panel, ability_name);
+        }
+    }
+
     if (slot_panel.last_seal != undefined) {
         switch (slot_panel.last_seal_type) {
             case Seal_Type.PRIMAL: {
                 const ability_name = convert_primal_seal_type_to_ability_name(slot_panel.last_seal);
-                $.DispatchEvent("DOTAShowAbilityTooltip", slot_panel.panel, ability_name);
+                dispatch_tooltip_event(ability_name, slot_panel.last_seal_level, slot_panel.panel);
                 break;
             }
 
             case Seal_Type.GREATER: {
                 const ability_name = convert_greater_seal_type_to_ability_name(slot_panel.last_seal);
-                $.DispatchEvent("DOTAShowAbilityTooltip", slot_panel.panel, ability_name);
+                dispatch_tooltip_event(ability_name, slot_panel.last_seal_level, slot_panel.panel);
                 break;
             }
 
@@ -201,6 +217,12 @@ function make_slot_panel(container: Panel) {
     const slot_content = $.CreatePanel("Panel", top_level_panel, "");
     slot_content.AddClass("SealContent");
 
+    const slot_level_container = $.CreatePanel("Panel", top_level_panel, "");
+    slot_level_container.AddClass("SealLevelContainer");
+
+    const slot_level_text = $.CreatePanel("Label", slot_level_container, "");
+    slot_level_text.AddClass("SealLevelText");
+
     const slot_overlay = $.CreatePanel("Panel", top_level_panel, "");
     slot_overlay.AddClass("SealOverlay");
 
@@ -208,6 +230,7 @@ function make_slot_panel(container: Panel) {
 
     slot_panel.panel = top_level_panel;
     slot_panel.image_panel = slot_image;
+    slot_panel.level_text = slot_level_text;
 
     return slot_panel;
 }

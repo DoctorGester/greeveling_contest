@@ -29,6 +29,8 @@ function fill_drop_table()
         for type = 0, type_enum.LAST - 1 do
             if seal_type == Seal_Type.PRIMAL and type == Primal_Seal_Type.PURPLE then
                 print("I'm a little purple seal, don't forget to add me!")
+            elseif seal_type == Seal_Type.LESSER and type == Lesser_Seal_Type.ABILITY_LEVEL then
+                print("Ability seal is redundant and removed! GG!")
             else
                 remaining_seal_drops[seal_type][type] = amount_of_each_bonus * seal_type_factors[seal_type]
             end

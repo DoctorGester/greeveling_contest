@@ -1,11 +1,11 @@
+@import "defines";
+
 .SealPanel {
   //border-radius: 2px;
   //border-top: 1px solid #717a89;
   transition-property: background-color, border;
   transition-duration: .05s;
   transition-timing-function: ease-in-out;
-  border-radius: 50%;
-  box-shadow: inset black 0px 0px 16px 0px;
   tooltip-position: left;
   tooltip-body-position: 100% 0%;
 
@@ -37,10 +37,33 @@
   }
 
   .SealContent {
+    box-shadow: inset black 0px 0px 16px 0px;
     width: 90%;
     height: 90%;
     align: center center;
     border-radius: 50%;
+  }
+
+  .SealLevelContainer {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: black;
+    align: right bottom;
+    opacity: 0.9;
+
+    .SealLevelText {
+      font-family: @normal-font;
+      font-size: 16px;
+      align: center center;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+    }
+  }
+
+  &.LevelOne .SealLevelContainer {
+    visibility: collapse;
   }
 
   &:active {
@@ -49,5 +72,10 @@
 
   &:hover:enabled {
     brightness: 1.5;
+  }
+
+  &.CantInsert {
+    saturation: 0.5;
+    brightness: 0.3;
   }
 }

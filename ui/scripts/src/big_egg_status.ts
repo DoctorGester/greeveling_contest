@@ -1,7 +1,7 @@
 declare class Big_Egg_State {
-    primal_seals: { [index: number] : Primal_Seal_Type };
-    greater_seals: { [index: number] : Greater_Seal_Type };
-    lesser_seals: { [index: number] : Lesser_Seal_Type };
+    primal_seals: { [index: number] : Primal_Seal_With_Level };
+    greater_seals: { [index: number] : Greater_Seal_With_Level };
+    lesser_seals: { [index: number] : Lesser_Seal_With_Level };
 }
 
 const slot_panels_by_team: { [team: number]: Slot_Panel[] } = {};
@@ -19,20 +19,38 @@ function update_big_egg_status(egg_state_by_team_id: { [team_id: number]: Big_Eg
         let slot_index = 0;
 
         for (let seal_index in big_egg_state.primal_seals) {
-            const primal_seal: Primal_Seal_Type = big_egg_state.primal_seals[seal_index];
-            update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.PRIMAL, primal_seal);
+            const primal_seal = big_egg_state.primal_seals[seal_index];
+
+            if (primal_seal) {
+                update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.PRIMAL, primal_seal.seal, primal_seal.level);
+            } else {
+                update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.PRIMAL);
+            }
+
             slot_index++;
         }
 
         for (let seal_index in big_egg_state.greater_seals) {
-            const greater_seal: Greater_Seal_Type = big_egg_state.greater_seals[seal_index];
-            update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.GREATER, greater_seal);
+            const greater_seal = big_egg_state.greater_seals[seal_index];
+
+            if (greater_seal) {
+                update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.GREATER, greater_seal.seal, greater_seal.level);
+            } else {
+                update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.GREATER);
+            }
+
             slot_index++;
         }
 
         for (let seal_index in big_egg_state.lesser_seals) {
-            const lesser_seal: Lesser_Seal_Type = big_egg_state.lesser_seals[seal_index];
-            update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.LESSER, lesser_seal);
+            const lesser_seal = big_egg_state.lesser_seals[seal_index];
+
+            if (lesser_seal) {
+                update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.LESSER, lesser_seal.seal, lesser_seal.level);
+            } else {
+                update_seal_slot_panel_from_seal_type_and_seal(team_slot_panels[slot_index], Seal_Type.LESSER);
+            }
+
             slot_index++;
         }
     }

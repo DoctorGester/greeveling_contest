@@ -37,24 +37,21 @@ function make_mega_greevil(big_egg, abilities)
     native_unit_proxy.attached_entity = entity
 
     local dummy_ability_source = native_unit_proxy:FindAbilityByName("generic_hidden")
-    local primal_seals_and_levels, greater_seals_and_levels, lesser_seals_and_levels =
-        collapse_abilities_and_levels_into_abilities_with_levels(big_egg.primal_seals, big_egg.greater_seals, big_egg.lesser_seals)
-
     local seal_to_ability = {}
 
-    for _, primal_seal_and_level in pairs(primal_seals_and_levels) do
+    for _, primal_seal_and_level in pairs(big_egg.storage.primal_seals) do
         local ability = native_unit_proxy:AddAbility(convert_primal_seal_type_to_ability_name(primal_seal_and_level.seal))
         ability:SetLevel(primal_seal_and_level.level)
 
         seal_to_ability[primal_seal_and_level.seal] = ability
     end
 
-    for _, greater_seal_and_level in pairs(greater_seals_and_levels) do
+    for _, greater_seal_and_level in pairs(big_egg.storage.greater_seals) do
         local ability = native_unit_proxy:AddAbility(convert_greater_seal_type_to_ability_name(greater_seal_and_level.seal))
         ability:SetLevel(greater_seal_and_level.level)
     end
 
-    for _, lesser_seal_and_level in pairs(lesser_seals_and_levels) do
+    for _, lesser_seal_and_level in pairs(big_egg.storage.lesser_seals) do
         local modifier_name = convert_lesser_seal_type_to_modifier_name(lesser_seal_and_level.seal)
         local new_modifier = native_unit_proxy:AddNewModifier(native_unit_proxy, dummy_ability_source, modifier_name, {})
         new_modifier:SetStackCount(lesser_seal_and_level.level)

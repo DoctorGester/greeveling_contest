@@ -718,6 +718,8 @@ function set_up_game_settings()
     mode:SetModifyExperienceFilter(function(_, data) return filter_native_experience_added(data) end, {})
     mode:SetModifierGainedFilter(function (_, data) return filter_native_modifier_applied(data) end, {})
     mode:SetRespawnTimeScale(0.5)
+    mode:SetFountainPercentageHealthRegen(10.0)
+    mode:SetFountainPercentageManaRegen(10.0)
 
     GameRules:SetGoldPerTick(4)
     GameRules:SetUseUniversalShopMode(true)

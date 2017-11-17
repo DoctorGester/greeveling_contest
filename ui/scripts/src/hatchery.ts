@@ -1,3 +1,18 @@
+declare class Primal_Seal_With_Level {
+    seal: Primal_Seal_Type;
+    level: number;
+}
+
+declare class Greater_Seal_With_Level {
+    seal: Greater_Seal_Type;
+    level: number;
+}
+
+declare class Lesser_Seal_With_Level {
+    seal: Lesser_Seal_Type;
+    level: number;
+}
+
 declare class Hero_State {
     bonuses: { [slot_index:number]: Bonus_Slot };
     total_eggs: number;
@@ -7,9 +22,9 @@ declare class Hero_State {
 }
 
 declare class Hero_Egg {
-    primal_seals: Primal_Seal_Type[];
-    greater_seals: Greater_Seal_Type[];
-    lesser_seals: Lesser_Seal_Type[];
+    primal_seals: Primal_Seal_With_Level[];
+    greater_seals: Greater_Seal_With_Level[];
+    lesser_seals: Lesser_Seal_With_Level[];
 }
 
 declare class Bonus_Slot {
@@ -45,6 +60,8 @@ let current_tab = Hatchery_Tab.GREEVILS;
 let big_eggs_are_past_hatching_state = false;
 let mega_greevil_hatches_at = 0;
 
+const MAX_ABILITY_LEVEL = 4;
+
 function convert_primal_seal_type_to_egg_image_url(seal_type: Primal_Seal_Type) {
     const base_folder = "file://{images}/econ/courier/greevil/";
 
@@ -63,28 +80,87 @@ function convert_primal_seal_type_to_egg_image_url(seal_type: Primal_Seal_Type) 
     }
 }
 
+function can_insert_seal(primal_slots: Slot_Panel[], greater_slots: Slot_Panel[], lesser_slots: Slot_Panel[], seal_type?: Seal_Type, seal?: number) {
+    let slot_panels;
+
+    switch (seal_type) {
+        case Seal_Type.PRIMAL: {
+            slot_panels = primal_slots;
+            break;
+        }
+
+        case Seal_Type.GREATER: {
+            slot_panels = greater_slots;
+            break
+        }
+
+        case Seal_Type.LESSER: {
+            slot_panels = lesser_slots;
+            break
+        }
+
+        default: {
+            return false;
+        }
+    }
+
+    let found_an_empty_slot = false;
+
+    for (let slot_panel of slot_panels) {
+        if (slot_panel.last_seal != undefined && slot_panel.last_seal_level != undefined) {
+            const is_at_max_level = slot_panel.last_seal_level >= MAX_ABILITY_LEVEL;
+            const is_the_same_seal = slot_panel.last_seal == seal;
+
+            if (is_the_same_seal) {
+                return !is_at_max_level;
+            }
+        } else {
+            found_an_empty_slot = true;
+        }
+    }
+
+    return found_an_empty_slot;
+}
+
 function update_hatchery_ui_from_hero_state(hero_state: Hero_State) {
     const egg_counter_text: LabelPanel = <LabelPanel>$("#EggCount");
     egg_counter_text.text = "+" + (hero_state.total_eggs - 1);
     $("#EggCounter").SetHasClass("Visible", hero_state.total_eggs > 1);
     $("#HatchButtonContainer").SetHasClass("IsHatching", hero_state.is_hatching_an_egg);
     $("#HatcheryContainer").SetHasClass("HasEggs", hero_state.total_eggs > 0);
-    ($("#Egg") as ImagePanel).SetImage(convert_primal_seal_type_to_egg_image_url(hero_state.egg.primal_seals[1]));
 
-    update_seal_slot_panel_from_seal_type_and_seal(primal_seal_slot, Seal_Type.PRIMAL, hero_state.egg.primal_seals[1]);
+    const seal_slot = hero_state.egg.primal_seals[1];
+
+    if (seal_slot) {
+        ($("#Egg") as ImagePanel).SetImage(convert_primal_seal_type_to_egg_image_url(seal_slot.seal));
+
+        update_seal_slot_panel_from_seal_type_and_seal(primal_seal_slot, Seal_Type.PRIMAL, seal_slot.seal, seal_slot.level);
+    } else {
+        ($("#Egg") as ImagePanel).SetImage(convert_primal_seal_type_to_egg_image_url(-1));
+
+        update_seal_slot_panel_from_seal_type_and_seal(primal_seal_slot, Seal_Type.PRIMAL);
+    }
 
     for (let slot_array_index = 0; slot_array_index < MAX_HERO_GREATER_SEALS; slot_array_index++) {
         const seal_slot = hero_state.egg.greater_seals[slot_array_index + 1];
         const corresponding_slot_panel = greater_seal_slots[slot_array_index];
 
-        update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.GREATER, seal_slot);
+        if (seal_slot) {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.GREATER, seal_slot.seal, seal_slot.level);
+        } else {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.GREATER);
+        }
     }
 
     for (let slot_array_index = 0; slot_array_index < MAX_HERO_LESSER_SEALS; slot_array_index++) {
         const seal_slot = hero_state.egg.lesser_seals[slot_array_index + 1];
         const corresponding_slot_panel = lesser_seal_slots[slot_array_index];
 
-        update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.LESSER, seal_slot);
+        if (seal_slot) {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.LESSER, seal_slot.seal, seal_slot.level);
+        } else {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.LESSER);
+        }
     }
 
     for (let slot_array_index = 0; slot_array_index < TOTAL_INVENTORY_SLOTS; slot_array_index++) {
@@ -95,12 +171,34 @@ function update_hatchery_ui_from_hero_state(hero_state: Hero_State) {
     }
 }
 
+function update_inventory_seal_statuses_from_tab(hatchery_tab: Hatchery_Tab) {
+    switch (hatchery_tab) {
+        case Hatchery_Tab.EGGS: {
+            update_inventory_seal_statuses([ primal_seal_slot ], greater_seal_slots, lesser_seal_slots);
+            break;
+        }
+
+        case Hatchery_Tab.MEGA_GREEVIL: {
+            update_inventory_seal_statuses(mega_primal_seal_slots, mega_greater_seal_slots, mega_lesser_seal_slots);
+            break;
+        }
+    }
+}
+
+function update_inventory_seal_statuses(primal_slots: Slot_Panel[], greater_slots: Slot_Panel[], lesser_slots: Slot_Panel[]) {
+    for (let inventory_slot of inventory_slots) {
+        inventory_slot.panel.SetHasClass("CantInsert", !can_insert_seal(primal_slots, greater_slots, lesser_slots, inventory_slot.last_seal_type, inventory_slot.last_seal));
+    }
+}
+
 function on_hero_state_update(hero_state_by_player_id: { [player_id: number]: Hero_State }) {
     const hero_state = hero_state_by_player_id[Game.GetLocalPlayerID()];
 
     if (hero_state) {
         update_hatchery_ui_from_hero_state(hero_state);
     }
+
+    update_inventory_seal_statuses_from_tab(current_tab);
 }
 
 function on_big_egg_state_update(egg_state_by_team_id: { [team_id: number]: Big_Egg_State }) {
@@ -115,22 +213,36 @@ function on_big_egg_state_update(egg_state_by_team_id: { [team_id: number]: Big_
         const seal_slot = egg_state.primal_seals[slot_array_index + 1];
         const corresponding_slot_panel = mega_primal_seal_slots[slot_array_index];
 
-        update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.PRIMAL, seal_slot);
+        if (seal_slot) {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.PRIMAL, seal_slot.seal, seal_slot.level);
+        } else {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.PRIMAL);
+        }
     }
 
     for (let slot_array_index = 0; slot_array_index < MAX_MEGA_GREATER_SEALS; slot_array_index++) {
         const seal_slot = egg_state.greater_seals[slot_array_index + 1];
         const corresponding_slot_panel = mega_greater_seal_slots[slot_array_index];
 
-        update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.GREATER, seal_slot);
+        if (seal_slot) {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.GREATER, seal_slot.seal, seal_slot.level);
+        } else {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.GREATER);
+        }
     }
 
     for (let slot_array_index = 0; slot_array_index < MAX_MEGA_LESSER_SEALS; slot_array_index++) {
         const seal_slot = egg_state.lesser_seals[slot_array_index + 1];
         const corresponding_slot_panel = mega_lesser_seal_slots[slot_array_index];
 
-        update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.LESSER, seal_slot);
+        if (seal_slot) {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.LESSER, seal_slot.seal, seal_slot.level);
+        } else {
+            update_seal_slot_panel_from_seal_type_and_seal(corresponding_slot_panel, Seal_Type.LESSER);
+        }
     }
+
+    update_inventory_seal_statuses_from_tab(current_tab);
 }
 
 function update_hatchery_mega_greevil_timer_periodically() {
@@ -343,6 +455,8 @@ function switch_hatchery_tab(new_tab: Hatchery_Tab) {
     $("#TabButtonEggs").SetHasClass("CurrentTab", new_tab == Hatchery_Tab.EGGS);
     $("#TabButtonGreevils").SetHasClass("CurrentTab", new_tab == Hatchery_Tab.GREEVILS);
     $("#TabButtonMegaGreevil").SetHasClass("CurrentTab", new_tab == Hatchery_Tab.MEGA_GREEVIL);
+
+    update_inventory_seal_statuses_from_tab(new_tab);
 }
 
 function init_tabs() {
