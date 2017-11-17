@@ -64,11 +64,15 @@ function big_egg_apply_seal(big_egg, seal)
         max_seals_in_table = MAX_BIG_EGG_LESSER_SEALS
     end
 
-    assert(#seal_table < max_seals_in_table, "All slots of type " .. tostring(seal.seal_type) .. " are occupied")
+    if #seal_table >= max_seals_in_table then
+        return error_cant_insert_all_slots_are_full
+    end
 
     table.insert(seal_table, seal.seal)
 
     update_big_egg_network_state(big_egg)
+
+    return success
 end
 
 ---@param big_egg Big_Egg

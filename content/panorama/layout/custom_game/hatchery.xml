@@ -16,62 +16,90 @@
         <Panel id="HatcheryContainer">
             <Label id="Title" text="Hatchery"/>
 
-            <Panel id="HatcheryNoEggOverlay">
-                <Panel id="HatcheryNoEggImage"/>
-                <Label id="HatcheryNoEggTip" text="Collect eggs to hatch greevils!"/>
-                <!--TODO another image of a hero running with a bonus in his arms-->
+            <Panel id="TabButtons">
+                <Button id="TabButtonEggs">
+                    <Label text="EGGS"/>
+                </Button>
+                <Button id="TabButtonGreevils" class="CurrentTab">
+                    <Label text="GREEVILS"/>
+                </Button>
+                <Button id="TabButtonMegaGreevil">
+                    <Label text="BIG BOY"/>
+                </Button>
             </Panel>
 
-            <Panel id="HatcheryRegularContent">
-                <Panel id="EggContainer">
-                    <Image id="Egg"/>
-                    <Panel id="EggCounter">
-                        <Label id="EggCount"/>
-                    </Panel>
+            <Panel id="TabHatchery" class="Tab">
+                <Panel id="HatcheryNoEggOverlay">
+                    <Panel id="HatcheryNoEggImage"/>
+                    <Label id="HatcheryNoEggTip" text="No eggs left!\nFind more to hatch greevils!"/>
+                    <!--TODO another image of a hero running with a bonus in his arms-->
                 </Panel>
 
-                <Panel id="SealsSection">
+                <Panel id="HatcheryRegularContent">
+                    <Panel id="EggContainer">
+                        <Image id="Egg"/>
+                        <Panel id="EggCounter">
+                            <Label id="EggCount"/>
+                        </Panel>
+                    </Panel>
+
+                    <Panel id="SealsSection">
+                        <Label class="SectionTitle" text="Seals"/>
+                        <Panel id="SealContainer">
+                            <Panel id="PrimalSeal"/>
+                            <Panel id="GreaterSeals"/>
+                            <Panel id="LesserSeals"/>
+                        </Panel>
+                    </Panel>
+
+                    <Label class="SectionTitle" text="Hatch"/>
+                    <Panel id="HatchButtonContainer">
+                        <Button id="HatchButton">
+                            <Panel id="HatchButtonImage"/>
+                            <Label id="HatchButtonCounter" text="3"/>
+                        </Button>
+                    </Panel>
+                </Panel>
+            </Panel>
+
+            <Panel id="TabGreevils" class="Tab Active">
+                <Panel id="GreevilsNoGreevilsOverlay">
+                    <Panel id="GreevilsNoGreevilsImage"/>
+                    <!--Label class="GreevilsNoGreevilsTip" text="No Greevils yet!\nFind some Seals to hatch your first egg"/-->
+                    <Label class="GreevilsNoGreevilsTip" text="Work In Progress"/>
+                </Panel>
+            </Panel>
+
+            <Panel id="TabMegaGreevil" class="Tab">
+                <Panel id="MegaGreevilImage"/>
+                <Label id="MegaGreevilTimerText" class="SectionTitle" text="HATCHES IN"/>
+                <Label id="MegaGreevilTimer"/>
+                <Panel id="MegaSealsSection">
                     <Label class="SectionTitle" text="Seals"/>
                     <Panel id="SealContainer">
-                        <Panel id="PrimalSeal"/>
-                        <Panel id="GreaterSeals"/>
-                        <Panel id="LesserSeals"/>
+                        <Panel id="MegaPrimalSeals"/>
+                        <Panel id="MegaGreaterSeals"/>
+                        <Panel id="MegaLesserSealsTop"/>
+                        <Panel id="MegaLesserSealsBottom"/>
                     </Panel>
-                </Panel>
-
-                <Label class="SectionTitle" text="Hatch"/>
-                <Panel id="HatchButtonContainer">
-                    <Button id="HatchButton">
-                        <Panel id="HatchButtonImage"/>
-                        <Label id="HatchButtonCounter" text="3"/>
-                    </Button>
                 </Panel>
             </Panel>
 
             <Panel id="InventorySection">
-                <Label class="SectionTitle" id="InventoryTitle" text="Inventory"/>
+                <Label class="SectionTitle" id="InventoryTitle" text="GREEVIL SEALS"/>
                 <Label class="SectionTitle" id="InventoryStatusFeeding" text="FEED THE MEGA GREEVIL"/>
                 <Label class="SectionTitle" id="InventoryStatusDropping" text="SELECT ITEMS TO DROP"/>
                 <Panel id="InventoryContainer"/>
-                <Panel id="InventoryButtons">
-                    <Button id="InventoryButtonFeed">
-                        <Label text="Feed"/>
-                        <Image src="file://{images}/custom_game/feed_mega_greevil.png"/>
-                    </Button>
-                    <Button id="InventoryButtonDrop">
-                        <Label text="Drop"/>
-                        <Image src="file://{images}/custom_game/drop.png"/>
-                    </Button>
-                </Panel>
+                <Label id="InventoryControlsTip" text="Left click to equip, right click to drop"/>
             </Panel>
+        </Panel>
 
-            <Panel id="ImageCache" style="flow-children: right;">
-                <Image src="file://{images}/custom_game/cooldown_reduction.png"/>
-                <Image src="file://{images}/custom_game/health.png"/>
-                <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_strength.psd"/>
-                <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_agility.psd"/>
-                <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_intelligence.psd"/>
-            </Panel>
+        <Panel id="ImageCache" style="flow-children: right;">
+            <Image src="file://{images}/custom_game/cooldown_reduction.png"/>
+            <Image src="file://{images}/custom_game/health.png"/>
+            <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_strength.psd"/>
+            <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_agility.psd"/>
+            <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_intelligence.psd"/>
         </Panel>
     </Panel>
 </root>

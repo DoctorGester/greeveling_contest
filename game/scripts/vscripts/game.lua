@@ -19,6 +19,10 @@ queue_event_finish = false
 
 event_locations = {}
 
+if is_in_debug_mode then
+    entity_stats_print_at = 0
+end
+
 local EVENT_DURATION = minutes(1)
 local EVENT_FREQUENCY = minutes(3)
 local FIRST_EVENT_DELAY = minutes(5)
@@ -396,6 +400,34 @@ function update_game_state(current_time)
     end
 end
 
+function print_debug_entity_stats()
+    local entity_type_to_string = {
+        [Entity_Type.HERO] = "HERO",
+        [Entity_Type.BONUS] = "BONUS",
+        [Entity_Type.GREEVIL_EGG] = "GREEVIL_EGG",
+        [Entity_Type.GREEVIL] = "GREEVIL",
+        [Entity_Type.BIG_EGG] = "BIG_EGG",
+        [Entity_Type.MEGA_GREEVIL] = "MEGA_GREEVIL",
+        [Entity_Type.CANDY] = "CANDY",
+        [Entity_Type.AI_CRYSTAL_MAIDEN] = "AI_CRYSTAL_MAIDEN",
+        [Entity_Type.AI_TUSK] = "AI_TUSK",
+        [Entity_Type.AI_LICH] = "AI_LICH",
+        [Entity_Type.AI_WINTER_WYVERN] = "AI_WINTER_WYVERN",
+    }
+
+    local entity_stats = {}
+
+    for _, entity in ipairs(all_entities) do
+        entity_stats[entity.entity_type] = (entity_stats[entity.entity_type] or 0) + 1
+    end
+
+    print("Entity_Stats")
+
+    for entity_type, entity_amount in pairs(entity_stats) do
+        print("", entity_type_to_string[entity_type] or "UNKNOWN", entity_amount)
+    end
+end
+
 function do_one_frame(current_time)
     xpcall(update_game_state, handle_errors, current_time)
 
@@ -407,6 +439,14 @@ function do_one_frame(current_time)
         if all_entities[entity_index].is_destroyed_next_update then
             destroy_entity(all_entities[entity_index])
             table.remove(all_entities, entity_index)
+        end
+    end
+
+    if is_in_debug_mode then
+        if current_time >= entity_stats_print_at then
+            entity_stats_print_at = current_time + 120.0
+
+            print_debug_entity_stats()
         end
     end
 end

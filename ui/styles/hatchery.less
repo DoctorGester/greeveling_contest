@@ -74,6 +74,19 @@
 }
 
 #HatcheryContainer {
+  #TabHatchery {
+    width: 100%;
+    height: fill-parent-flow(1.0);
+    flow-children: down;
+  }
+
+  .Tab {
+    visibility: collapse;
+    &.Active {
+      visibility: visible;
+    }
+  }
+
   background-image: url("s2r://panorama/images/hud/reborn/bg_mainshop_psd.vtex");
   background-size: cover;
   flow-children: down;
@@ -142,11 +155,10 @@
   #HatcheryRegularContent {
     flow-children: down;
     width: 100%;
-    height: fill-parent-flow(1.0);
 
     #EggContainer {
-      width: 90%;
-      height: 180px;
+      width: 80%;
+      height: 170px;
       align: center center;
 
       #Egg {
@@ -197,8 +209,8 @@
         flow-children: down;
 
         .SealPanel {
-          width: 40px;
-          height: 40px;
+          width: 34px;
+          height: 34px;
           margin: 3px;
         }
 
@@ -230,8 +242,8 @@
     }
 
     #HatchButtonContainer {
-      width: 100px;
-      height: 100px;
+      width: 95px;
+      height: 95px;
       border-radius: 50%;
       border: 1px solid #4eb8ab;
       box-shadow: rgba(121, 255, 233, 0.67) 0px 0px 6px 0px;
@@ -296,10 +308,9 @@
 
   #InventorySection {
     width: 100%;
-    height: 245px;
     background-image: url("s2r://panorama/images/hud/reborn/bg_item_build_psd.vtex");
     background-size: cover;
-    margin-top: 10px;
+    margin-top: 20px;
     flow-children: down;
 
     &.Feeding #InventoryTitle, &.Dropping #InventoryTitle {
@@ -356,69 +367,180 @@
       }
   }
 
-  #InventoryButtons {
-    horizontal-align: center;
-    flow-children: right;
-    height: 100%;
-    padding: 12px;
+  #InventoryControlsTip {
+    margin: 10px;
+    font-family: @normal-font;
+    font-size: 18px;
+    color: #6d8e9f;
+    align: center center;
+  }
+}
 
-    #InventoryButtonFeed {
-      background-color: #ff9407;
-      tooltip-position: left;
-      tooltip-body-position: 100% 50%;
+#TabButtons {
+  flow-children: right;
+  width: 100%;
+  margin-bottom: 10px;
+
+  Button {
+    width: fill-parent-flow(1.0);
+    height: 30px;
+    //box-shadow: #000000aa 0px 0px 2px 2px;
+    tooltip-position: top;
+
+    transition-property: brightness, saturation;
+    transition-duration: 0.1s;
+
+    &:hover {
+      brightness: 1.4;
 
       Label {
-        margin-left: 30px;
+        color: white;
       }
     }
 
-    #InventoryButtonDrop {
-      background-color: #9a9b82;
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &:disabled {
+
+    }
+
+    &.CurrentTab {
+      background-color: #57646d;
 
       Label {
-        margin-left: 25px;
+        color: white;
       }
     }
 
-    Button {
-      width: 120px;
-      height: 100%;
-      margin-left: 8px;
-      margin-right: 8px;
-      border-radius: 3px;
-      box-shadow: #000000aa 0px 0px 2px 2px;
-      tooltip-position: top;
+    Label {
+      //text-shadow: 0px 0px 4px 3.0 #00000077;
+      color: #57646d;
+      align: center center;
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-family: @normal-font;
 
-      transition-property: brightness, saturation;
+      transition-property: color;
       transition-duration: 0.1s;
 
-      &:hover {
-        brightness: 1.4;
+      .CurrentTab & {
+
+      }
+    }
+
+    Image {
+      height: 100%;
+      width: height-percentage(100%);
+      horizontal-align: right;
+    }
+  }
+}
+
+#TabGreevils {
+  width: 100%;
+  height: fill-parent-flow(1.0);
+
+  #GreevilsNoGreevilsOverlay {
+    width: 100%;
+    flow-children: down;
+
+    #GreevilsNoGreevilsImage {
+      margin: 20px;
+      height: 300px;
+      width: 80%;
+      align: center center;
+      background-image: url("file://{images}/custom_game/greevil_bank_background.png");
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .GreevilsNoGreevilsTip {
+      font-family: @normal-font;
+      margin: 10px;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      color: white;
+      font-size: 24px;
+      horizontal-align: center;
+      text-align: center;
+    }
+  }
+}
+
+#TabMegaGreevil {
+  width: 100%;
+  height: fill-parent-flow(1.0);
+  flow-children: down;
+
+  #MegaGreevilImage {
+    margin: 10px;
+    height: 220px;
+    width: 60%;
+    align: center top;
+    background-image: url("file://{images}/custom_game/mega_greevil.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    opacity-mask: url("file://{images}/masks/softedge_circle_sharper.png");
+  }
+
+
+  #MegaGreevilTimer {
+    font-family: @normal-font;
+    text-transform: uppercase;
+    align: center center;
+    color: white;
+    font-size: 22px;
+  }
+
+  #MegaSealsSection {
+    width: 100%;
+    height: fill-parent-flow(1.0);
+    margin-top: 15px;
+    margin-bottom: 10px;
+    flow-children: down;
+
+    #SealContainer {
+      width: 100%;
+      flow-children: down;
+
+      .SealPanel {
+        width: 34px;
+        height: 34px;
+        margin: 3px;
       }
 
-      &:active {
-        transform: translateY(1px);
+      #MegaPrimalSeals {
+        horizontal-align: center;
+        flow-children: right;
+
+        .Primal {
+          margin-left: 3px;
+          margin-right: 3px;
+        }
       }
 
-      &:disabled {
-        saturation: 0.0;
-        brightness: 0.3;
+      #MegaGreaterSeals {
+        horizontal-align: center;
+        flow-children: right;
+
+        .Greater {
+          margin-left: 2px;
+          margin-right: 2px;
+        }
       }
 
-      Label {
-        text-shadow: 0px 0px 4px 3.0 #00000077;
-        color: white;
-        align: left center;
-        text-align: center;
-        font-size: 22px;
-        text-transform: uppercase;
-        font-family: @normal-font;
-      }
+      #MegaLesserSealsTop, #MegaLesserSealsBottom {
+        horizontal-align: center;
+        flow-children: right;
 
-      Image {
-        height: 100%;
-        width: height-percentage(100%);
-        horizontal-align: right;
+        .Lesser {
+          margin-left: 1px;
+          margin-right: 1px;
+        }
       }
     }
   }

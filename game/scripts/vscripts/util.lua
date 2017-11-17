@@ -58,12 +58,14 @@ end
 ---@class Entity
 ---@field public entity_type Entity_Type
 ---@field public is_destroyed_next_update false
+---@field public created_at number
 function make_entity(entity_type, entity_data)
     assert(entity_type ~= nil, "Entity type can't be nil!")
 
     local result_entity = {
         entity_type = entity_type,
-        is_destroyed_next_update = false
+        is_destroyed_next_update = false,
+        created_at = GameRules:GetGameTime()
     }
 
     copy_struct_into(entity_data, result_entity)

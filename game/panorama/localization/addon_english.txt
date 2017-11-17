@@ -7,6 +7,8 @@
 
         "error_cant_be_picked_up_by_non_heroes" "Can only be picked up by heroes"
 		"error_hatchery_is_full" "Hatchery is full!"
+		"error_all_slots_are_occupied" "All slots of this type are occupied!"
+        "error_all_big_eggs_already_hatched" "Mega Greevils have already hatched!"
 
 		"hatch_button_text" "HATCH"
 		"hatch_greevil_tooltip" "Hatch your greevil!<br/>Don't forget to put in as many seals as you can to make your greevil as strong as possible!"

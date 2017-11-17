@@ -107,10 +107,14 @@ function hero_egg_apply_seal(hero, seal)
     local seal_table = hero_get_seal_table_by_seal_type(hero, seal.seal_type)
     local empty_slot_index, found = find_empty_egg_seal_slot(hero, seal.seal_type)
 
-    assert(found, "No empty slot found")
+    if not found then
+        return error_cant_insert_all_slots_are_full
+    end
 
     seal_table[empty_slot_index] = seal.seal
     update_hero_network_state(hero)
+
+    return success
 end
 
 ---@param hero Hero
@@ -151,10 +155,17 @@ function hero_insert_seal(hero, slot_index)
 
     assert(seal ~= nil, string.format("Seal not found in slot %i", slot_index))
 
-    hero_egg_apply_seal(hero, seal)
+    local result = hero_egg_apply_seal(hero, seal)
+
+    if result ~= success then
+        return result
+    end
+
     hero.bonuses[slot_index] = nil
 
     update_hero_network_state(hero)
+
+    return success
 end
 
 ---@param hero Hero
@@ -179,16 +190,25 @@ function hero_insert_seal_into_big_egg(hero, slot_index, big_egg)
     assert(hero ~= nil, "Hero can't be nil")
     assert(slot_index ~= nil, "Slot index can't be nil")
     assert(big_egg ~= nil, "Big egg can't be nil")
-    assert(not big_eggs_hatched, "Big eggs have already hatched!")
+
+    if big_eggs_hatched then
+        return error_big_eggs_have_already_hatched
+    end
 
     local seal = hero.bonuses[slot_index]
 
     assert(seal ~= nil, string.format("Seal not found in slot %i", slot_index))
 
-    big_egg_apply_seal(big_egg, seal)
-    hero.bonuses[slot_index] = nil
+    local result = big_egg_apply_seal(big_egg, seal)
 
+    if result ~= success then
+        return result
+    end
+
+    hero.bonuses[slot_index] = nil
     update_hero_network_state(hero)
+
+    return success
 end
 
 ---@param hero Hero
@@ -296,7 +316,11 @@ function on_hatchery_insert_seal(event)
 
     ---@type Hero
     local hero = PlayerResource:GetPlayer(playerID):GetAssignedHero().attached_entity
-    hero_insert_seal(hero, event.seal + 1)
+    local result = hero_insert_seal(hero, event.seal + 1)
+
+    if result == error_cant_insert_all_slots_are_full then
+        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_slots_are_occupied", 80)
+    end
 end
 
 ---@param event table
@@ -327,7 +351,15 @@ function on_hatchery_hero_feed_big_egg(event)
     ---@type Big_Egg
     local big_egg = big_egg_by_team_id[PlayerResource:GetTeam(playerID)]
 
-    hero_insert_seal_into_big_egg(hero, event.seal + 1, big_egg)
+    local result = hero_insert_seal_into_big_egg(hero, event.seal + 1, big_egg)
+
+    if result == error_cant_insert_all_slots_are_full then
+        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_slots_are_occupied", 80)
+    end
+
+    if result == error_big_eggs_have_already_hatched then
+        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_big_eggs_already_hatched", 80)
+    end
 end
 
 ---@param event table
