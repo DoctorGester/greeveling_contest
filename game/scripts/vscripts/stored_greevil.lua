@@ -69,12 +69,6 @@ function find_empty_seal_slot_for_seal_in_stored_greevil(stored_greevil, seal_ty
     local max_seals_of_this_type = get_max_stored_greevil_seal_amount_by_seal_type(stored_greevil, seal_type)
     local seal_table = stored_greevil_get_seal_table_by_seal_type(stored_greevil, seal_type)
 
-    for slot_index = 1, max_seals_of_this_type do
-        if not seal_table[slot_index] or seal_table[slot_index].seal == seal then
-            return slot_index, true
-        end
-    end
-
     local found_an_empty_slot = false
     local empty_slot_index
 
@@ -83,7 +77,7 @@ function find_empty_seal_slot_for_seal_in_stored_greevil(stored_greevil, seal_ty
             if seal_table[slot_index].seal == seal then
                 return slot_index, true
             end
-        else
+        elseif not found_an_empty_slot then
             found_an_empty_slot = true
             empty_slot_index = slot_index
         end
