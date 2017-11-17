@@ -49,7 +49,7 @@ function start_game()
     big_eggs_hatch_at = current_time + minutes(20.0)
 
     if is_in_debug_mode then
-        big_eggs_hatch_at = current_time + minutes(4.5)
+        --big_eggs_hatch_at = current_time + minutes(4.5)
     end
 
     update_timers_network_state()
@@ -115,8 +115,16 @@ function update_entity(entity)
         update_big_egg(entity)
     elseif entity.entity_type == Entity_Type.MEGA_GREEVIL then
         update_mega_greevil(entity)
+    elseif entity.entity_type == Entity_Type.CANDY then
+        update_candy(entity)
     elseif entity.entity_type == Entity_Type.AI_CRYSTAL_MAIDEN then
         update_crystal_maiden_ai(entity)
+    end
+end
+
+function destroy_entity(entity)
+    if entity.entity_type == Entity_Type.CANDY then
+        destroy_candy(entity)
     end
 end
 
@@ -397,6 +405,7 @@ function do_one_frame(current_time)
 
     for entity_index = #all_entities, 1, -1 do
         if all_entities[entity_index].is_destroyed_next_update then
+            destroy_entity(all_entities[entity_index])
             table.remove(all_entities, entity_index)
         end
     end
@@ -522,6 +531,10 @@ function filter_native_item_added_to_inventory(item_data)
 
     --- If not a special item
     if not item_entity then
+        return true
+    end
+
+    if item_entity.entity_type == Entity_Type.CANDY then
         return true
     end
 
@@ -673,7 +686,7 @@ function set_up_game_settings()
     GameRules:SetStrategyTime(10.0)
 
     if is_in_debug_mode then
-        --mode:SetCustomGameForceHero("npc_dota_hero_juggernaut")
+        mode:SetCustomGameForceHero("npc_dota_hero_juggernaut")
         --mode:SetFogOfWarDisabled(true)
 
         GameRules:EnableCustomGameSetupAutoLaunch(true)

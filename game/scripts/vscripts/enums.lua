@@ -6,10 +6,11 @@ Entity_Type = {
     GREEVIL = 3,
     BIG_EGG = 4,
     MEGA_GREEVIL = 5,
-    AI_CRYSTAL_MAIDEN = 6,
-    AI_TUSK = 7,
-    AI_LICH = 8,
-    AI_WINTER_WYVERN = 9,
+    CANDY = 6,
+    AI_CRYSTAL_MAIDEN = 7,
+    AI_TUSK = 8,
+    AI_LICH = 9,
+    AI_WINTER_WYVERN = 10,
 }
 
 ---@class Seal_Type

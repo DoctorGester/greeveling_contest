@@ -22,11 +22,11 @@ function modifier_greevil_pinata:OnTakeDamage(damage_data)
             local heal_amount = self:GetAbility():GetSpecialValueFor("heal_amount")
             local candy_item = CreateItem("item_healing_candy", nil, nil)
             local launch_target = self:GetParent():GetAbsOrigin() + RandomVector(300)
-
-            CreateItemOnPositionForLaunch(self:GetParent():GetAbsOrigin(), candy_item)
-            candy_item.heal_amount = heal_amount
+            local container = CreateItemOnPositionForLaunch(self:GetParent():GetAbsOrigin(), candy_item)
             candy_item:LaunchLootInitialHeight(true, 32, 200, 0.6, launch_target)
             self:GetParent():EmitSound("ability_greater_greevil_pinata")
+
+            add_entity(make_candy(container, candy_item, heal_amount))
         end
     end
 end
