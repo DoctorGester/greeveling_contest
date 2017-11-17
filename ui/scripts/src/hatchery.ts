@@ -274,11 +274,14 @@ function subscribe_to_hatchery_visibility_handlers() {
         container.ToggleClass("Visible");
 
         if (container.BHasClass("Visible")) {
-            $.DispatchEvent("SetInputFocus", container);
             Game.EmitSound("Shop.PanelUp");
         } else {
             Game.EmitSound("Shop.PanelDown");
         }
+    });
+
+    GameEvents.Subscribe("dota_player_update_selected_unit", () => {
+        container.SetHasClass("Visible", false);
     });
 
     const shop_button = $.GetContextPanel()

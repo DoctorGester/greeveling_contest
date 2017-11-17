@@ -13,7 +13,7 @@
     </scripts>
 
     <Panel hittest="false" class="HatcheryRoot">
-        <Panel id="HatcheryContainer" acceptfocus="true">
+        <Panel id="HatcheryContainer">
             <Label id="Title" text="Hatchery"/>
 
             <Panel id="HatcheryNoEggOverlay">
