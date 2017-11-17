@@ -19,7 +19,9 @@ queue_event_finish = false
 
 event_locations = {}
 
-local EVENT_DURATION = minutes(2)
+local EVENT_DURATION = minutes(1)
+local EVENT_FREQUENCY = minutes(3)
+local FIRST_EVENT_DELAY = minutes(5)
 
 function start_game()
     if is_in_debug_mode then
@@ -41,7 +43,7 @@ function start_game()
     local current_time = GameRules:GetGameTime()
 
     initialize_drop_occurence_counter(current_time)
-    schedule_next_event(current_time)
+    schedule_next_event(current_time, FIRST_EVENT_DELAY)
 
     next_creep_spawn_at = current_time
     big_eggs_hatch_at = current_time + minutes(20.0)
@@ -71,8 +73,8 @@ function make_egg_invulnerable(egg)
     egg:AddNewModifier(egg, nil, "modifier_invulnerable", {})
 end
 
-function schedule_next_event(current_time)
-    event_start_at = current_time + minutes(4.5)
+function schedule_next_event(current_time, delay)
+    event_start_at = current_time + delay
 
     if is_in_debug_mode then
         event_start_at = current_time + minutes(0.3)
@@ -314,7 +316,7 @@ function finish_ongoing_event(current_time)
 
     queue_event_finish = false
     event_is_ongoing = false
-    schedule_next_event(current_time)
+    schedule_next_event(current_time, EVENT_FREQUENCY)
 end
 
 function update_ongoing_event_state(current_time)
