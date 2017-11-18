@@ -1,6 +1,6 @@
 ---@class AI_Crystal_Maiden : Entity
 ---@field public state AI_Crystal_Maiden_State
----@field public loot_drop_damage_buffer number
+---@field public next_drop_at_least_at number
 ---@field public native_unit_proxy CDOTA_BaseNPC_Creature
 ---@field public ability_spiral CDOTABaseAbility
 ---@field public ability_frost_nova CDOTABaseAbility
@@ -16,7 +16,7 @@
 ---@field public event_ended_at number
 
 local FROST_NOVA_RADIUS = 275
-local LOOT_BUFFER_SIZE = 400
+local DROP_FREQUENCY = 1.4
 local FROSTBITE_DURATION = 1.0
 
 local DELAY_BETWEEN_EVENT_END_AND_DESTROY = 0.9
@@ -33,7 +33,7 @@ function make_crystal_maiden_ai(location)
 
     local entity = make_entity(Entity_Type.AI_CRYSTAL_MAIDEN, {
         state = AI_Crystal_Maiden_State.ON_THE_MOVE,
-        loot_drop_damage_buffer = LOOT_BUFFER_SIZE,
+        next_drop_at_least_at = GameRules:GetGameTime(),
         tick_counter = 0,
         time_during_movement = 0,
         native_unit_proxy = native_unit_proxy,
@@ -310,15 +310,15 @@ function crystal_maiden_register_damage_taken(ai, attacker, damage)
         return
     end
 
-    ai.loot_drop_damage_buffer = ai.loot_drop_damage_buffer + damage
-
     if crystal_maiden_can_cast_frostbite_on(ai, attacker) then
         crystal_maiden_cast_frostbite_on(ai, attacker)
     end
 
-    if ai.loot_drop_damage_buffer > LOOT_BUFFER_SIZE then
+    local current_time = GameRules:GetGameTime()
+
+    if current_time >= ai.next_drop_at_least_at then
         ai.loot_dropped = ai.loot_dropped + 1
-        ai.loot_drop_damage_buffer = ai.loot_drop_damage_buffer - LOOT_BUFFER_SIZE
+        ai.next_drop_at_least_at = current_time + DROP_FREQUENCY
 
         generate_and_launch_boss_drop(attacker, ai.native_unit_proxy, ai.loot_dropped % 7 == 0)
         handle_crystal_maiden_loot_dropped(ai)
