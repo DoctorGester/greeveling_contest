@@ -235,8 +235,8 @@ function update_greevil_ai_ability_ai(ai)
 
             for _, unit in pairs(all_targets) do
                 if unit:IsRooted() or unit:IsSilenced() or unit:IsDisarmed() or
-                unit:IsStunned() or unit:IsBlind() or unit:IsCommandRestricted() or
-                unit:IsHexed() or unit:IsMovementImpaired() or unit:IsMuted()
+                    unit:IsStunned() or unit:IsBlind() or unit:IsCommandRestricted() or
+                    unit:IsHexed() or unit:IsMuted()
                 then
                     actual_targets = actual_targets + 1
                 end
@@ -272,17 +272,19 @@ function update_greevil_ai_ability_ai(ai)
             end
 
             for _, target in pairs(all_targets) do
-                local history = ai.yellow_health_history[target]
+                if target:IsRealHero() then
+                    local history = ai.yellow_health_history[target]
 
-                if not history then
-                    history = {}
-                    ai.yellow_health_history[target] = history
-                end
+                    if not history then
+                        history = {}
+                        ai.yellow_health_history[target] = history
+                    end
 
-                table.insert(history, target:GetHealthPercent())
+                    table.insert(history, target:GetHealthPercent())
 
-                if #history > 90 then
-                    table.remove(history, 1)
+                    if #history > 90 then
+                        table.remove(history, 1)
+                    end
                 end
             end
 
