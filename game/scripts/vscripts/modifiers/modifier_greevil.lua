@@ -8,7 +8,8 @@ end
 function modifier_greevil:DeclareFunctions()
     return {
         MODIFIER_PROPERTY_TRANSLATE_ACTIVITY_MODIFIERS,
-        MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE
+        MODIFIER_PROPERTY_MOVESPEED_ABSOLUTE,
+        MODIFIER_EVENT_ON_ATTACK_LANDED
     }
 end
 
@@ -23,6 +24,15 @@ if IsServer() then
         end
 
         return self:GetParent():GetOwner():GetIdealSpeed()
+    end
+
+    function modifier_greevil:OnAttackLanded(params)
+        local attacker = params.attacker
+        local target = params.target
+
+        if attacker == self:GetParent() and target ~= nil then
+            target:EmitSound("greevil_attack_landed")
+        end
     end
 end
 

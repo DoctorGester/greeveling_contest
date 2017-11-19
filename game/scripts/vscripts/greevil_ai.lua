@@ -42,7 +42,7 @@ function flatten_cluster_history(cluster_history, cluster_radius)
     return false, nil
 end
 
-function find_ability_cast_target_based_on_cluster_history(ai, ability, cluster_history)
+function find_ability_cast_target_based_on_cluster_history(ai, ability, cluster_history, optinal_target_filter)
     local current_location = ai.native_unit_proxy:GetAbsOrigin()
     local ability_cast_range = ability:GetCastRange(Vector(), nil)
 
@@ -58,7 +58,7 @@ function find_ability_cast_target_based_on_cluster_history(ai, ability, cluster_
     end
 
     local ability_radius = ability:GetAOERadius()
-    local all_clusters = split_ability_targets_into_circle_clusters(ability, current_location, ability_cast_range, ability_radius)
+    local all_clusters = split_ability_targets_into_circle_clusters(ability, current_location, ability_cast_range, ability_radius, optinal_target_filter)
 
     for _, cluster in pairs(all_clusters) do
         table.insert(cluster_history, cluster_average(cluster))
@@ -184,7 +184,9 @@ function update_greevil_ai_ability_ai(ai)
         end
 
         if seal == Primal_Seal_Type.RED then
-            local found_cast_target, cast_target = find_ability_cast_target_based_on_cluster_history(ai, ability, ai.red_cluster_history)
+            local found_cast_target, cast_target = find_ability_cast_target_based_on_cluster_history(ai, ability, ai.red_cluster_history, function(target)
+                return target:IsAttacking()
+            end)
 
             if found_cast_target then
                 ai.red_cluster_history = {}

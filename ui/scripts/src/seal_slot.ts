@@ -211,8 +211,8 @@ function make_slot_panel(container: Panel) {
     const slot_panel: Slot_Panel = new Slot_Panel();
     const top_level_panel = $.CreatePanel("Button", container, "");
     top_level_panel.AddClass("SealPanel");
-    top_level_panel.SetPanelEvent("onmouseover", () => display_slot_tooltip(slot_panel));
-    top_level_panel.SetPanelEvent("onmouseout", () => hide_slot_tooltip(slot_panel));
+    top_level_panel.SetPanelEvent(PanelEvent.ON_MOUSE_OVER, () => display_slot_tooltip(slot_panel));
+    top_level_panel.SetPanelEvent(PanelEvent.ON_MOUSE_OUT, () => hide_slot_tooltip(slot_panel));
 
     const slot_content = $.CreatePanel("Panel", top_level_panel, "");
     slot_content.AddClass("SealContent");

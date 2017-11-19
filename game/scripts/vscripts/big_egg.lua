@@ -34,7 +34,6 @@ end
 ---@param big_egg Big_Egg
 ---@param seal Bonus
 function big_egg_apply_seal(big_egg, seal)
-    print_table("s", seal)
     local result = stored_greevil_apply_seal(big_egg.storage, seal)
 
     if result ~= success then

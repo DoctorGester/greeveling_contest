@@ -22,7 +22,6 @@ end
 ---@param candy Candy
 function update_candy(candy)
     if GameRules:GetGameTime() >= candy.expires_at then
-        print("Kill the candy")
         candy.is_destroyed_next_update = true
     end
 end

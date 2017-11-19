@@ -1,11 +1,13 @@
 ---@class Greevil : Entity
 ---@field public native_unit_proxy CDOTA_BaseNPC_Creature
 ---@field public respawn_at number
+---@field public is_enabled boolean
 ---@field public is_dead boolean
 ---@field public tick_counter number
 ---@field public ai Greevil_AI
 ---@field public lost_owner_at number
 ---@field public started_attacking_at number
+---@field public wearables CBaseModelEntity[]
 
 local RESPAWN_DURATION = 15.0
 
@@ -48,8 +50,6 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
         primal_seal_to_ability[primal_seal.seal] = ability
     end
 
-    randomize_greevil_wearables(greevil, skin_id)
-
     greevil:AddNewModifier(greevil, nil, "modifier_greevil", {}):SetStackCount(RandomInt(0, 6))
 
     for _, greater_seal_and_level in pairs(greater_seals) do
@@ -70,19 +70,41 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
     local entity = make_entity(Entity_Type.GREEVIL, {
         respawn_at = 0,
         is_dead = false,
+        is_enabled = true,
         native_unit_proxy = greevil,
         tick_counter = 0,
         ai = make_greevil_ai(greevil, primal_seal_to_ability),
         lost_owner_at = 0,
-        started_attacking_at = 0
+        started_attacking_at = 0,
+        wearables = {}
     })
+
+    randomize_greevil_wearables(entity, skin_id)
 
     greevil.attached_entity = entity
 
     return entity
 end
 
----@param greevil CDOTA_BaseNPC_Creature
+---@param greevil Greevil
+function hide_greevil(greevil)
+    greevil.native_unit_proxy:AddNoDraw()
+
+    for _, wearable in pairs(greevil.wearables) do
+        wearable:AddEffects(EF_NODRAW)
+    end
+end
+
+---@param greevil Greevil
+function unhide_greevil(greevil)
+    greevil.native_unit_proxy:RemoveNoDraw()
+
+    for _, wearable in pairs(greevil.wearables) do
+        wearable:RemoveEffects(EF_NODRAW)
+    end
+end
+
+---@param greevil Greevil
 function randomize_greevil_wearables(greevil, skin_id)
     local all_ears = {
         "models/courier/greevil/greevil_ears1.vmdl",
@@ -133,7 +155,7 @@ function randomize_greevil_wearables(greevil, skin_id)
 
         if selected == nil then return end
 
-        add_wearable_to_greevil(greevil, skin_id, selected)
+        table.insert(greevil.wearables, add_wearable_to_greevil(greevil.native_unit_proxy, skin_id, selected))
     end
 
     add_random_wearable_from(all_ears)
@@ -144,7 +166,7 @@ function randomize_greevil_wearables(greevil, skin_id)
     add_random_wearable_from(all_teeth)
     add_random_wearable_from(all_wings)
 
-    add_wearable_to_greevil(greevil, skin_id, "models/courier/greevil/greevil_eyes.vmdl")
+    table.insert(greevil.wearables, add_wearable_to_greevil(greevil.native_unit_proxy, skin_id, "models/courier/greevil/greevil_eyes.vmdl"))
 end
 
 ---@param primal_seal_type Primal_Seal_Type
@@ -176,11 +198,20 @@ function add_wearable_to_greevil(greevil, skin_id, model_path)
     ---@type CBaseModelEntity
     local wearable = SpawnEntityFromTableSynchronous("prop_dynamic", { model = model_path })
     wearable:FollowEntity(greevil, true)
-    wearable:SetSkin(skin_id)
+
+    if skin_id ~= nil then
+        wearable:SetSkin(skin_id)
+    end
+
+    return wearable
 end
 
 ---@param greevil Greevil
 function update_greevil(greevil)
+    if greevil.native_unit_proxy:HasModifier("modifier_greevil_deactivated") then
+        return
+    end
+
     ---@type CDOTA_BaseNPC_Hero
     local owner = greevil.native_unit_proxy:GetOwner()
 
@@ -262,6 +293,8 @@ function handle_greevil_death(greevil)
 
     local owner_hero = greevil.native_unit_proxy:GetOwner()
     owner_hero:AddNewModifier(owner_hero, nil, "modifier_greevil_respawn", { duration = RESPAWN_DURATION })
+
+    update_hero_network_state(owner_hero.attached_entity)
 end
 
 function get_random_greevil_respawn_location(greevil)
@@ -273,6 +306,31 @@ function get_random_greevil_respawn_location(greevil)
     local respawn_locations = respawn_locations_by_team[greevil.native_unit_proxy:GetTeam()]
 
     return respawn_locations[RandomInt(1, #respawn_locations)]:GetAbsOrigin()
+end
+
+---@param hero Hero
+---@param greevil Greevil
+function activate_greevil_for_hero(hero, greevil)
+    greevil.is_enabled = true
+    greevil.native_unit_proxy:RemoveModifierByName("modifier_greevil_deactivated")
+
+    fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil.native_unit_proxy, { release = true })
+
+    FindClearSpaceForUnit(greevil.native_unit_proxy, hero.native_unit_proxy:GetAbsOrigin(), true)
+    greevil.native_unit_proxy:SetForwardVector(hero.native_unit_proxy:GetAbsOrigin() - greevil.native_unit_proxy:GetAbsOrigin())
+    greevil.native_unit_proxy:StartGestureWithPlaybackRate(ACT_DOTA_SPAWN, 2.0)
+    greevil.native_unit_proxy:AddNewModifier(greevil.native_unit_proxy, nil,"modifier_greevil_spawning", { duration = 0.85 })
+end
+
+---@param greevil Greevil
+function deactivate_greevil(greevil)
+    greevil.is_enabled = false
+    greevil.native_unit_proxy:AddNewModifier(greevil.native_unit_proxy, nil,"modifier_greevil_deactivated", {})
+
+    fx("particles/econ/events/winter_major_2016/blink_dagger_start_wm.vpcf", PATTACH_WORLDORIGIN, nil, {
+        cp0 = greevil.native_unit_proxy:GetAbsOrigin(),
+        release = true
+    })
 end
 
 ---@param greevil Greevil
@@ -290,4 +348,8 @@ function respawn_greevil(greevil)
     fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil.native_unit_proxy, { release = true })
 
     FindClearSpaceForUnit(greevil.native_unit_proxy, respawn_location, true)
+
+    if not greevil.is_enabled then
+        deactivate_greevil(greevil)
+    end
 end

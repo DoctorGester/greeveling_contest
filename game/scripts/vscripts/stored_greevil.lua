@@ -9,6 +9,7 @@
 ---@field public max_primal_seals number
 ---@field public max_greater_seals number
 ---@field public max_lesser_seals number
+---@field public greevil Greevil
 
 
 MAX_SEAL_LEVEL = 4

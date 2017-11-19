@@ -223,6 +223,32 @@ function process_chat_message(player_id, text)
         end
     end
 
+    if text == "party" then
+        ---@type Hero
+        local hero_entity = hero.attached_entity
+
+        for seal = 0, Primal_Seal_Type.LAST - 1 do
+            if seal ~= Primal_Seal_Type.PURPLE then
+                add_bonus_to_hero_inventory(hero_entity, make_seal_in_inventory(Seal_Type.PRIMAL, seal))
+                add_egg_to_hero_inventory(hero_entity)
+                hero_insert_seal(hero_entity, 1)
+                hero_hatch_egg(hero_entity)
+                hero_entity.started_hatching_at = GameRules:GetGameTime() - 10.0
+                update_hero(hero_entity)
+            end
+        end
+    end
+
+    if string_starts(text, "kg") then
+        ---@type Hero
+        local hero_entity = hero.attached_entity
+
+        local space_position = string.find(text, " ")
+        local remaining_text = string.sub(text, space_position + 1)
+
+        hero_entity.active_greevils[tonumber(remaining_text)].greevil.native_unit_proxy:Kill(nil, nil)
+    end
+
     if record_last_command then
         editor_last_chat_message = text
     end

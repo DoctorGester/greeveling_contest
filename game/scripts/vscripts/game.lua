@@ -1,4 +1,6 @@
 event_queue = event_queue or {}
+
+---@type Entity[]
 all_entities = all_entities or {}
 
 big_eggs_hatched = false
@@ -222,7 +224,8 @@ function handle_event(event)
         hatchery_remove_seal = on_hatchery_remove_seal,
         hatchery_hatch_egg = on_hatchery_hero_hatch_egg,
         hatchery_feed_seal = on_hatchery_hero_feed_big_egg,
-        hatchery_drop_seal = on_hatchery_hero_drop_seal
+        hatchery_drop_seal = on_hatchery_hero_drop_seal,
+        hatchery_put_greevil_into_slot = on_hatchery_hero_put_greevil_into_slot
     }
 
     if is_in_debug_mode then
@@ -591,7 +594,7 @@ function filter_native_item_added_to_inventory(item_data)
 
     if picked_up_by_a_hero then
         if item_entity.entity_type == Entity_Type.GREEVIL_EGG then
-            add_egg_to_hero_inventory(picked_up_by, item_entity)
+            add_egg_to_hero_inventory(picked_up_by)
             native_item:Destroy()
         elseif item_entity.entity_type == Entity_Type.BONUS then
             if hero_has_a_slot_for_another_bonus(picked_up_by) then
@@ -667,11 +670,13 @@ function link_native_modifiers()
     link_native_modifier_simple("bonuses/lesser/modifier_lesser_seal_health")
 
     -- Other stuff
-    link_native_modifier_simple("modifier_big_egg_visual_delta_z_correction")
-    link_native_modifier_simple("modifier_big_egg_hidden")
-    link_native_modifier_simple("modifier_greevil")
-    link_native_modifier_simple("modifier_greevil_respawn")
-    link_native_modifier_simple("modifier_mega_greevil")
+    link_native_modifier_simple("modifiers/modifier_big_egg_visual_delta_z_correction")
+    link_native_modifier_simple("modifiers/modifier_big_egg_hidden")
+    link_native_modifier_simple("modifiers/modifier_greevil")
+    link_native_modifier_simple("modifiers/modifier_greevil_respawn")
+    link_native_modifier_simple("modifiers/modifier_greevil_spawning")
+    link_native_modifier_simple("modifiers/modifier_greevil_deactivated")
+    link_native_modifier_simple("modifiers/modifier_mega_greevil")
 
 
     -- Bosses

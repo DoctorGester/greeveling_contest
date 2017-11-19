@@ -19,11 +19,7 @@ function bind_custom_events()
     listen_to_custom_event("hatchery_hatch_egg")
     listen_to_custom_event("hatchery_feed_seal")
     listen_to_custom_event("hatchery_drop_seal")
-end
-
-function set_up_extra_native_event_bus()
-    LinkLuaModifier("modifier_event_bus", LUA_MODIFIER_MOTION_NONE)
-    CreateModifierThinker(nil, nil, "modifier_event_bus", {}, Vector(), DOTA_TEAM_GOODGUYS, false)
+    listen_to_custom_event("hatchery_put_greevil_into_slot")
 end
 
 function set_up_native_game_mode_entity()

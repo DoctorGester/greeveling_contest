@@ -4,8 +4,8 @@ hero_state_by_entity_id = {}
 ---@class Hero : Entity
 ---@field public native_unit_proxy CDOTA_BaseNPC_Hero
 ---@field public egg_greevil Stored_Greevil
----@field public party_greevils Stored_Greevil[]
----@field public inventory_greevils Stored_Greevil[]
+---@field public active_greevils Stored_Greevil[]
+---@field public stored_greevils Stored_Greevil[]
 ---@field public greevil_eggs number
 ---@field public bonuses Bonus[]
 ---@field public is_hatching_an_egg boolean
@@ -17,6 +17,9 @@ MAX_HERO_PRIMAL_SEALS = 1
 MAX_HERO_GREATER_SEALS = 2
 MAX_HERO_LESSER_SEALS = 4
 
+MAX_ACTIVE_GREEVILS = 2
+MAX_STORED_GREEVILS = 12
+
 ---@return Hero
 function make_hero(native_unit_proxy)
     local hero = make_entity(Entity_Type.HERO, {
@@ -24,8 +27,9 @@ function make_hero(native_unit_proxy)
         greevil_eggs = 1,
         bonuses = {},
         egg_greevil = make_stored_greevil(MAX_HERO_PRIMAL_SEALS, MAX_HERO_GREATER_SEALS, MAX_HERO_LESSER_SEALS),
-        is_hatching_an_egg = false,
-        started_hatchingg_at = -1
+        active_greevils = {},
+        stored_greevils = {},
+        is_hatching_an_egg = false
     })
 
     native_unit_proxy.attached_entity = hero
@@ -44,7 +48,7 @@ end
 
 ---@param hero Hero
 ---@param greevil_egg Greevil_Egg
-function add_egg_to_hero_inventory(hero, greevil_egg)
+function add_egg_to_hero_inventory(hero)
     hero.greevil_eggs = hero.greevil_eggs + 1
 
     update_hero_network_state(hero)
@@ -115,6 +119,39 @@ function update_hero_network_state(hero)
     hero_state.egg.primal_seals = hero.egg_greevil.primal_seals
     hero_state.egg.greater_seals = hero.egg_greevil.greater_seals
     hero_state.egg.lesser_seals = hero.egg_greevil.lesser_seals
+
+    hero_state.active_greevils = {}
+    hero_state.stored_greevils = {}
+
+    for slot_index = 1, MAX_ACTIVE_GREEVILS do
+        local stored_greevil = hero.active_greevils[slot_index]
+
+        if stored_greevil then
+            hero_state.active_greevils[slot_index] = {
+                storage = {
+                    primal_seals = stored_greevil.primal_seals,
+                    greater_seals = stored_greevil.greater_seals,
+                    lesser_seals = stored_greevil.lesser_seals,
+                },
+                respawn_at = stored_greevil.greevil.respawn_at
+            }
+        end
+    end
+
+    for slot_index = 1, MAX_STORED_GREEVILS do
+        local stored_greevil = hero.stored_greevils[slot_index]
+
+        if stored_greevil then
+            hero_state.stored_greevils[slot_index] = {
+                storage = {
+                    primal_seals = stored_greevil.primal_seals,
+                    greater_seals = stored_greevil.greater_seals,
+                    lesser_seals = stored_greevil.lesser_seals,
+                },
+                respawn_at = stored_greevil.greevil.respawn_at
+            }
+        end
+    end
 
     hero_state.is_hatching_an_egg = hero.is_hatching_an_egg
     hero_state.total_eggs = hero.greevil_eggs
@@ -209,6 +246,9 @@ end
 function hero_hatch_egg(hero)
     assert_hero_can_act_on_an_egg(hero)
 
+    local slot_found = find_an_empty_greevil_table_and_slot(hero)
+    assert(slot_found, "No slot found for a new greevil!")
+
     hero.started_hatching_at = GameRules:GetGameTime()
     hero.is_hatching_an_egg = true
 
@@ -228,9 +268,32 @@ function filter_empty_slots_from_seal_table(seal_table)
 end
 
 ---@param hero Hero
+---@return boolean, table, number
+function find_an_empty_greevil_table_and_slot(hero)
+    for slot_index = 1, MAX_ACTIVE_GREEVILS do
+        if not hero.active_greevils[slot_index] then
+            return true, hero.active_greevils, slot_index
+        end
+    end
+
+    for slot_index = 1, MAX_STORED_GREEVILS do
+        if not hero.stored_greevils[slot_index] then
+            return true, hero.stored_greevils, slot_index
+        end
+    end
+
+    return false, nil, nil
+end
+
+---@param hero Hero
 function hero_finish_hatching_an_egg(hero)
     hero.is_hatching_an_egg = false
     hero.greevil_eggs = hero.greevil_eggs - 1
+
+    ---@type Stored_Greevil
+    local greevil_copy = {}
+
+    copy_struct_into(hero.egg_greevil, greevil_copy)
 
     local greevil_primal_seals = filter_empty_slots_from_seal_table(hero.egg_greevil.primal_seals)
     local greevil_greater_seals = filter_empty_slots_from_seal_table(hero.egg_greevil.greater_seals)
@@ -240,7 +303,42 @@ function hero_finish_hatching_an_egg(hero)
     hero.egg_greevil.greater_seals = {}
     hero.egg_greevil.lesser_seals = {}
 
-    add_entity(make_greevil(hero, greevil_primal_seals[1], greevil_greater_seals, greevl_lesser_seals))
+    local slot_found, greevil_table, slot = find_an_empty_greevil_table_and_slot(hero)
+    assert(slot_found, "Empty greevil slot not found!")
+
+    greevil_table[slot] = greevil_copy
+
+    local new_greevil = make_greevil(hero, greevil_primal_seals[1], greevil_greater_seals, greevl_lesser_seals)
+    add_entity(new_greevil)
+    greevil_copy.greevil = new_greevil
+
+    update_hero_network_state(hero)
+
+    if greevil_table == hero.stored_greevils then
+        deactivate_greevil(new_greevil)
+    end
+end
+
+---@param hero Hero
+---@param greevil_slot number
+---@param target_slot number
+function hero_put_greevil_into_slot(hero, greevil_slot, target_slot)
+    assert(hero ~= nil, "Hero can't be nil")
+    assert(hero.stored_greevils[greevil_slot] ~= nil, "Invalid greevil slot!")
+    assert(not hero.stored_greevils[greevil_slot].greevil.is_dead, "Trying to swap out a dead greevil")
+
+    local current_active_greevil = hero.active_greevils[target_slot]
+    local stored_greevil = hero.stored_greevils[greevil_slot]
+
+    if current_active_greevil then
+        deactivate_greevil(current_active_greevil.greevil)
+    end
+
+    activate_greevil_for_hero(hero, stored_greevil.greevil)
+
+    hero.stored_greevils[greevil_slot] = current_active_greevil
+    hero.active_greevils[target_slot] = stored_greevil
+
     update_hero_network_state(hero)
 end
 
@@ -292,35 +390,49 @@ end
 
 ---@param event table
 function on_hatchery_hero_feed_big_egg(event)
-    local playerID = event.PlayerID
+    local player_id = event.PlayerID
+    local player = PlayerResource:GetPlayer(player_id)
+
+    assert(player ~= nil)
 
     ---@type Hero
-    local hero = PlayerResource:GetPlayer(playerID):GetAssignedHero().attached_entity
+    local hero = player:GetAssignedHero().attached_entity
 
     ---@type Big_Egg
-    local big_egg = big_egg_by_team_id[PlayerResource:GetTeam(playerID)]
+    local big_egg = big_egg_by_team_id[PlayerResource:GetTeam(player_id)]
 
     local result = hero_insert_seal_into_big_egg(hero, event.seal + 1, big_egg)
 
     if result == error_cant_insert_all_slots_are_full then
-        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_slots_are_occupied", 80)
+        emit_custom_hud_error_for_player(player, "error_all_slots_are_occupied", 80)
     end
 
     if result == error_max_seal_level then
-        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_max_seal_level", 80)
+        emit_custom_hud_error_for_player(player, "error_max_seal_level", 80)
     end
 
     if result == error_big_eggs_have_already_hatched then
-        emit_custom_hud_error_for_player(PlayerResource:GetPlayer(playerID), "error_all_big_eggs_already_hatched", 80)
+        emit_custom_hud_error_for_player(player, "error_all_big_eggs_already_hatched", 80)
     end
 end
 
 ---@param event table
 function on_hatchery_hero_drop_seal(event)
-    local playerID = event.PlayerID
+    local player_id = event.PlayerID
 
     ---@type Hero
-    local hero = PlayerResource:GetPlayer(playerID):GetAssignedHero().attached_entity
+    local hero = PlayerResource:GetPlayer(player_id):GetAssignedHero().attached_entity
 
     hero_drop_seal(hero, event.seal + 1)
+end
+
+function on_hatchery_hero_put_greevil_into_slot(event)
+    local greevil_slot = event.greevil_slot + 1
+    local target_slot = event.target_slot + 1
+    local player_id = event.PlayerID
+
+    ---@type Hero
+    local hero = PlayerResource:GetPlayer(player_id):GetAssignedHero().attached_entity
+
+    hero_put_greevil_into_slot(hero, greevil_slot, target_slot)
 end

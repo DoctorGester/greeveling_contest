@@ -15,7 +15,6 @@ interface Panel {
     paneltype: string;
     rememberchildfocus: boolean;
     style: VCSSStyleDeclaration;
-    acceptsfocus: boolean;
 
     scrolloffset_x: number;
     scrolloffset_y: number;
@@ -77,7 +76,7 @@ interface Panel {
 
     RemoveAndDeleteChildren(): void;
 
-    MoveChildBefore(child: Panel, afterChild: Panel): void;
+    MoveChildBefore(child: Panel, beforeChild: Panel): void;
     MoveChildAfter(child: Panel, afterChild: Panel): void;
 
     GetPositionWithinWindow(): {x: number, y: number};
@@ -134,7 +133,7 @@ interface Panel {
 
     BReadyForDisplay(): boolean;
     SetReadyForDisplay(value: boolean): void; // ???
-    SetPanelEvent(event: string, handler: () => void): void;
+    SetPanelEvent(event: PanelEvent, handler: () => void): void;
 
     RunScriptInPanelContext(script: string): void;
 }
@@ -152,13 +151,32 @@ interface LabelPanel extends Panel {
     html: boolean;
 }
 
+declare const enum PanelEvent {
+    ON_LEFT_CLICK = "onactivate",
+    ON_RIGHT_CLICK = "oncontextmenu",
+    ON_MOUSE_OVER = "onmouseover",
+    ON_MOUSE_OUT = "onmouseout",
+    ON_ESCAPE_PRESS = "oncancel"
+}
+
+declare const enum ScalingFunction {
+    NONE = "none",
+    STRETCH = "stretch", // the default
+    STRETCH_X = "stretchx",
+    STRETCH_Y = "stretchy",
+    STRETCH_TO_FIT_PRESERVE_ASPECT = "stretch-to-fit-preserve-aspect",
+    STRETCH_TO_FIT_X_PRESERVE_ASPECT = "stretch-to-fit-x-preserve-aspect",
+    STRETCH_TO_FIT_Y_PRESERVE_ASPECT = "stretch-to-fit-y-preserve-aspect",
+    STRETCH_TO_COVER_PRESERVE_ASPECT = "stretch-to-cover-preserve-aspect"
+}
+
 interface ImagePanel extends Panel {
     /**
      * Sets the image of this Image.
      * Example: image.SetImage("s2r://panorama/images/hud/hudv2_iconglyph.png")
      */
     SetImage(path: string): void;
-    SetScaling(scale: string): void;
+    SetScaling(scale: ScalingFunction): void;
 }
 
 interface AbilityImage extends ImagePanel {

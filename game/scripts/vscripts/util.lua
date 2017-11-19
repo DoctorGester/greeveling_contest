@@ -241,18 +241,20 @@ function clusterize_points(points, cluster_radius)
     return all_clusters
 end
 
-function find_predicted_ability_targets_points_at_location(ability, at_location, initial_search_radius)
+function find_predicted_ability_targets_points_at_location(ability, at_location, initial_search_radius, optional_target_filter)
     local units_in_radius = find_ability_targets_at_location(ability, at_location, initial_search_radius)
     local all_points = {}
 
     for _, unit in pairs(units_in_radius) do
-        local point = unit:GetAbsOrigin()
+        if not optional_target_filter or optional_target_filter(unit) then
+            local point = unit:GetAbsOrigin()
 
-        if unit:IsMoving() then
-            point = point + unit:GetForwardVector() * unit:GetIdealSpeed()
+            if unit:IsMoving() then
+                point = point + unit:GetForwardVector() * unit:GetIdealSpeed()
+            end
+
+            table.insert(all_points, point)
         end
-
-        table.insert(all_points, point)
     end
 
     return all_points
@@ -263,8 +265,8 @@ end
 ---@param initial_search_radius number
 ---@param cluster_radius number
 ---@return boolean, vector[]
-function split_ability_targets_into_circle_clusters(ability, at_location, initial_search_radius, cluster_radius)
-    local all_points = find_predicted_ability_targets_points_at_location(ability, at_location, initial_search_radius)
+function split_ability_targets_into_circle_clusters(ability, at_location, initial_search_radius, cluster_radius, optional_target_filter)
+    local all_points = find_predicted_ability_targets_points_at_location(ability, at_location, initial_search_radius, optional_target_filter)
 
     return clusterize_points(all_points, cluster_radius)
 end

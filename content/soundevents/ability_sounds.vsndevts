@@ -49,6 +49,23 @@
         soundlevel = "95.0"
         event_type = "1.0"
     }
+    
+    greevil_attack_landed = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/weapons/creep/greevil/attack01.vsnd",
+            "sounds/weapons/creep/greevil/attack02.vsnd",
+            "sounds/weapons/creep/greevil/attack03.vsnd",
+            "sounds/weapons/creep/greevil/attack04.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
 
     hatch_rumble = {
         type = "dota_update_default"

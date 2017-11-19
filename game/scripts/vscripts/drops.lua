@@ -89,10 +89,26 @@ function initialize_drop_occurence_counter(current_time)
     egg_drop_time_counter = current_time
 end
 
+function could_use_an_egg_drop_at_location(location)
+    for _, entity in ipairs(all_entities) do
+        if entity.entity_type == Entity_Type.HERO then
+            local is_close = (entity.native_unit_proxy:GetAbsOrigin() - location):Length2D() <= 900
+            local has_no_eggs = entity.greevil_eggs == 0
+
+            if is_close and has_no_eggs then
+                return true
+            end
+        end
+    end
+
+    return false
+end
+
 function handle_neutral_creep_death_in_regard_to_item_drops(neutral_creep)
     local current_time = GameRules:GetGameTime()
+    local someone_needs_an_egg = could_use_an_egg_drop_at_location(neutral_creep:GetAbsOrigin())
 
-    if current_time - egg_drop_time_counter > egg_drop_occurence_frequency then
+    if current_time - egg_drop_time_counter > egg_drop_occurence_frequency and someone_needs_an_egg then
         egg_drop_time_counter = egg_drop_time_counter + egg_drop_occurence_frequency
         generate_and_launch_egg_drop(neutral_creep)
     elseif current_time - neutral_creep_drop_time_counter > neutral_drop_occurrence_frequency then
@@ -116,8 +132,10 @@ function handle_lane_creep_death_in_regard_to_item_drops(lane_creep, hero_killer
         false
     ) > 0
 
+    local someone_needs_an_egg = could_use_an_egg_drop_at_location(lane_creep:GetAbsOrigin())
+
     if any_heroes_are_around then
-        if current_time - egg_drop_time_counter > egg_drop_occurence_frequency then
+        if current_time - egg_drop_time_counter > egg_drop_occurence_frequency and someone_needs_an_egg then
             egg_drop_time_counter = egg_drop_time_counter + egg_drop_occurence_frequency
             generate_and_launch_egg_drop(lane_creep, hero_killer_optional)
         elseif current_time - lane_creep_drop_time_counter > lane_drop_occurence_frequency then

@@ -1,13 +1,7 @@
-declare class Big_Egg_State {
-    primal_seals: { [index: number] : Primal_Seal_With_Level };
-    greater_seals: { [index: number] : Greater_Seal_With_Level };
-    lesser_seals: { [index: number] : Lesser_Seal_With_Level };
-}
-
 const slot_panels_by_team: { [team: number]: Slot_Panel[] } = {};
 const TOTAL_SLOTS = 14;
 
-function update_big_egg_status(egg_state_by_team_id: { [team_id: number]: Big_Egg_State }) {
+function update_big_egg_status(egg_state_by_team_id: { [team_id: number]: Stored_Greevil }) {
     for (const team_id in egg_state_by_team_id) {
         const big_egg_state = egg_state_by_team_id[team_id];
         const team_slot_panels = slot_panels_by_team[team_id];

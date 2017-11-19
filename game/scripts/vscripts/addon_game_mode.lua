@@ -32,7 +32,6 @@ end
 function Activate()
     set_up_game_settings()
     set_up_native_game_mode_entity()
-    set_up_extra_native_event_bus()
     bind_native_events()
     bind_custom_events()
     link_native_modifiers()

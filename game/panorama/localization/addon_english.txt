@@ -10,10 +10,12 @@
 		"error_all_slots_are_occupied" "All slots of this type are occupied!"
         "error_all_big_eggs_already_hatched" "Mega Greevils have already hatched!"
         "error_max_seal_level" "That seal is already at max level!"
+        "error_greevil_is_dead" "Can't use a dead greevil"
 
 		"hatch_button_text" "HATCH"
 		"hatch_greevil_tooltip" "Hatch your greevil!<br/>Don't forget to put in as many seals as you can to make your greevil as strong as possible!"
 		"feed_mega_greevil_tooltip" "Feed seals to your Mega Greevil to power him up! Mega Greevil can contain 2x more seals than a regular greevil."
+		"greevil_level_tooltip" "Combined seal level of your greevil"
 
         "DOTA_Tooltip_Ability_item_greevil_egg" "Greevil Egg"
         "DOTA_Tooltip_Ability_item_healing_candy" "Healing Candy"

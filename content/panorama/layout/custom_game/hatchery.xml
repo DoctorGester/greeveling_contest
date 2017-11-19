@@ -68,6 +68,15 @@
                     <!--Label class="GreevilsNoGreevilsTip" text="No Greevils yet!\nFind some Seals to hatch your first egg"/-->
                     <Label class="GreevilsNoGreevilsTip" text="Work In Progress"/>
                 </Panel>
+
+                <Panel id="GreevilsRegularContent">
+                    <Label class="SectionTitle" text="MY PARTY"/>
+                    <Panel id="ActiveGreevils"/>
+                    <Label class="SectionTitle" text="GREEVIL STORAGE"/>
+                    <Label id="PutGreevilIntoPartyTip" text="Left click to swap a greevil into your party"/>
+                    <Label id="NoGreevilsInStorageTip" text="Hatch more greevils to fill your storage"/>
+                    <Panel id="StoredGreevils"/>
+                </Panel>
             </Panel>
 
             <Panel id="TabMegaGreevil" class="Tab">
@@ -87,8 +96,6 @@
 
             <Panel id="InventorySection">
                 <Label class="SectionTitle" id="InventoryTitle" text="GREEVIL SEALS"/>
-                <Label class="SectionTitle" id="InventoryStatusFeeding" text="FEED THE MEGA GREEVIL"/>
-                <Label class="SectionTitle" id="InventoryStatusDropping" text="SELECT ITEMS TO DROP"/>
                 <Panel id="InventoryContainer"/>
                 <Label id="InventoryControlsTip" text="Left click to equip, right click to drop"/>
             </Panel>
@@ -97,6 +104,16 @@
         <Panel id="ImageCache" style="flow-children: right;">
             <Image src="file://{images}/custom_game/cooldown_reduction.png"/>
             <Image src="file://{images}/custom_game/health.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_naked_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_red_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_orange_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_white_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_black_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_yellow_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_green_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_blue_1.png"/>
+            <Image src="file://{images}/custom_game/greevils/greevil_black_2.png"/>
+
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_strength.psd"/>
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_agility.psd"/>
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_intelligence.psd"/>
