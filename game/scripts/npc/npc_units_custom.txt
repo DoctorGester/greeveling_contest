@@ -21,12 +21,12 @@
 		"UnitLabel"			        "greevil"
 
 		"ArmorPhysical"				"5"
-		"MagicalResistance"			"50"
+		"MagicalResistance"			"25"
 
 		"AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
 		"AttackDamageMin"			"35"
 		"AttackDamageMax"			"35"
-		"AttackRate"				"1.2"
+		"AttackRate"				"1.5"
 		"AttackAnimationPoint"		"0.43"
 		"AttackAcquisitionRange"	"500"
 		"AttackRange"				"128"
@@ -44,7 +44,7 @@
 		"MovementSpeed"				"320"		
 		"MovementTurnRate"			"0.6"		
 
-		"StatusHealth"				"1000"
+		"StatusHealth"				"800"
 		"StatusHealthRegen"			"3"			
 		"StatusMana"				"300"		
 		"StatusManaRegen"			"3"		
@@ -82,12 +82,12 @@
         "Ability4"					""
 
         "ArmorPhysical"				"30"
-        "MagicalResistance"			"50"
+        "MagicalResistance"			"25"
 
         "AttackCapabilities"		"DOTA_UNIT_CAP_MELEE_ATTACK"
         "AttackDamageMin"			"450"
         "AttackDamageMax"			"500"
-        "AttackRate"				"1.5"
+        "AttackRate"				"1.8"
         "AttackAnimationPoint"		"0.43"
         "AttackAcquisitionRange"	"500"
         "AttackRange"				"280"
