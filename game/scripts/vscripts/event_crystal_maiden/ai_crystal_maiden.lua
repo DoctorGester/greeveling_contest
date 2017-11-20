@@ -268,7 +268,7 @@ function update_crystal_maiden_ai(ai)
     elseif ai.state == AI_Crystal_Maiden_State.CASTING_SPIRAL then
         update_crystal_maiden_spiral_cast(ai)
 
-        if current_time - ai.started_casting_spiral_at > 14.0 then
+        if current_time - ai.started_casting_spiral_at > 6.0 then
             ai.native_unit_proxy:FadeGesture(ACT_DOTA_CAST_ABILITY_4)
             ai.state = AI_Crystal_Maiden_State.ON_THE_MOVE
         end
