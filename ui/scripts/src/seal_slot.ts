@@ -15,7 +15,7 @@ function update_seal_slot_panel_from_seal_type_and_seal(slot_panel: Slot_Panel, 
     slot_panel.panel.SetHasClass("Empty", seal_type == undefined && seal == undefined);
     slot_panel.panel.SetHasClass("LevelOne", level == undefined || level <= 1);
 
-    if (slot_panel.last_seal != seal || slot_panel.last_seal_type != seal_type) {
+    if (slot_panel.last_seal != seal || slot_panel.last_seal_type != seal_type || slot_panel.last_seal_level != level) {
         slot_panel.panel.AddClass("Appear");
 
         $.Schedule(0.1, () => slot_panel.panel.SetHasClass("Appear", false));

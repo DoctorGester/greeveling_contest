@@ -1,5 +1,6 @@
 <root>
     <styles>
+        <include src="file://{resources}/styles/custom_game/animations.css"/>
         <include src="file://{resources}/styles/custom_game/event_timer.css"/>
     </styles>
 
@@ -10,12 +11,22 @@
 
     <Panel hittest="false" class="EventTimer">
         <Panel class="EventTimerContainer" id="EventTimerTop">
-            <Label class="EventHeader" text="Event"/>
-            <Label id="EventTimer" class="EventTimerText" text=""/>
+            <Panel class="EventContent">
+                <Panel class="EventTextAndHeader">
+                    <Label class="EventHeader" text="Crystal Maiden"/>
+                    <Label id="EventTimer" class="EventTimerText" text=""/>
+                </Panel>
+            </Panel>
+            <Image id="BossEventImage" class="EventImage"/>
         </Panel>
         <Panel class="EventTimerContainer" id="HatchTimerTop">
-            <Label class="EventHeader" text="Mega eggs"/>
-            <Label id="BigEggHatchTimer" class="EventTimerText" text=""/>
+            <Panel class="EventContent">
+                <Panel class="EventTextAndHeader">
+                    <Label class="EventHeader" text="Mega eggs"/>
+                    <Label id="BigEggHatchTimer" class="EventTimerText" text=""/>
+                </Panel>
+            </Panel>
+            <Image id="BigEggHatchEventImage" class="EventImage"/>
         </Panel>
     </Panel>
 </root>

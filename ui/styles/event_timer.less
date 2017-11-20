@@ -1,37 +1,64 @@
 @import "defines";
 
 .EventTimer {
+  align: left bottom;
   visibility: visible;
   flow-children: down;
   transition-property: opacity;
   transition-duration: .2s;
-  width: 180px;
-  margin-top: 140px;
+  width: 400px;
+  margin-bottom: 300px;
+
+  .HUDFlipped & {
+    align: right bottom;
+  }
+
+  .EventContent {
+    background-color: gradient( linear, 0% 0%, 100% 0%, from(rgba(66, 86, 100, 0.8)), color-stop( .5, rgba(66, 86, 99, 0.33)), to(rgba(0, 0, 1, 0)) );
+    width: 100%;
+    vertical-align: bottom;
+  }
+
+  .EventImage {
+    width: 120px;
+    height: 90px;
+  }
+
+  .EventTextAndHeader {
+    flow-children: down;
+    padding-left: 140px;
+
+    .EventHeader {
+      color: white;
+      text-align: left;
+      horizontal-align: left;
+      font-family: @title-font;
+      font-size: 24px;
+      text-shadow: 1px 1px 1px 2 #00000099;
+      text-transform: uppercase;
+
+      .HUDFlipped & {
+        transform: scaleX(-1);
+      }
+    }
+  }
 }
 
 .EventTimerContainer {
-  flow-children: down;
   horizontal-align: left;
   opacity: 1;
   transition-property: opacity;
   transition-duration: 0.12s;
   transition-timing-function: ease-in-out;
-  background-color: gradient( linear, 0% 0%, 100% 0%, from(rgba(66, 86, 100, 0.8)), color-stop( .5, rgba(66, 86, 99, 0.33)), to(rgba(0, 0, 1, 0)) );
-  padding-left: 18px;
   padding-right: 10px;
   padding-top: 4px;
   margin-bottom: 20px;
   width: 100%;
-}
+  border-bottom: 1px solid #7c9fb4aa;
 
-.EventHeader {
-  color: #A3B5D0cc;
-  text-align: center;
-  horizontal-align: center;
-  font-family: @normal-font;
-  font-size: 16px;
-  text-shadow: 1px 1px 1px 2 #00000099;
-  text-transform: uppercase;
+  .HUDFlipped & {
+    transform: scaleX(-1);
+  }
 }
 
 .EventTimerText {
@@ -39,9 +66,20 @@
   font-weight: thin;
   font-size: 20px;
   text-shadow: 1px 1px 1px 2 #00000099;
-  text-align: center;
+  text-align: left;
   //margin-right: 10px;
   font-family: @normal-font;
   margin-right: 4px;
-  horizontal-align: center;
+  horizontal-align: left;
+
+  .HUDFlipped & {
+    transform: scaleX(-1);
+  }
+}
+
+.AnimationTimerClose {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-name: TimerCloseAnimation;
 }

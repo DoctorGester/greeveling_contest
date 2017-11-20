@@ -29,7 +29,14 @@ function update_timer_label_from_time_remaining(event_time: number, timer_label:
             return (new Array(3).join('0') + numbers).slice(-2);
         };
 
-        timer_label.text = left_pad(minutes) + ':' + left_pad(seconds);
+        const new_timer_text = left_pad(minutes) + ':' + left_pad(seconds);
+
+        if (new_timer_text != timer_label.text && minutes == 0 && seconds <= 5) {
+            timer_label.RemoveClass("AnimationTimerClose");
+            timer_label.AddClass("AnimationTimerClose");
+        }
+
+        timer_label.text = new_timer_text;
     } else {
         timer_label.text = default_text;
     }

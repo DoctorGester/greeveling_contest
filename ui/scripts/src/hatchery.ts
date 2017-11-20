@@ -350,6 +350,7 @@ function update_greevils_tab_from_hero_state(hero_state: Hero_State) {
 
         greevil_slot.button.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, () => {
             if (currently_reassinged_slot != -1) {
+                Game.EmitSound("ui_greevil_swap");
                 GameEvents.SendCustomGameEventToServer("hatchery_put_greevil_into_slot", {
                     greevil_slot: currently_reassinged_slot,
                     target_slot: slot_array_index
@@ -378,6 +379,8 @@ function update_greevils_tab_from_hero_state(hero_state: Hero_State) {
                 });
                 return;
             }
+
+            Game.EmitSound("ui_greevil_click");
 
             if (currently_reassinged_slot == slot_array_index) {
                 reset_currently_reassigned_slot();
@@ -503,13 +506,21 @@ function make_inventory_slot_clicked_handler_for_slot_index(slot_index: number) 
     return () => {
         hide_slot_tooltip(inventory_slots[slot_index]);
 
+        function emit_sound_if_can_insert() {
+            if (!inventory_slots[slot_index].panel.BHasClass("CantInsert")) {
+                Game.EmitSound("ui_seal_add");
+            }
+        }
+
         switch (current_tab) {
             case Hatchery_Tab.EGGS: {
+                emit_sound_if_can_insert();
                 GameEvents.SendCustomGameEventToServer("hatchery_insert_seal", { seal: slot_index });
                 break;
             }
 
             case Hatchery_Tab.MEGA_GREEVIL: {
+                emit_sound_if_can_insert();
                 GameEvents.SendCustomGameEventToServer("hatchery_feed_seal", { seal: slot_index });
                 break;
             }
@@ -526,6 +537,7 @@ function fill_inventory_slot_panels() {
         slot_panel.panel.AddClass("InventorySlotPanel");
         slot_panel.panel.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, make_inventory_slot_clicked_handler_for_slot_index(slot_index));
         slot_panel.panel.SetPanelEvent(PanelEvent.ON_RIGHT_CLICK, () => {
+            Game.EmitSound("ui_seal_drop");
             GameEvents.SendCustomGameEventToServer("hatchery_drop_seal", { seal: slot_index });
         });
 
@@ -533,30 +545,20 @@ function fill_inventory_slot_panels() {
     }
 }
 
+function set_egg_seal_slot_click_event(slot_panel: Slot_Panel, seal_type: Seal_Type, slot_index: number) {
+    slot_panel.panel.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, () => {
+        hide_slot_tooltip(slot_panel);
+        Game.EmitSound("ui_seal_remove");
+        GameEvents.SendCustomGameEventToServer("hatchery_remove_seal", { seal: slot_index, seal_type: seal_type });
+    });
+}
+
 function fill_primal_seal_slot() {
     const primal_seal_container = $("#PrimalSeal");
     primal_seal_slot = make_slot_panel(primal_seal_container);
     primal_seal_slot.panel.AddClass("InventorySlotPanel");
-    primal_seal_slot.panel.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, () => {
-        hide_slot_tooltip(primal_seal_slot);
-        GameEvents.SendCustomGameEventToServer("hatchery_remove_seal", { seal: 0, seal_type: Seal_Type.PRIMAL });
-    });
-}
 
-function fill_lesser_seal_slots() {
-    const lesser_seals_container = $("#LesserSeals");
-
-    for (let slot_index = 0; slot_index < MAX_HERO_LESSER_SEALS; slot_index++) {
-        const slot_panel = make_slot_panel(lesser_seals_container);
-
-        slot_panel.panel.AddClass("InventorySlotPanel");
-        slot_panel.panel.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, () => {
-            hide_slot_tooltip(slot_panel);
-            GameEvents.SendCustomGameEventToServer("hatchery_remove_seal", { seal: slot_index, seal_type: Seal_Type.LESSER });
-        });
-
-        lesser_seal_slots[slot_index] = slot_panel;
-    }
+    set_egg_seal_slot_click_event(primal_seal_slot, Seal_Type.PRIMAL, 0);
 }
 
 function fill_greater_seal_slots() {
@@ -566,12 +568,22 @@ function fill_greater_seal_slots() {
         const slot_panel = make_slot_panel(greater_seal_container);
 
         slot_panel.panel.AddClass("InventorySlotPanel");
-        slot_panel.panel.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, () => {
-            hide_slot_tooltip(slot_panel);
-            GameEvents.SendCustomGameEventToServer("hatchery_remove_seal", { seal: slot_index, seal_type: Seal_Type.GREATER });
-        });
+        set_egg_seal_slot_click_event(slot_panel, Seal_Type.GREATER, slot_index);
 
         greater_seal_slots[slot_index] = slot_panel;
+    }
+}
+
+function fill_lesser_seal_slots() {
+    const lesser_seals_container = $("#LesserSeals");
+
+    for (let slot_index = 0; slot_index < MAX_HERO_LESSER_SEALS; slot_index++) {
+        const slot_panel = make_slot_panel(lesser_seals_container);
+
+        slot_panel.panel.AddClass("InventorySlotPanel");
+        set_egg_seal_slot_click_event(slot_panel, Seal_Type.LESSER, slot_index);
+
+        lesser_seal_slots[slot_index] = slot_panel;
     }
 }
 
@@ -640,6 +652,7 @@ function set_hatch_button_events() {
     });
 
     hatch_button.SetPanelEvent(PanelEvent.ON_LEFT_CLICK, () => {
+        Game.EmitSound("ui_hatch");
         GameEvents.SendCustomGameEventToServer("hatchery_hatch_egg", {});
     });
 }

@@ -754,4 +754,5 @@ function preload_resources_from_context(context)
 
     PrecacheResource("soundfile", "soundevents/game_sounds_vo_announcer.vsndevts", context)
     PrecacheResource("soundfile", "soundevents/ability_sounds.vsndevts", context)
+    PrecacheResource("soundfile", "soundevents/ui_sounds.vsndevts", context)
 end

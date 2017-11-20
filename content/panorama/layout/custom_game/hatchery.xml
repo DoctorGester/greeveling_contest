@@ -65,8 +65,7 @@
             <Panel id="TabGreevils" class="Tab Active">
                 <Panel id="GreevilsNoGreevilsOverlay">
                     <Panel id="GreevilsNoGreevilsImage"/>
-                    <!--Label class="GreevilsNoGreevilsTip" text="No Greevils yet!\nFind some Seals to hatch your first egg"/-->
-                    <Label class="GreevilsNoGreevilsTip" text="Work In Progress"/>
+                    <Label class="GreevilsNoGreevilsTip" text="No Greevils yet!\nFind some Seals to hatch your first egg"/>
                 </Panel>
 
                 <Panel id="GreevilsRegularContent">
@@ -113,6 +112,9 @@
             <Image src="file://{images}/custom_game/greevils/greevil_green_1.png"/>
             <Image src="file://{images}/custom_game/greevils/greevil_blue_1.png"/>
             <Image src="file://{images}/custom_game/greevils/greevil_black_2.png"/>
+
+            <Image src="file://{images}/custom_game/event_egg.png"/>
+            <Image src="file://{images}/custom_game/boss_crystal_maiden.png"/>
 
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_strength.psd"/>
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_agility.psd"/>
