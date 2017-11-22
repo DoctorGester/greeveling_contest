@@ -1,8 +1,8 @@
 "AddonInfo" {
-    maps "5v5"
+    maps "greeviling"
 	"IsPlayable" "1"
 	"HeroGuidesSupported" "1"
-	"5v5" {
+	"greeviling" {
         "MaxPlayers" "10"
 	}
 }

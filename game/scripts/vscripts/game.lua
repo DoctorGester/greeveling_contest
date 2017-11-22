@@ -39,8 +39,8 @@ function start_game()
 
     event_locations = {
         Entities:FindByName(nil, "middle_event_spawn"),
-        Entities:FindByName(nil, "side_event_spawn_1"), -- left
-        Entities:FindByName(nil, "side_event_spawn_2"), -- right
+        --Entities:FindByName(nil, "side_event_spawn_1"), -- left
+        --Entities:FindByName(nil, "side_event_spawn_2"), -- right
     }
 
     fill_drop_table()
@@ -354,7 +354,7 @@ function announce_and_reveal_event()
     for _, team in pairs({ DOTA_TEAM_GOODGUYS, DOTA_TEAM_BADGUYS }) do
         MinimapEvent(team, big_egg_by_team_id[team].native_unit_proxy, location.x, location.y, DOTA_MINIMAP_EVENT_HINT_LOCATION, 5.0)
 
-        AddFOWViewer(team, location, 2000, EVENT_DURATION, false)
+        AddFOWViewer(team, location, 1450, EVENT_DURATION, false)
     end
 end
 
