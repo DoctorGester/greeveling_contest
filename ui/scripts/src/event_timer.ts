@@ -44,7 +44,7 @@ function update_timer_periodically() {
     update_timers_visibility(shop_panel.BHasClass("ShopOpen"));
 
     const timer_callback: Timer_Callback = (minutes, seconds, timer_label) => {
-        if (minutes == 0 && seconds <= 5) {
+        if (minutes == 0 && seconds <= 5 && seconds >= 0) {
             Game.EmitSound("ui_event_last_seconds_tick");
 
             timer_label.RemoveClass("AnimationTimerClose");
@@ -52,12 +52,10 @@ function update_timer_periodically() {
         }
     };
 
-    update_timer_label_from_time_remaining(next_event_at, ($("#EventTimer") as LabelPanel), "IN PROGRESS", timer_callback);
-    update_timer_label_from_time_remaining(big_eggs_hatch_at, ($("#BigEggHatchTimer") as LabelPanel), "HATCHED", timer_callback);
+    const default_event_text = next_event_at > big_eggs_hatch_at ? "OVER" : "IN PROGRESS";
 
-    if (next_event_at > big_eggs_hatch_at) {
-        ($("#EventTimer") as LabelPanel).text = "OVER";
-    }
+    update_timer_label_from_time_remaining(next_event_at, ($("#EventTimer") as LabelPanel), default_event_text, timer_callback);
+    update_timer_label_from_time_remaining(big_eggs_hatch_at, ($("#BigEggHatchTimer") as LabelPanel), "HATCHED", timer_callback);
 }
 
 function subscribe_to_shop_visibility_event() {

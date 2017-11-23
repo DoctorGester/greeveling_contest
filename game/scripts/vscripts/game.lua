@@ -4,6 +4,8 @@ event_queue = event_queue or {}
 all_entities = all_entities or {}
 
 big_eggs_hatched = false
+
+---@type table<DOTATeam_t, Big_Egg>
 big_egg_by_team_id = {}
 next_creep_spawn_at = 0
 big_eggs_hatch_at = 0
@@ -55,7 +57,7 @@ function start_game()
     big_eggs_hatch_at = current_time + minutes(20.0)
 
     if is_in_debug_mode then
-        --big_eggs_hatch_at = current_time + minutes(4.5)
+        big_eggs_hatch_at = current_time + minutes(0.2)
     end
 
     update_timers_network_state()
@@ -258,6 +260,26 @@ function hatch_big_eggs()
 
         update_hero_network_state(hero_entity)
     end)
+
+    CustomGameEventManager:Send_ServerToTeam(DOTA_TEAM_GOODGUYS, "big_eggs_are_hatching", {
+        target_entity = big_egg_by_team_id[DOTA_TEAM_GOODGUYS].native_unit_proxy:GetEntityIndex()
+    })
+
+    CustomGameEventManager:Send_ServerToTeam(DOTA_TEAM_BADGUYS, "big_eggs_are_hatching", {
+        target_entity = big_egg_by_team_id[DOTA_TEAM_BADGUYS].native_unit_proxy:GetEntityIndex()
+    })
+
+    CreateModifierThinker(
+        big_egg_by_team_id[DOTA_TEAM_GOODGUYS].native_unit_proxy,
+        nil,
+        "modifier_egg_hatch_pause",
+        {
+            duration = 5.0
+        },
+        Vector(),
+        DOTA_TEAM_NEUTRALS,
+        false
+    )
 end
 
 function start_next_event()
@@ -679,6 +701,8 @@ function link_native_modifiers()
     link_native_modifier_simple("modifiers/modifier_greevil_spawning")
     link_native_modifier_simple("modifiers/modifier_greevil_deactivated")
     link_native_modifier_simple("modifiers/modifier_mega_greevil")
+    link_native_modifier_simple("modifiers/modifier_egg_hatch_pause")
+    link_native_modifier_simple("modifiers/modifier_egg_hatch_pause_target")
 
 
     -- Bosses

@@ -50,6 +50,7 @@ end
 ---@param greevil_egg Greevil_Egg
 function add_egg_to_hero_inventory(hero)
     hero.greevil_eggs = hero.greevil_eggs + 1
+    hero.native_unit_proxy:EmitSound("item_pickup")
 
     update_hero_network_state(hero)
 end
@@ -76,6 +77,7 @@ function add_bonus_to_hero_inventory(hero, bonus)
     assert(found, "No empty slot found")
 
     hero.bonuses[empty_slot_index] = bonus
+    hero.native_unit_proxy:EmitSound("item_pickup")
 
     CustomGameEventManager:Send_ServerToPlayer(hero.native_unit_proxy:GetPlayerOwner(), "hatchery_new_seal_picked_up", {})
 

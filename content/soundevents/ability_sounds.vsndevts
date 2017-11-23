@@ -187,6 +187,20 @@
         event_type = "1.0"
     }
 
+    item_pickup = {
+        type = "dota_update_default"
+        vsnd_files =
+        [
+            "sounds/ui/item_pickup_gem_world.vsnd"
+        ]
+        volume = "1.0"
+        pitch_rand_min = "-0.05"
+        pitch_rand_max = "0.05"
+        pitch = "1.0"
+        soundlevel = "95.0"
+        event_type = "1.0"
+    }
+
 	ability_primal_blue_cast = {
 		type = "dota_update_default"
 		vsnd_files =

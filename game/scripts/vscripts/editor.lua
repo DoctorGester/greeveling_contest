@@ -239,6 +239,20 @@ function process_chat_message(player_id, text)
         end
     end
 
+    if text == "sall" then
+        CreateModifierThinker(
+            big_egg_by_team_id[DOTA_TEAM_GOODGUYS].native_unit_proxy,
+            nil,
+            "modifier_egg_hatch_pause",
+            {
+                duration = 5.0
+            },
+            Vector(),
+            DOTA_TEAM_NEUTRALS,
+            false
+        )
+    end
+
     if string_starts(text, "kg") then
         ---@type Hero
         local hero_entity = hero.attached_entity

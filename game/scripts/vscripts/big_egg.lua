@@ -12,7 +12,7 @@ big_egg_state_by_team_id = {}
 
 MAX_BIG_EGG_PRIMAL_SEALS = 2
 MAX_BIG_EGG_GREATER_SEALS = 4
-MAX_BIG_EGG_LESSER_SEALS = 8
+MAX_BIG_EGG_LESSER_SEALS = 4
 
 ---@param native_unit_proxy CDOTA_BaseNPC_Building
 ---@return Big_Egg
