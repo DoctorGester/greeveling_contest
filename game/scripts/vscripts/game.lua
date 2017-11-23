@@ -468,7 +468,7 @@ function do_one_frame(current_time)
 
     for entity_index = #all_entities, 1, -1 do
         if all_entities[entity_index].is_destroyed_next_update then
-            destroy_entity(all_entities[entity_index])
+            xpcall(destroy_entity, handle_errors, all_entities[entity_index])
             table.remove(all_entities, entity_index)
         end
     end
@@ -586,7 +586,7 @@ function filter_native_item_added_to_inventory(item_data)
 
     local main_hero = native_unit
 
-    if native_unit:IsRealHero() and not is_native_unit_a_player_assigned_hero(native_unit) then
+    if native_unit:IsRealHero() and native_unit:GetPlayerOwner() ~= nil and not is_native_unit_a_player_assigned_hero(native_unit) then
         main_hero = native_unit:GetPlayerOwner():GetAssignedHero()
 
         if main_hero == nil then
@@ -707,7 +707,6 @@ function link_native_modifiers()
     link_native_modifier_simple("modifiers/modifier_mega_greevil")
     link_native_modifier_simple("modifiers/modifier_egg_hatch_pause")
     link_native_modifier_simple("modifiers/modifier_egg_hatch_pause_target")
-
 
     -- Bosses
     link_native_modifier_simple("event_crystal_maiden/modifier_crystal_maiden_boss")
