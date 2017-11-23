@@ -78,8 +78,6 @@ function init_event_timer() {
     schedule_periodic_timer_update();
     subscribe_to_shop_visibility_event();
     subscribe_to_net_table_key_and_update_immediately("events", "timers", update_event_timers);
-
-    $.Msg("... Done!");
 }
 
 init_event_timer();

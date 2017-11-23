@@ -14,8 +14,6 @@ function init_hatchery_button() {
         $("#NewThingsCounterContainer").SetHasClass("Visible", amount_of_new_things > 0);
         ($("#NewThingsCounter") as LabelPanel).text = amount_of_new_things.toString(10);
     });
-
-    $.Msg("... Done!");
 }
 
 init_hatchery_button();

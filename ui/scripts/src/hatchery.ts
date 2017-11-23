@@ -843,8 +843,6 @@ function init_hatchery() {
     subscribe_to_net_table_key_and_update_immediately("heroes", "state", on_hero_state_update);
     subscribe_to_net_table_key_and_update_immediately("eggs", "state", on_big_egg_state_update);
     subscribe_to_net_table_key_and_update_immediately("events", "timers", on_timers_updated);
-
-    $.Msg("... Done!");
 }
 
 init_hatchery();

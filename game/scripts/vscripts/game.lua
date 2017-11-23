@@ -270,6 +270,8 @@ function start_next_event()
 
         add_entity(event_entity)
     end
+
+    CustomGameEventManager:Send_ServerToAllClients("event_started", {})
 end
 
 function spawn_lane_creeps_for_teams(team, spawn_locations, creep_names)

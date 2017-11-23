@@ -66,8 +66,6 @@ function init_big_egg_status() {
     fill_mega_greevil_slot_panels(DOTATeam_t.DOTA_TEAM_BADGUYS, $("#RightTeamContainer"));
 
     subscribe_to_net_table_key_and_update_immediately("eggs", "state", update_big_egg_status);
-
-    $.Msg("... Done!");
 }
 
 init_big_egg_status();

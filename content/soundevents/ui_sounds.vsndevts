@@ -88,4 +88,37 @@
         memory_type = "0"
         volume = "1"
     }
+
+    ui_event_start = {
+        type = "dota_limit_speakers_ui"
+        vsnd_files =
+        [
+            "sounds/music/stingers/greevil_stingers/greevil_camp_respawn.vsnd"
+        ]
+        pitch = "1"
+        memory_type = "0"
+        volume = "1"
+    }
+
+    ui_event_start_notification = {
+        type = "dota_limit_speakers_ui"
+        vsnd_files =
+        [
+            "sounds/ui/ui_message_popup_fast_01.vsnd"
+        ]
+        pitch = "1"
+        memory_type = "0"
+        volume = "1"
+    }
+
+    ui_mega_greevil_spawn = {
+        type = "dota_limit_speakers_ui"
+        vsnd_files =
+        [
+            "sounds/music/stingers/greevil_stingers/greevil_mega_spawn.vsnd"
+        ]
+        pitch = "1"
+        memory_type = "0"
+        volume = "1"
+    }
 }
