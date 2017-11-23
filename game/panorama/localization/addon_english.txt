@@ -5,6 +5,9 @@
 	{
 		"locale" "en"
 
+        "DOTA_Gamemode_15" "It's Greeviling!"
+        "addon_game_name" "It's Greeviling!"
+
         "error_cant_be_picked_up_by_non_heroes" "Can only be picked up by heroes"
 		"error_hatchery_is_full" "Hatchery is full!"
 		"error_all_slots_are_occupied" "All slots of this type are occupied!"
