@@ -262,7 +262,7 @@ function update_greevil(greevil)
                 end
             else
                 if greevil.tick_counter % 10 == 0 then
-                    greevil.native_unit_proxy:MoveToPosition(get_random_greevil_respawn_location(greevil))
+                    greevil.native_unit_proxy:MoveToPosition(get_random_respawn_location_for_unit(greevil.native_unit_proxy))
                 end
             end
 
@@ -296,17 +296,6 @@ function handle_greevil_death(greevil)
     owner_hero:AddNewModifier(owner_hero, nil, "modifier_greevil_respawn", { duration = RESPAWN_DURATION })
 
     update_hero_network_state(owner_hero.attached_entity)
-end
-
-function get_random_greevil_respawn_location(greevil)
-    local respawn_locations_by_team = {
-        [DOTA_TEAM_GOODGUYS] = Entities:FindAllByClassname("info_player_start_goodguys"),
-        [DOTA_TEAM_BADGUYS] = Entities:FindAllByClassname("info_player_start_badguys")
-    }
-
-    local respawn_locations = respawn_locations_by_team[greevil.native_unit_proxy:GetTeam()]
-
-    return respawn_locations[RandomInt(1, #respawn_locations)]:GetAbsOrigin()
 end
 
 ---@param hero Hero
@@ -343,7 +332,7 @@ function respawn_greevil(greevil)
     local respawn_location = greevil.native_unit_proxy:GetOwner():GetAbsOrigin()
 
     if not greevil.native_unit_proxy:GetOwner():IsAlive() then
-        respawn_location = get_random_greevil_respawn_location(greevil)
+        respawn_location = get_random_respawn_location_for_unit(greevil.native_unit_proxy)
     end
 
     greevil.is_dead = false

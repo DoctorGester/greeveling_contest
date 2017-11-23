@@ -197,7 +197,13 @@ function hero_drop_seal(hero, slot_index)
 
     assert(seal ~= nil, string.format("Seal not found in slot %i", slot_index))
 
-    make_bonus(hero.native_unit_proxy:GetAbsOrigin(), seal.seal_type, seal.seal)
+    local location = hero.native_unit_proxy:GetAbsOrigin()
+
+    if not hero.native_unit_proxy:IsAlive() then
+        location = get_random_respawn_location_for_unit(hero.native_unit_proxy)
+    end
+
+    make_bonus(location, seal.seal_type, seal.seal)
     hero.bonuses[slot_index] = nil
 
     update_hero_network_state(hero)

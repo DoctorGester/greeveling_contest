@@ -322,3 +322,14 @@ end
 function is_left(a, b, c)
     return ((b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x)) > 0
 end
+
+function get_random_respawn_location_for_unit(native_unit_proxy)
+    local respawn_locations_by_team = {
+        [DOTA_TEAM_GOODGUYS] = Entities:FindAllByClassname("info_player_start_goodguys"),
+        [DOTA_TEAM_BADGUYS] = Entities:FindAllByClassname("info_player_start_badguys")
+    }
+
+    local respawn_locations = respawn_locations_by_team[native_unit_proxy:GetTeam()]
+
+    return respawn_locations[RandomInt(1, #respawn_locations)]:GetAbsOrigin()
+end
