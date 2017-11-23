@@ -1,6 +1,7 @@
 neutral_creep_drop_time_counter = 0
 lane_creep_drop_time_counter = 0
 egg_drop_time_counter = 0
+ongoing_hero_drops = {}
 remaining_seal_drops = {
     [Seal_Type.PRIMAL] = {},
     [Seal_Type.GREATER] = {},
@@ -11,6 +12,7 @@ local neutral_drop_occurrence_frequency = minutes(0.15)
 local lane_drop_occurence_frequency = minutes(0.15)
 local egg_drop_occurence_frequency = minutes(0.75)
 local amount_of_each_bonus = 8
+local hero_seal_drop_tick_amount = 3
 
 local seal_type_factors = {
     [Seal_Type.PRIMAL] = 1,
@@ -47,6 +49,24 @@ local function expanding_random(items_with_weights)
     end
 
     return list[RandomInt(1, #list)]
+end
+
+function start_hero_drop(hero)
+    ongoing_hero_drops[hero] = RandomInt(1, 3) * hero_seal_drop_tick_amount
+end
+
+function update_hero_drops()
+    for hero, drop_ticks_remaining in pairs(ongoing_hero_drops) do
+        ongoing_hero_drops[hero] = drop_ticks_remaining - 1
+
+        if drop_ticks_remaining % hero_seal_drop_tick_amount == 0 then
+            generate_and_launch_creep_drop(hero.native_unit_proxy)
+        end
+
+        if drop_ticks_remaining == 0 then
+            ongoing_hero_drops[hero] = nil
+        end
+    end
 end
 
 ---@return Seal_Type, number, boolean

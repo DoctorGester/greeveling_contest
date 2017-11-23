@@ -198,7 +198,9 @@ function on_native_unit_killed(event)
     local entity = native_unit_proxy.attached_entity
 
     if entity then
-        if entity.entity_type == Entity_Type.GREEVIL then
+        if entity.entity_type == Entity_Type.HERO then
+            start_hero_drop(entity)
+        elseif entity.entity_type == Entity_Type.GREEVIL then
             handle_greevil_death(entity)
         elseif entity.entity_type == Entity_Type.MEGA_GREEVIL then
             local his_team = native_unit_proxy:GetTeam()
@@ -421,6 +423,8 @@ function update_game_state(current_time)
             schedule_next_creep_spawn(current_time)
         end
     end
+
+    update_hero_drops()
 
     if event_is_ongoing then
         update_ongoing_event_state(current_time)
