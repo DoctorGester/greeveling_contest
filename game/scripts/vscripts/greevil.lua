@@ -319,8 +319,10 @@ function activate_greevil_for_hero(hero, greevil)
 
     greevil.native_unit_proxy:EmitSound("greevil_hatch")
 
+    local direction_to_owner = (hero.native_unit_proxy:GetAbsOrigin() - greevil.native_unit_proxy:GetAbsOrigin()) * Vector(1, 1, 0)
+
     FindClearSpaceForUnit(greevil.native_unit_proxy, hero.native_unit_proxy:GetAbsOrigin(), true)
-    greevil.native_unit_proxy:SetForwardVector(hero.native_unit_proxy:GetAbsOrigin() - greevil.native_unit_proxy:GetAbsOrigin())
+    greevil.native_unit_proxy:SetForwardVector(direction_to_owner)
     greevil.native_unit_proxy:StartGestureWithPlaybackRate(ACT_DOTA_SPAWN, 2.0)
     greevil.native_unit_proxy:AddNewModifier(greevil.native_unit_proxy, nil,"modifier_greevil_spawning", { duration = 0.85 })
 end
