@@ -86,6 +86,9 @@ let currently_reassinged_slot = -1;
 let big_eggs_are_past_hatching_state = false;
 let mega_greevil_hatches_at = 0;
 
+let new_seals_counter = 0;
+let new_greevils_counter = 0;
+
 function convert_primal_seal_type_to_egg_image_url(seal_type: Primal_Seal_Type) {
     const base_folder = "file://{images}/econ/courier/greevil/";
 
@@ -684,7 +687,9 @@ function subscribe_to_hatchery_visibility_handlers() {
     GameEvents.Subscribe("hatchery_button_click", () => {
         container.ToggleClass("Visible");
 
-        if (container.BHasClass("Visible")) {
+        if (is_hatchery_open()) {
+            switch_hatchery_tab(current_tab); // Refresh the state
+
             Game.EmitSound("Shop.PanelUp");
         } else {
             Game.EmitSound("Shop.PanelDown");
@@ -709,13 +714,63 @@ function subscribe_to_hatchery_visibility_handlers() {
 }
 
 function subscribe_to_error_message_event() {
-    GameEvents.Subscribe("custom_game_error", function(data) {
+    GameEvents.Subscribe("custom_game_error", data => {
         GameEvents.SendEventClientSide("dota_hud_error_message", data);
+    });
+}
+
+function is_hatchery_open() {
+    return $("#HatcheryContainer").BHasClass("Visible");
+}
+
+function update_new_things_counters() {
+    $("#NewSealsCounterContainer").SetHasClass("Visible", new_seals_counter > 0);
+    $("#NewGreevilsCounterContainer").SetHasClass("Visible", new_greevils_counter > 0);
+
+    ($("#NewSealsCounter") as LabelPanel).text = new_seals_counter.toString(10);
+    ($("#NewGreevilsCounter") as LabelPanel).text = new_greevils_counter.toString(10);
+
+    GameEvents.SendEventClientSide("hatchery_new_things_update", { amount: new_seals_counter + new_greevils_counter });
+}
+
+function increment_new_seals_counter_if_not_in_eggs_tab() {
+    if (!is_hatchery_open() || current_tab != Hatchery_Tab.EGGS) {
+        new_seals_counter++;
+
+        update_new_things_counters();
+    }
+}
+
+function increment_new_greevils_counter_if_not_in_greevils_tab() {
+    if (!is_hatchery_open() || current_tab != Hatchery_Tab.GREEVILS) {
+        new_greevils_counter++;
+
+        update_new_things_counters();
+    }
+}
+
+function subscribe_to_hatchery_new_things_notifications() {
+    GameEvents.Subscribe("hatchery_new_seal_picked_up", () => {
+        increment_new_seals_counter_if_not_in_eggs_tab();
+    });
+
+    GameEvents.Subscribe("hatchery_new_greevil_added_to_collection", () => {
+        increment_new_greevils_counter_if_not_in_greevils_tab();
     });
 }
 
 function switch_hatchery_tab(new_tab: Hatchery_Tab) {
     current_tab = new_tab;
+
+    if (new_tab == Hatchery_Tab.GREEVILS) {
+        new_greevils_counter = 0;
+        update_new_things_counters();
+    }
+
+    if (new_tab == Hatchery_Tab.EGGS) {
+        new_seals_counter = 0;
+        update_new_things_counters();
+    }
 
     $("#TabHatchery").SetHasClass("Active", new_tab == Hatchery_Tab.EGGS);
     $("#TabGreevils").SetHasClass("Active", new_tab == Hatchery_Tab.GREEVILS);
@@ -784,6 +839,7 @@ function init_hatchery() {
 
     subscribe_to_error_message_event();
     subscribe_to_hatchery_visibility_handlers();
+    subscribe_to_hatchery_new_things_notifications();
     subscribe_to_net_table_key_and_update_immediately("heroes", "state", on_hero_state_update);
     subscribe_to_net_table_key_and_update_immediately("eggs", "state", on_big_egg_state_update);
     subscribe_to_net_table_key_and_update_immediately("events", "timers", on_timers_updated);

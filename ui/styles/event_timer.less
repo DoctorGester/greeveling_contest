@@ -1,20 +1,20 @@
 @import "defines";
 
 .EventTimer {
-  align: left bottom;
+  align: right bottom;
   visibility: visible;
   flow-children: down;
   transition-property: opacity;
   transition-duration: .2s;
   width: 400px;
-  margin-bottom: 300px;
+  margin-bottom: 220px;
 
   .HUDFlipped & {
-    align: right bottom;
+    align: left bottom;
   }
 
   .EventContent {
-    background-color: gradient( linear, 0% 0%, 100% 0%, from(rgba(66, 86, 100, 0.8)), color-stop( .5, rgba(66, 86, 99, 0.33)), to(rgba(0, 0, 1, 0)) );
+    background-color: gradient( linear, 100% 0%, 0% 0%, from(rgba(66, 86, 100, 0.8)), color-stop( .5, rgba(66, 86, 99, 0.33)), to(rgba(0, 0, 1, 0)) );
     width: 100%;
     vertical-align: bottom;
   }
@@ -22,16 +22,19 @@
   .EventImage {
     width: 120px;
     height: 90px;
+    horizontal-align: right;
+    transform: scaleX(-1);
   }
 
   .EventTextAndHeader {
     flow-children: down;
-    padding-left: 140px;
+    horizontal-align: right;
+    padding-right: 140px;
 
     .EventHeader {
       color: white;
-      text-align: left;
-      horizontal-align: left;
+      text-align: right;
+      horizontal-align: right;
       font-family: @title-font;
       font-size: 24px;
       text-shadow: 1px 1px 1px 2 #00000099;
@@ -45,12 +48,8 @@
 }
 
 .EventTimerContainer {
-  horizontal-align: left;
+  horizontal-align: right;
   opacity: 1;
-  transition-property: opacity;
-  transition-duration: 0.12s;
-  transition-timing-function: ease-in-out;
-  padding-right: 10px;
   padding-top: 4px;
   margin-bottom: 20px;
   width: 100%;
@@ -61,16 +60,23 @@
   }
 }
 
+.EventTimerSlideOut {
+  animation-duration: 0.25s;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 1;
+  animation-name: SlideOut;
+}
+
 .EventTimerText {
   color: #fffa;
   font-weight: thin;
   font-size: 20px;
   text-shadow: 1px 1px 1px 2 #00000099;
-  text-align: left;
+  text-align: right;
   //margin-right: 10px;
   font-family: @normal-font;
   margin-right: 4px;
-  horizontal-align: left;
+  horizontal-align: right;
 
   .HUDFlipped & {
     transform: scaleX(-1);

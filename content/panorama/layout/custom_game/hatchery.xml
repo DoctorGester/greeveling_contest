@@ -17,15 +17,31 @@
             <Label id="Title" text="Hatchery"/>
 
             <Panel id="TabButtons">
-                <Button id="TabButtonEggs">
-                    <Label text="EGGS"/>
-                </Button>
-                <Button id="TabButtonGreevils" class="CurrentTab">
-                    <Label text="GREEVILS"/>
-                </Button>
-                <Button id="TabButtonMegaGreevil">
-                    <Label text="BIG BOY"/>
-                </Button>
+                <Panel class="TabButtonContainer">
+                    <Button class="TabButton" id="TabButtonEggs">
+                        <Label text="EGGS"/>
+                    </Button>
+
+                    <Panel id="NewSealsCounterContainer" class="NewInTabCounter">
+                        <Label id="NewSealsCounter" text="2"/>
+                    </Panel>
+                </Panel>
+
+                <Panel class="TabButtonContainer">
+                    <Button id="TabButtonGreevils" class="TabButton">
+                        <Label text="GREEVILS"/>
+                    </Button>
+
+                    <Panel id="NewGreevilsCounterContainer" class="NewInTabCounter">
+                        <Label id="NewGreevilsCounter" text="12"/>
+                    </Panel>
+                </Panel>
+
+                <Panel class="TabButtonContainer">
+                    <Button id="TabButtonMegaGreevil" class="TabButton">
+                        <Label text="BIG BOY"/>
+                    </Button>
+                </Panel>
             </Panel>
 
             <Panel id="TabHatchery" class="Tab">

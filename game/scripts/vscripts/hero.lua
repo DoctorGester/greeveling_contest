@@ -76,6 +76,9 @@ function add_bonus_to_hero_inventory(hero, bonus)
     assert(found, "No empty slot found")
 
     hero.bonuses[empty_slot_index] = bonus
+
+    CustomGameEventManager:Send_ServerToPlayer(hero.native_unit_proxy:GetPlayerOwner(), "hatchery_new_seal_picked_up", {})
+
     update_hero_network_state(hero)
 end
 
@@ -316,6 +319,8 @@ function hero_finish_hatching_an_egg(hero)
 
     if greevil_table == hero.stored_greevils then
         deactivate_greevil(new_greevil)
+
+        CustomGameEventManager:Send_ServerToPlayer(hero.native_unit_proxy:GetPlayerOwner(), "hatchery_new_greevil_added_to_collection", {})
     end
 end
 

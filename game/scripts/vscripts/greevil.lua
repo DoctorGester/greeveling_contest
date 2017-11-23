@@ -30,6 +30,7 @@ function make_greevil(owner, primal_seal, greater_seals, lesser_seals)
 
     greevil:SetUnitCanRespawn(true)
     greevil:EmitSound("greevil_hatch")
+    greevil:EmitSound("greevil_spawn")
 
     fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil, { release = true })
 
@@ -315,6 +316,8 @@ function activate_greevil_for_hero(hero, greevil)
     greevil.native_unit_proxy:RemoveModifierByName("modifier_greevil_deactivated")
 
     fx("particles/ui/ui_game_start_hero_spawn.vpcf", PATTACH_ABSORIGIN_FOLLOW, greevil.native_unit_proxy, { release = true })
+
+    greevil.native_unit_proxy:EmitSound("greevil_hatch")
 
     FindClearSpaceForUnit(greevil.native_unit_proxy, hero.native_unit_proxy:GetAbsOrigin(), true)
     greevil.native_unit_proxy:SetForwardVector(hero.native_unit_proxy:GetAbsOrigin() - greevil.native_unit_proxy:GetAbsOrigin())

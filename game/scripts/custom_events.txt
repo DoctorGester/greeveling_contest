@@ -3,4 +3,9 @@
     "hatchery_button_click"
     {
     }
+
+    "hatchery_new_things_update"
+    {
+        "amount" "short"
+    }
 }

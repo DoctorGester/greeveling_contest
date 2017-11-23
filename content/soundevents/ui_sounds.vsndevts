@@ -66,4 +66,26 @@
         memory_type = "0"
         volume = "1"
     }
+
+    ui_timers_slide_out = {
+        type = "dota_limit_speakers_ui"
+        vsnd_files =
+        [
+            "sounds/ui/ui_scoreboard_appear_01.vsnd"
+        ]
+        pitch = "1"
+        memory_type = "0"
+        volume = "1"
+    }
+
+    ui_event_last_seconds_tick = {
+        type = "dota_limit_speakers_ui"
+        vsnd_files =
+        [
+            "sounds/ui/inventory/treasure_count.vsnd"
+        ]
+        pitch = "1"
+        memory_type = "0"
+        volume = "1"
+    }
 }

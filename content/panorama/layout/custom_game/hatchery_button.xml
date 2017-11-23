@@ -12,5 +12,9 @@
             <Panel id="SnowBackground"/>
             <Label text="Hatchery"/>
         </Button>
+
+        <Panel id="NewThingsCounterContainer" class="NewInTabCounter" hittest="false" hittestchildren="false">
+            <Label id="NewThingsCounter"/>
+        </Panel>
     </Panel>
 </root>

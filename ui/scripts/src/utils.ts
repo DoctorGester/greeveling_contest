@@ -18,7 +18,9 @@ function subscribe_to_net_table_key_and_update_immediately(table_name: string, t
     return listener;
 }
 
-function update_timer_label_from_time_remaining(event_time: number, timer_label: LabelPanel, default_text: string) {
+declare type Timer_Callback = (minutes: number, seconds: number, timer_label: LabelPanel) => any;
+
+function update_timer_label_from_time_remaining(event_time: number, timer_label: LabelPanel, default_text: string, on_time_change?: Timer_Callback) {
     const delta_time = Math.floor(event_time - Game.GetGameTime());
 
     if (delta_time > 0) {
@@ -31,9 +33,8 @@ function update_timer_label_from_time_remaining(event_time: number, timer_label:
 
         const new_timer_text = left_pad(minutes) + ':' + left_pad(seconds);
 
-        if (new_timer_text != timer_label.text && minutes == 0 && seconds <= 5) {
-            timer_label.RemoveClass("AnimationTimerClose");
-            timer_label.AddClass("AnimationTimerClose");
+        if (on_time_change && new_timer_text != timer_label.text) {
+            on_time_change(minutes, seconds, timer_label);
         }
 
         timer_label.text = new_timer_text;

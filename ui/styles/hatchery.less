@@ -14,19 +14,53 @@
 }*/
 
 .HatcheryButtonContainer {
+  @button-size: 36px;
+  @counter-size: 26px;
+
   align: right bottom;
   margin-right: 5px;
+  margin-bottom: 12px;
+  height: @button-size + @counter-size;
 
   .HUDFlipped & {
     align: left bottom;
     margin-left: 130px;
   }
 
+  .NewInTabCounter {
+    width: @counter-size;
+    height: @counter-size;
+    border-radius: 50%;
+    background-color: #d20700;
+    align: right top;
+    margin-right: 4px;
+    margin-top: 7px;
+    transform: scaleX(0.0) scaleY(0.0);
+    border-top: 1px solid #623f00;
+
+    transition-property: transform;
+    transition-duration: 0.15s;
+
+    &.Visible {
+      transform: scaleX(1.0) scaleY(1.0);
+    }
+
+    & > Label {
+      align: center center;
+      text-align: center;
+      font-family: @normal-font;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      text-shadow: 0px 1px 0px 2.0 #00000077;
+    }
+  }
+
   #HatcheryButton {
     background-color: gradient(linear, 0% 0%, 0% 100%, from(rgb(17, 52, 52)), to(rgb(69, 124, 123)));
     width: 120px;
-    height: 36px;
-    margin-bottom: 12px;
+    height: @button-size;
+    margin-top: @counter-size / 2;
     border: 0;
     border-radius: 2px;
     border-top: 1px solid #406162;
@@ -35,6 +69,7 @@
     transition-duration: .18s;
     transition-timing-function: ease-in-out;
     tooltip-position: top;
+    align: right bottom;
 
     #SnowBackground {
       width: 32px;
@@ -184,7 +219,7 @@
         border-top: 1px solid #626002;
 
         &.Visible {
-          visibility: visible;;
+          visibility: visible;
         }
 
         #EggCount {
@@ -343,11 +378,38 @@
 #TabButtons {
   flow-children: right;
   width: 100%;
-  margin-bottom: 10px;
 
-  Button {
+  .NewInTabCounter {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #d20700;
+    align: right top;
+    margin-right: 4px;
+    transform: scaleX(0.0) scaleY(0.0);
+    border-top: 1px solid #623f00;
+
+    transition-property: transform;
+    transition-duration: 0.15s;
+
+    &.Visible {
+      transform: scaleX(1.0) scaleY(1.0);
+    }
+
+    & > Label {
+      align: center center;
+      text-align: center;
+      font-family: @normal-font;
+      color: white;
+      font-size: 12px;
+      font-weight: bold;
+      text-shadow: 0px 1px 0px 2.0 #00000077;
+    }
+  }
+
+  .TabButtonContainer {
     width: fill-parent-flow(1.0);
-    height: 30px;
+    height: 40px;
     //box-shadow: #000000aa 0px 0px 2px 2px;
     tooltip-position: top;
 
@@ -370,15 +432,23 @@
 
     }
 
-    &.CurrentTab {
+    .TabButton {
+      width: 100%;
+      height: 100%;
+
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+
+    .TabButton.CurrentTab {
       background-color: #57646d;
 
-      Label {
+      & Label {
         color: white;
       }
     }
 
-    Label {
+    .TabButton Label {
       //text-shadow: 0px 0px 4px 3.0 #00000077;
       color: #57646d;
       align: center center;
@@ -394,12 +464,6 @@
       .CurrentTab & {
 
       }
-    }
-
-    Image {
-      height: 100%;
-      width: height-percentage(100%);
-      horizontal-align: right;
     }
   }
 }
