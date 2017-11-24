@@ -11,7 +11,7 @@ remaining_seal_drops = {
 local neutral_drop_occurrence_frequency = minutes(0.15)
 local lane_drop_occurence_frequency = minutes(0.15)
 local egg_drop_occurence_frequency = minutes(0.75)
-local amount_of_each_bonus = 8
+local amount_of_each_bonus = 16
 local hero_seal_drop_tick_amount = 3
 
 local seal_type_factors = {
@@ -176,10 +176,10 @@ function generate_and_launch_egg_drop(creep, towards_who_optional)
     local launch_location = creep:GetAbsOrigin() + RandomVector(100)
 
     if towards_who_optional then
-        local direction_halfway = (towards_who_optional:GetAbsOrigin() - creep:GetAbsOrigin()) / 2.0
-        direction_halfway = min_vector_2d(direction_halfway, direction_halfway:Normalized() * 500.0)
+        local direction_towards_hero = (towards_who_optional:GetAbsOrigin() - creep:GetAbsOrigin()) * 0.75
+        direction_towards_hero = min_vector_2d(direction_towards_hero, direction_towards_hero:Normalized() * 600.0)
 
-        launch_location = creep:GetAbsOrigin() + direction_halfway
+        launch_location = creep:GetAbsOrigin() + direction_towards_hero
     end
 
     egg_drop_item:LaunchLootInitialHeight(false, 0, 300, 0.75, launch_location)
