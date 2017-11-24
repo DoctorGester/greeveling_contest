@@ -289,6 +289,44 @@ function process_chat_message(player_id, text)
         hero_entity.active_greevils[tonumber(remaining_text)].greevil.native_unit_proxy:Kill(nil, nil)
     end
 
+    if text == "modloc" then
+        local localization = LoadKeyValues("resource/addon_english.txt").Tokens
+        local all_missing = {}
+
+        for mod_name, mod_path in pairs(linked_modifiers) do
+            require(mod_path)
+
+            local defines_is_hidden = _G[mod_name].IsHidden ~= nil
+            local is_actually_hidden = true
+
+            if defines_is_hidden then
+                local no_errors, result = pcall(function() return _G[mod_name].IsHidden() end)
+
+                if no_errors then
+                    is_actually_hidden = result
+                else
+                    is_actually_hidden = false
+                end
+            end
+
+            if not is_actually_hidden or not defines_is_hidden then
+                local key = localization["DOTA_Tooltip_" .. mod_name]
+
+                if not key then
+                    table.insert(all_missing, "DOTA_Tooltip_" .. mod_name)
+                end
+            end
+        end
+
+        print("::: MISSING MODIFIERS")
+
+        table.sort(all_missing)
+
+        for _, text in ipairs(all_missing) do
+            print("\"" .. text .. "\" \"\"")
+        end
+    end
+
     if record_last_command then
         editor_last_chat_message = text
     end

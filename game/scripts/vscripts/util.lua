@@ -91,11 +91,15 @@ function link_native_modifier_simple(modifier_path)
 
     if last_slash_position == nil then
         LinkLuaModifier(modifier_path, modifier_path, LUA_MODIFIER_MOTION_NONE)
+        linked_modifiers[modifier_path] = modifier_path
+
         print("Linking", modifier_path)
     else
         local remaining_file_name = string.sub(modifier_path, last_slash_position + 1)
 
         LinkLuaModifier(remaining_file_name, modifier_path, LUA_MODIFIER_MOTION_NONE)
+        linked_modifiers[remaining_file_name] = modifier_path
+
         print("Linking", remaining_file_name, "from", modifier_path)
     end
 end

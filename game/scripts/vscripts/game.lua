@@ -23,6 +23,8 @@ queue_event_finish = false
 
 event_locations = {}
 
+linked_modifiers = {}
+
 if is_in_debug_mode then
     entity_stats_print_at = 0
 end
@@ -741,7 +743,6 @@ function link_native_modifiers()
     link_native_modifier_simple("bonuses/primal/animations/modifier_animation_black")
     link_native_modifier_simple("bonuses/primal/animations/modifier_animation_blue")
     link_native_modifier_simple("bonuses/primal/animations/modifier_animation_orange")
-    link_native_modifier_simple("bonuses/primal/animations/modifier_animation_green")
 end
 
 function set_up_game_settings()
