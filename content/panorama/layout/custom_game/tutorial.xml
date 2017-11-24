@@ -10,8 +10,7 @@
     </scripts>
 
     <Panel class="TutorialRoot">
-        <!--Panel id="TutorialContainer" class="Hidden"-->
-        <Panel id="TutorialContainer">
+        <Panel id="TutorialContainer" class="Hidden">
             <Label class="GameTitle" text="#addon_game_name"/>
             <Panel class="TutorialBlocks">
                 <Panel class="TutorialBlock">
