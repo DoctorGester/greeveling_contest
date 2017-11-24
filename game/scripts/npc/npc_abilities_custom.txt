@@ -260,7 +260,12 @@
         "AbilitySpecial" {
             "01" {
                 "var_type" "FIELD_INTEGER"
-                "attack_damage" "20 40 60 80"
+                "attack_damage" "20 30 40 50"
+            }
+
+            "02" {
+                "var_type" "FIELD_INTEGER"
+                "maximum_stacks" "8"
             }
         }
     }

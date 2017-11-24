@@ -11,6 +11,7 @@ end
 function modifier_magic_well:OnAbilityFullyCast(cast_data)
     if cast_data.unit:GetTeam() ~= self:GetParent():GetTeam() then return end
     if cast_data.unit == self:GetParent() then return end
+    if not cast_data.ability:ProcsMagicStick() then return end
 
     local distance_to_unit = (self:GetParent():GetAbsOrigin() - cast_data.unit:GetAbsOrigin()):Length2D()
     if distance_to_unit > self:GetAbility():GetCastRange(Vector(), nil) then return end
@@ -21,7 +22,10 @@ function modifier_magic_well:OnAbilityFullyCast(cast_data)
     end
 
     self:SetDuration(8.0, true)
-    self:IncrementStackCount()
+
+    if self:GetStackCount() < self:GetAbility():GetSpecialValueFor("maximum_stacks") then
+        self:IncrementStackCount()
+    end
 end
 
 function modifier_magic_well:IsHidden()
