@@ -198,6 +198,32 @@ function process_chat_message(player_id, text)
         make_greater_seal(hero_location + RandomVector(200), tonumber(remaining_text))
     end
 
+    if string_starts(text, "ll") then
+        local space_position = string.find(text, " ")
+        local remaining_text = string.sub(text, space_position + 1)
+
+        make_lesser_seal(hero_location + RandomVector(200), tonumber(remaining_text))
+    end
+
+    if text == "testdmg" then
+        local hero_entity = hero.attached_entity
+        local free_slot, _ = find_empty_inventory_slot(hero_entity)
+        add_egg_to_hero_inventory(hero_entity)
+
+        for i = 1, 4 do
+            add_bonus_to_hero_inventory(hero_entity, make_seal_in_inventory(Seal_Type.GREATER, Greater_Seal_Type.MAGIC_WELL))
+            hero_insert_seal(hero_entity, free_slot)
+            add_bonus_to_hero_inventory(hero_entity, make_seal_in_inventory(Seal_Type.GREATER, Greater_Seal_Type.SOUL_BIND))
+            hero_insert_seal(hero_entity, free_slot)
+            add_bonus_to_hero_inventory(hero_entity, make_seal_in_inventory(Seal_Type.LESSER, Lesser_Seal_Type.DAMAGE))
+            hero_insert_seal(hero_entity, free_slot)
+        end
+
+        hero_hatch_egg(hero_entity)
+        hero_entity.started_hatching_at = GameRules:GetGameTime() - 10.0
+        update_hero(hero_entity)
+    end
+
     if text == "cl" then
         ---@type Hero
         local hero_entity = hero.attached_entity

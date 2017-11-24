@@ -7,11 +7,11 @@ end
 
 function modifier_lesser_seal_damage:DeclareFunctions()
     return {
-        MODIFIER_PROPERTY_DAMAGEOUTGOING_PERCENTAGE
+        MODIFIER_PROPERTY_BASEDAMAGEOUTGOING_PERCENTAGE
     }
 end
 
-function modifier_lesser_seal_damage:GetModifierDamageOutgoing_Percentage()
+function modifier_lesser_seal_damage:GetModifierBaseDamageOutgoing_Percentage()
     local function log2(x)
         return math.log(x) / math.log(2)
     end

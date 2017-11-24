@@ -57,7 +57,7 @@ function start_game()
     big_eggs_hatch_at = current_time + minutes(20.0)
 
     if is_in_debug_mode then
-        big_eggs_hatch_at = current_time + minutes(0.2)
+        --big_eggs_hatch_at = current_time + minutes(0.2)
     end
 
     update_timers_network_state()
