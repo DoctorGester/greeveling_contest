@@ -145,6 +145,11 @@ function on_state_changed()
         --SendToServerConsole("dota_bot_populate")
     end
 
+    if native_state_changed_to == DOTA_GAMERULES_STATE_PRE_GAME then
+        print("Pre-game has started")
+        CustomGameEventManager:Send_ServerToAllClients("pregame_started", {})
+    end
+
     if native_state_changed_to == DOTA_GAMERULES_STATE_GAME_IN_PROGRESS then
         print("Game has begun")
         start_game()

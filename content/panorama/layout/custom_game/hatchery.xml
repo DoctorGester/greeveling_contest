@@ -132,6 +132,9 @@
             <Image src="file://{images}/custom_game/event_egg.png"/>
             <Image src="file://{images}/custom_game/boss_crystal_maiden.png"/>
 
+            <Image src="file://{images}/custom_game/find_seals_tutorial.png"/>
+            <Image src="file://{images}/custom_game/find_eggs_tutorial.png"/>
+
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_strength.psd"/>
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_agility.psd"/>
             <Image src="file://{images}/primary_attribute_icons/primary_attribute_icon_intelligence.psd"/>
