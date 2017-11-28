@@ -9,7 +9,7 @@ remaining_seal_drops = {
 }
 
 local neutral_drop_occurrence_frequency = minutes(0.15)
-local lane_drop_occurence_frequency = minutes(0.15)
+local lane_drop_occurence_frequency = minutes(0.18)
 local egg_drop_occurence_frequency = minutes(0.75)
 local amount_of_each_bonus = 16
 local hero_seal_drop_tick_amount = 3
@@ -52,7 +52,7 @@ local function expanding_random(items_with_weights)
 end
 
 function start_hero_drop(hero)
-    ongoing_hero_drops[hero] = RandomInt(1, 3) * hero_seal_drop_tick_amount
+    ongoing_hero_drops[hero] = RandomInt(1, 2) * hero_seal_drop_tick_amount
 end
 
 function update_hero_drops()

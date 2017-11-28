@@ -16,7 +16,7 @@
 ---@field public event_ended_at number
 
 local FROST_NOVA_RADIUS = 275
-local DROP_FREQUENCY = 1.4
+local DROP_FREQUENCY = 1.8
 local FROSTBITE_DURATION = 1.0
 
 local DELAY_BETWEEN_EVENT_END_AND_DESTROY = 0.9

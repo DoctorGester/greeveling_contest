@@ -52,10 +52,13 @@ function update_timer_periodically() {
         }
     };
 
-    const default_event_text = next_event_at > big_eggs_hatch_at ? "OVER" : "IN PROGRESS";
-
-    update_timer_label_from_time_remaining(next_event_at, ($("#EventTimer") as LabelPanel), default_event_text, timer_callback);
     update_timer_label_from_time_remaining(big_eggs_hatch_at, ($("#BigEggHatchTimer") as LabelPanel), "HATCHED", timer_callback);
+
+    if (next_event_at > big_eggs_hatch_at) {
+        ($("#EventTimer") as LabelPanel).text = "OVER";
+    } else {
+        update_timer_label_from_time_remaining(next_event_at, ($("#EventTimer") as LabelPanel), "IN PROGRESS", timer_callback);
+    }
 }
 
 function subscribe_to_shop_visibility_event() {
