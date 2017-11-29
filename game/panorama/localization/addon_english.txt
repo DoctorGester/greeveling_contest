@@ -36,7 +36,7 @@
         "DOTA_Tooltip_Ability_item_greater_heal_la_kill" "<font color=\"#e4ae39\">Greater Seal:</font> Heal la Kill"
         "DOTA_Tooltip_Ability_item_greater_healing_frenzy" "<font color=\"#e4ae39\">Greater Seal:</font> Healing Frenzy"
         "DOTA_Tooltip_Ability_item_greater_magic_well" "<font color=\"#e4ae39\">Greater Seal:</font> Magic Well"
-        "DOTA_Tooltip_Ability_item_greater_soul_bind" "<font color=\"#e4ae39\">Greater Seal:</font> Sould Bind"
+        "DOTA_Tooltip_Ability_item_greater_soul_bind" "<font color=\"#e4ae39\">Greater Seal:</font> Soul Bind"
         "DOTA_Tooltip_Ability_item_greater_static_discharge" "<font color=\"#e4ae39\">Greater Seal:</font> Static Discharge"
         "DOTA_Tooltip_Ability_item_greater_together_we_stand" "<font color=\"#e4ae39\">Greater Seal:</font> Together We Stand"
 
