@@ -546,10 +546,15 @@ function on_native_heal_received(heal_data)
     local target_id = heal_data.entindex_target_const
     local ability = heal_data.entindex_inflictor_const
 
-    if ability ~= nil and healer_id ~= nil and target_id ~= nil then
+    if ability ~= nil and target_id ~= nil then
         ---@type CDOTA_BaseNPC
         local target_entity = EntIndexToHScript(target_id)
         local heal_amount = heal_data.heal
+        local healer_entity = target_entity
+
+        if healer_id ~= nil then
+            healer_entity = EntIndexToHScript(healer_id)
+        end
 
         local all_units = FindUnitsInRadius(
             0,
@@ -566,7 +571,7 @@ function on_native_heal_received(heal_data)
         for _, unit in pairs(all_units) do
             for _, modifier in pairs(unit:FindAllModifiers()) do
                 if modifier.OnFilteredHealing then
-                    modifier:OnFilteredHealing(target_entity, heal_amount, EntIndexToHScript(healer_id), EntIndexToHScript(ability))
+                    modifier:OnFilteredHealing(target_entity, heal_amount, healer_entity, EntIndexToHScript(ability))
                 end
             end
         end
