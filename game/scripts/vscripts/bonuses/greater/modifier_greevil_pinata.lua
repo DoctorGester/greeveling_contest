@@ -1,5 +1,6 @@
 ---@class modifier_greevil_pinata : CDOTA_Modifier_Lua
----@field public damage_buffer
+---@field public damage_buffer number
+---@field public last_drop_at number
 modifier_greevil_pinata = {}
 
 function modifier_greevil_pinata:DeclareFunctions()
@@ -14,9 +15,14 @@ end
 
 function modifier_greevil_pinata:OnTakeDamage(damage_data)
     if damage_data.unit == self:GetParent() then
+        local last_drop_at = self.last_drop_at or 0
+
+        if GameRules:GetGameTime() - last_drop_at < 1.0 then return end
+
         self.damage_buffer = (self.damage_buffer or 0) + damage_data.damage
 
         if self.damage_buffer > 200 then
+            self.last_drop_at = GameRules:GetGameTime()
             self.damage_buffer = self.damage_buffer - 200
 
             local heal_amount = self:GetAbility():GetSpecialValueFor("heal_amount")

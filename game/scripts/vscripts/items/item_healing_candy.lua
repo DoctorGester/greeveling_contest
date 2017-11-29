@@ -6,6 +6,7 @@ function item_healing_candy:OnSpellStart()
     if self.attached_entity and self.attached_entity.entity_type == Entity_Type.CANDY then
         self:GetCaster():EmitSound("ability_greater_greevil_pinata_eat_candy")
         self:GetCaster():Heal(self.attached_entity.heal_amount, self:GetCaster())
+        SendOverheadEventMessage(nil, OVERHEAD_ALERT_HEAL, self:GetCaster(), self.attached_entity.heal_amount, self:GetCaster():GetPlayerOwner())
 
         self.attached_entity.was_eaten = true
         self.attached_entity.is_destroyed_next_update = true
